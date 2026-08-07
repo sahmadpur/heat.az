@@ -347,7 +347,7 @@ window.I18N = {
     "pkg.mainF2": "Priority emergency call-out",
     "pkg.mainF3": "Spare part supply",
     "pkg.mainF4": "Service log and reporting",
-    "pkg.mainF5": "Parameter commissioning",
+    "pkg.mainF5": "Parameter tuning",
     "pkg.mainF6": "Operator training",
     "pkg.mainCta": "Request an offer",
     "pkg.mainNote": "Response time: 1 business day",
