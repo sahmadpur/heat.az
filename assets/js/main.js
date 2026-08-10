@@ -7,6 +7,7 @@
   "use strict";
 
   var WHATSAPP = "994553487675";
+  var AUTO_MS = 10000; /* flue-gas readouts rotate on this interval */
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* Certificate tiles. Drop a scan into assets/img/certs/ and set `img` — the
@@ -136,7 +137,19 @@
   function initTabs() {
     var list = document.querySelector(".readouts");
     if (!list) return;
+    var grid = document.querySelector(".analyz__grid");
     var tabs = Array.prototype.slice.call(list.querySelectorAll("[role='tab']"));
+    var panels = tabs.map(function (t) {
+      return document.getElementById(t.getAttribute("aria-controls"));
+    }).filter(Boolean);
+
+    var timer = null;
+    var startedAt = 0;
+    var left = AUTO_MS;
+    var visible = false;
+    var paused = false;
+    /* auto-updating content is a nuisance without motion, so honour the pref */
+    var stopped = reduced;
 
     function select(tab, focus) {
       tabs.forEach(function (t) {
@@ -150,9 +163,82 @@
       if (focus) tab.focus();
     }
 
+    /* Every panel is padded out to the tallest one, so the block keeps a
+       constant height as the rotation swaps the copy. */
+    function lockHeight() {
+      var tallest = 0;
+      panels.forEach(function (p) {
+        var was = p.hidden;
+        p.hidden = false;
+        p.style.minHeight = "";
+        tallest = Math.max(tallest, p.offsetHeight);
+        p.hidden = was;
+      });
+      panels.forEach(function (p) { p.style.minHeight = tallest + "px"; });
+    }
+
+    /* ---- autoplay: advance every 10s ---- */
+
+    function advance() {
+      var i = tabs.indexOf(list.querySelector("[aria-selected='true']"));
+      select(tabs[(i + 1) % tabs.length], false);
+    }
+
+    /* A timeout chain rather than an interval, so a pause can bank the time
+       already served; the CSS sweep freezes alongside it and the two stay in
+       step. `startedAt`/`left` track the current leg. */
+    function schedule(ms) {
+      clearTimeout(timer);
+      left = ms;
+      startedAt = Date.now();
+      timer = setTimeout(function () {
+        advance();
+        schedule(AUTO_MS);
+      }, ms);
+    }
+
+    function play() {
+      if (stopped || paused || !visible || timer) return;
+      list.classList.add("is-playing");
+      list.classList.remove("is-paused");
+      schedule(left);
+    }
+
+    /* keepProgress: hovering banks the remainder; leaving the viewport or
+       stopping resets the leg so the next start gets a clean ten seconds */
+    function halt(keepProgress) {
+      if (timer && keepProgress) left = Math.max(400, left - (Date.now() - startedAt));
+      else if (!keepProgress) left = AUTO_MS;
+      clearTimeout(timer);
+      timer = null;
+      list.classList.toggle("is-paused", !!keepProgress);
+      if (!keepProgress) list.classList.remove("is-playing");
+    }
+
+    /* the visitor picking a gas ends the rotation for good — nothing should
+       move the copy out from under them once they have chosen */
+    function stop() {
+      stopped = true;
+      halt(false);
+    }
+
+    function setPaused(state) {
+      if (paused === state) return;
+      paused = state;
+      if (paused) {
+        halt(true);
+      } else {
+        /* clear the frozen state even when play() declines (off screen, stopped) */
+        list.classList.remove("is-paused");
+        play();
+      }
+    }
+
     list.addEventListener("click", function (ev) {
       var tab = ev.target.closest("[role='tab']");
-      if (tab) select(tab, false);
+      if (!tab) return;
+      stop();
+      select(tab, false);
     });
 
     list.addEventListener("keydown", function (ev) {
@@ -165,8 +251,46 @@
       else if (ev.key === "End") next = tabs[tabs.length - 1];
       if (!next) return;
       ev.preventDefault();
+      stop();
       select(next, true);
     });
+
+    /* hovering or tabbing into the block holds the current gas while it is read */
+    if (grid) {
+      grid.addEventListener("mouseenter", function () { setPaused(true); });
+      grid.addEventListener("mouseleave", function () { setPaused(false); });
+      grid.addEventListener("focusin", function () { setPaused(true); });
+      grid.addEventListener("focusout", function () {
+        if (!grid.contains(document.activeElement)) setPaused(false);
+      });
+    }
+
+    /* one source of truth for the interval: the CSS sweep reads it from here */
+    list.style.setProperty("--auto", AUTO_MS + "ms");
+
+    lockHeight();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
+
+    var resizeT;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeT);
+      resizeT = setTimeout(lockHeight, 200);
+    }, { passive: true });
+
+    /* only run while the block is on screen */
+    if (grid && "IntersectionObserver" in window) {
+      new IntersectionObserver(
+        function (entries) {
+          visible = entries[0].isIntersecting;
+          if (visible) play();
+          else halt(false);
+        },
+        { threshold: 0.25 }
+      ).observe(grid);
+    } else {
+      visible = true;
+      play();
+    }
   }
 
   /* ---------------------------------------------------------- certificates -- */

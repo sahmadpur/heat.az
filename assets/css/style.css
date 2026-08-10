@@ -241,6 +241,8 @@ h1, h2, h3, h4 {
   .blob,
   .grain,
   .dot::after,
+  .panel:not([hidden]),
+  .readout::before,
   .readout.is-active .readout__bar i { animation: none !important; }
 }
 
@@ -849,6 +851,33 @@ h1, h2, h3, h4 {
   50% { opacity: 0.45; }
 }
 
+/* countdown sweep along the top edge of the active card, so the rotation
+   reads as deliberate rather than as the page twitching */
+.readout::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: 2px;
+  width: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  opacity: 0;
+}
+
+.readouts.is-playing .readout.is-active::before {
+  opacity: 1;
+  animation: countdown var(--auto, 10s) linear forwards;
+}
+
+/* hovering or focusing the block holds the sweep where it is */
+.readouts.is-paused .readout.is-active::before { animation-play-state: paused; }
+
+@keyframes countdown {
+  from { width: 0; }
+  to { width: calc(100% + 2px); }
+}
+
 .analyz__panels {
   padding: clamp(24px, 2.6vw, 34px);
   background: rgba(255, 255, 255, 0.035);
@@ -858,6 +887,12 @@ h1, h2, h3, h4 {
 }
 
 .panel[hidden] { display: none; }
+.panel:not([hidden]) { animation: panel-in 0.45s var(--ease) both; }
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
 .panel .h4 { color: var(--cyan); margin-bottom: 14px; }
 
 .benefits { margin-top: clamp(40px, 4.5vw, 64px); }

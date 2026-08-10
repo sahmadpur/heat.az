@@ -78,6 +78,12 @@ All motion is CSS driven by class toggles from an `IntersectionObserver`:
 - `data-count` — integers count up once in view (`data-count-suffix` for `+` / `%`).
 - `.marquee__track` — the partner row is duplicated in JS and slid `-50%`;
   hovering pauses it.
+- Flue-gas readouts rotate every `AUTO_MS` (10s, set in `assets/js/main.js` and
+  mirrored to CSS as `--auto` so the countdown sweep matches). Hovering or
+  focusing the block freezes the sweep and banks the remaining time; picking a
+  gas by click or arrow key ends the rotation for good. It only runs while the
+  block is on screen, and never under reduced motion. All four panels are
+  padded to the tallest so the swap does not shift the layout.
 - Hero steam — two blurred blobs drift over a slow-panning particle layer, all CSS.
 
 `prefers-reduced-motion: reduce` disables all of it and shows the final state.
