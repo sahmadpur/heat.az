@@ -10,33 +10,58 @@
   var AUTO_MS = 10000; /* flue-gas readouts rotate on this interval */
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Certificate tiles. Drop a scan into assets/img/certs/ and set `img` — the
-     tile then becomes clickable and opens in the lightbox. While `img` is null
-     the tile renders as a labelled placeholder and is inert. */
+  /* Certificate tiles. Scans live in assets/img/certs/ — `thumb` feeds the tile,
+     `img` the lightbox; both are rendered from licenses/*.pdf with pdftoppm.
+     While `img` is null the tile renders as a labelled placeholder and is inert. */
   var CERTS = [
     {
-      label: "FHN Lisenziyası",
-      org: "Fövqəladə Hallar Nazirliyi",
-      note: "Montaj, sazlama və təmir icazəsi",
-      img: null
+      label: "Lisenziya EL-388/2026",
+      org: "İqtisadiyyat Nazirliyi",
+      note: "Təhlükə potensiallı obyektlərin diaqnostikası",
+      img: "assets/img/certs/lisenziya-diaqnostika.jpg",
+      thumb: "assets/img/certs/lisenziya-diaqnostika-th.jpg"
     },
     {
-      label: "Təhlükə Potensiallı Obyektlər",
-      org: "Fövqəladə Hallar Nazirliyi",
-      note: "Buxar və suqızdırıcı qazanlar, təzyiqli qablar",
-      img: null
+      label: "Lisenziya EL-380/2026",
+      org: "İqtisadiyyat Nazirliyi",
+      note: "Qaldırıcı qurğular, qazanlar və tutumların quraşdırılması",
+      img: "assets/img/certs/lisenziya-qurasdirma.jpg",
+      thumb: "assets/img/certs/lisenziya-qurasdirma-th.jpg"
     },
     {
-      label: "İstehsalçı Akkreditasiyası",
-      org: "Odluq və qazan istehsalçıları",
-      note: "Mühəndis heyəti üzrə ixtisaslaşma",
-      img: null
+      label: "Combustion Management System",
+      org: "LAMTEC",
+      note: "CMS quraşdırma, proqramlaşdırma və nasazlıq analizi",
+      img: "assets/img/certs/lamtec-cms.jpg",
+      thumb: "assets/img/certs/lamtec-cms-th.jpg"
     },
     {
-      label: "İstehsalçı Akkreditasiyası",
-      org: "Kompressor və generator istehsalçıları",
-      note: "Təlim mərkəzi sertifikatları",
-      img: null
+      label: "ETAMATIC Burner Control",
+      org: "LAMTEC",
+      note: "O₂ ölçmə, CO/H₂ təyini və alov detektorları",
+      img: "assets/img/certs/lamtec-etamatic.jpg",
+      thumb: "assets/img/certs/lamtec-etamatic-th.jpg"
+    },
+    {
+      label: "RIELLO Odluq Təlimi",
+      org: "E-GAZ / Riello",
+      note: "Motorin və təbii qaz odluqları üzrə ixtisaslaşma",
+      img: "assets/img/certs/riello-brulor.jpg",
+      thumb: "assets/img/certs/riello-brulor-th.jpg"
+    },
+    {
+      label: "Kompressor Servisi",
+      org: "DUCOMP Compressor",
+      note: "Hava kompressorlarının montaj, baxım və təmiri",
+      img: "assets/img/certs/ducomp-melikov.jpg",
+      thumb: "assets/img/certs/ducomp-melikov-th.jpg"
+    },
+    {
+      label: "Kompressor Servisi",
+      org: "DUCOMP Compressor",
+      note: "Hava kompressorlarının montaj, baxım və təmiri",
+      img: "assets/img/certs/ducomp-bayramov.jpg",
+      thumb: "assets/img/certs/ducomp-bayramov-th.jpg"
     }
   ];
 
@@ -111,8 +136,10 @@
     document.querySelectorAll(".marquee__track").forEach(function (track) {
       /* duplicate the row once so the -50% keyframe loops seamlessly */
       track.innerHTML += track.innerHTML;
-      track.querySelectorAll("img").forEach(function (img, i) {
-        if (i >= track.children.length / 2) img.setAttribute("aria-hidden", "true");
+      /* hide the copied half from assistive tech — logos and text chips alike */
+      var half = track.children.length / 2;
+      Array.prototype.forEach.call(track.children, function (item, i) {
+        if (i >= half) item.setAttribute("aria-hidden", "true");
       });
     });
   }
@@ -303,7 +330,7 @@
       frame.className = "cert__frame";
       if (c.img) {
         var thumb = new Image();
-        thumb.src = c.img;
+        thumb.src = c.thumb || c.img;
         thumb.alt = c.label + " — " + c.org;
         thumb.loading = "lazy";
         frame.appendChild(thumb);

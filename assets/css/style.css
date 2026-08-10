@@ -195,7 +195,7 @@ h1, h2, h3, h4 {
 .sec-head .h2 { margin-top: 14px; }
 .sec-head .lead { margin-top: 18px; }
 
-/* light steel band — partners + certificates (the 30% neutral zone) */
+/* light steel band — partners + certificates + brands (the 30% neutral zone) */
 .band {
   background: var(--steel);
   --ink: #16191c;
@@ -209,9 +209,9 @@ h1, h2, h3, h4 {
   color: var(--ink);
 }
 
-/* two sections share the band — don't stack their full vertical padding */
+/* three sections share the band — don't stack their full vertical padding */
 .band > section + section { padding-top: 0; }
-.band > section:first-child { padding-bottom: clamp(40px, 4vw, 64px); }
+.band > section:not(:last-child) { padding-bottom: clamp(40px, 4vw, 64px); }
 
 /* ==========================================================================
    reveal animations
@@ -1073,34 +1073,68 @@ h1, h2, h3, h4 {
    ========================================================================== */
 .marquee {
   overflow: hidden;
-  padding: 8px 0;
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  /* the shadow reaches 28px below the tile (4px offset + 24px blur) — leave more
+     room than that, or `overflow: hidden` shears it off */
+  padding: 30px 0;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
 
 .marquee__track {
   display: flex;
   align-items: center;
-  gap: clamp(40px, 5vw, 72px);
+  gap: clamp(14px, 1.4vw, 22px);
   width: max-content;
   animation: slide 42s linear infinite;
 }
 
 .marquee:hover .marquee__track { animation-play-state: paused; }
 
-.marquee img {
-  height: 36px;
-  width: auto;
-  object-fit: contain;
-  /* several logo PNGs carry an opaque white plate; multiply drops it into the
-     steel band so only the artwork reads */
-  mix-blend-mode: multiply;
-  filter: grayscale(1) contrast(1.05);
-  opacity: 0.85;
-  transition: filter 0.4s var(--ease), opacity 0.4s var(--ease);
+/* Each entry rides in its own white card. The card supplies the white ground the
+   logos were drawn for, so the PNGs with a baked-in white plate need no blend
+   trick and pale marks keep their own colour. Height is fixed for rhythm; width
+   grows so wide wordmarks stay legible instead of shrinking into a square. */
+.logo-tile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 96px;
+  height: 96px;
+  padding: 0 22px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s var(--ease-out), transform 0.4s var(--ease);
 }
 
-.marquee img:hover { filter: none; opacity: 1; }
+.logo-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.logo-tile img {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 172px;
+  object-fit: contain;
+}
+
+/* entries with no logo file — the name is set inside an identical tile so the
+   row keeps one shape throughout */
+.logo-tile__name {
+  max-width: 150px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* second carousel runs the other way so the pair does not scroll in lockstep */
+.marquee--rev .marquee__track { animation-direction: reverse; }
 
 @keyframes slide {
   from { transform: translateX(0); }
@@ -1181,7 +1215,8 @@ h1, h2, h3, h4 {
 .cert:not(.cert--ready) .cert__frame { aspect-ratio: 4 / 3; }
 .cert--ready .cert__frame { border-style: solid; background: #fff; }
 .cert__frame svg { width: 34px; height: 34px; }
-.cert__frame img { width: 100%; height: 100%; object-fit: cover; }
+/* scans are mixed portrait/landscape A4 — letterbox them rather than crop */
+.cert__frame img { width: 100%; height: 100%; object-fit: contain; }
 
 .cert__label { display: block; font-size: 14.5px; font-weight: 600; letter-spacing: -0.2px; line-height: 1.35; }
 .cert__org { display: block; font-size: 13px; color: var(--ink-3); margin-top: 3px; }
