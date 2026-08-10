@@ -1,90 +1,48 @@
 /* ==========================================================================
    heat.az — behaviour
-   i18n, scroll reveals, masked headings, marquee, accordion, nav, dock.
+   Reveals, counters, marquee, service cards, analyzer tabs, certificates
+   lightbox, FAQ accordion, nav and the WhatsApp request form.
    ========================================================================== */
 (function () {
   "use strict";
 
-  var LANGS = ["az", "en", "ru"];
-  var STORE_KEY = "heat-lang";
+  var WHATSAPP = "994553487675";
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------------------------------------------------------------- i18n -- */
-
-  /* Azerbaijani is the default; only an explicit ?lang= or a previous choice
-     overrides it — browser locale is deliberately ignored. */
-  function pickLang() {
-    var url = new URLSearchParams(location.search).get("lang");
-    var saved = null;
-    try { saved = localStorage.getItem(STORE_KEY); } catch (e) { /* private mode */ }
-    return [url, saved].filter(function (l) {
-      return LANGS.indexOf(l) > -1;
-    })[0] || "az";
-  }
-
-  /* Builds line-masked heading markup from "line one|~muted line" values. */
-  function renderLines(el, value) {
-    el.textContent = "";
-    value.split("|").forEach(function (line, i) {
-      var muted = line.charAt(0) === "~";
-      var span = document.createElement("span");
-      span.className = "l" + (muted ? " mute" : "");
-      var inner = document.createElement("b");
-      inner.textContent = muted ? line.slice(1) : line;
-      inner.style.setProperty("--d", i * 0.09 + "s");
-      span.appendChild(inner);
-      el.appendChild(span);
-    });
-  }
-
-  function applyLang(lang) {
-    var dict = window.I18N[lang];
-    if (!dict) return;
-
-    document.documentElement.lang = dict["html.lang"] || lang;
-    document.title = dict["meta.title"] || document.title;
-    var desc = document.querySelector('meta[name="description"]');
-    if (desc && dict["meta.desc"]) desc.setAttribute("content", dict["meta.desc"]);
-
-    document.querySelectorAll("[data-i18n]").forEach(function (el) {
-      var v = dict[el.dataset.i18n];
-      if (v != null) el.textContent = v;
-    });
-
-    /* keys whose copy contains <b> emphasis */
-    document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
-      var v = dict[el.dataset.i18nHtml];
-      if (v != null) el.innerHTML = v;
-    });
-
-    document.querySelectorAll("[data-i18n-lines]").forEach(function (el) {
-      var v = dict[el.dataset.i18nLines];
-      if (v != null) renderLines(el, v);
-    });
-
-    /* attributes: data-i18n-attr="aria-label:key, title:key2" */
-    document.querySelectorAll("[data-i18n-attr]").forEach(function (el) {
-      el.dataset.i18nAttr.split(",").forEach(function (pair) {
-        var bits = pair.split(":");
-        var attr = bits[0] && bits[0].trim();
-        var v = dict[bits[1] && bits[1].trim()];
-        if (attr && v != null) el.setAttribute(attr, v);
-      });
-    });
-
-    document.querySelectorAll("[data-lang-opt]").forEach(function (b) {
-      b.setAttribute("aria-checked", String(b.dataset.langOpt === lang));
-    });
-    var current = document.querySelector("[data-lang-current]");
-    if (current) current.textContent = lang.toUpperCase();
-
-    try { localStorage.setItem(STORE_KEY, lang); } catch (e) { /* ignore */ }
-  }
+  /* Certificate tiles. Drop a scan into assets/img/certs/ and set `img` — the
+     tile then becomes clickable and opens in the lightbox. While `img` is null
+     the tile renders as a labelled placeholder and is inert. */
+  var CERTS = [
+    {
+      label: "FHN Lisenziyası",
+      org: "Fövqəladə Hallar Nazirliyi",
+      note: "Montaj, sazlama və təmir icazəsi",
+      img: null
+    },
+    {
+      label: "Təhlükə Potensiallı Obyektlər",
+      org: "Fövqəladə Hallar Nazirliyi",
+      note: "Buxar və suqızdırıcı qazanlar, təzyiqli qablar",
+      img: null
+    },
+    {
+      label: "İstehsalçı Akkreditasiyası",
+      org: "Odluq və qazan istehsalçıları",
+      note: "Mühəndis heyəti üzrə ixtisaslaşma",
+      img: null
+    },
+    {
+      label: "İstehsalçı Akkreditasiyası",
+      org: "Kompressor və generator istehsalçıları",
+      note: "Təlim mərkəzi sertifikatları",
+      img: null
+    }
+  ];
 
   /* -------------------------------------------------------------- reveals -- */
 
   function initReveals() {
-    var targets = document.querySelectorAll("[data-reveal], .lines, .hero__stack");
+    var targets = document.querySelectorAll("[data-reveal]");
     if (reduced || !("IntersectionObserver" in window)) {
       targets.forEach(function (el) { el.classList.add("in"); });
       return;
@@ -102,7 +60,7 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /* Stagger children of any [data-stagger] container. */
+  /* Stagger direct children of any [data-stagger] container. */
   function initStagger() {
     document.querySelectorAll("[data-stagger]").forEach(function (box) {
       var step = parseFloat(box.dataset.stagger) || 0.07;
@@ -117,8 +75,7 @@
 
   function initCounters() {
     var nodes = document.querySelectorAll("[data-count]");
-    if (!nodes.length) return;
-    if (reduced || !("IntersectionObserver" in window)) return;
+    if (!nodes.length || reduced || !("IntersectionObserver" in window)) return;
 
     var io = new IntersectionObserver(
       function (entries) {
@@ -159,6 +116,155 @@
     });
   }
 
+  /* --------------------------------------------------------- service cards -- */
+
+  function initServiceCards() {
+    document.querySelectorAll(".svc__toggle").forEach(function (btn) {
+      var card = btn.closest(".svc");
+      var txt = btn.querySelector(".svc__toggleTxt");
+      btn.addEventListener("click", function () {
+        var open = !card.classList.contains("is-open");
+        card.classList.toggle("is-open", open);
+        btn.setAttribute("aria-expanded", String(open));
+        if (txt) txt.textContent = open ? "Yığışdır" : "Ətraflı";
+      });
+    });
+  }
+
+  /* -------------------------------------------------------- analyzer tabs -- */
+
+  function initTabs() {
+    var list = document.querySelector(".readouts");
+    if (!list) return;
+    var tabs = Array.prototype.slice.call(list.querySelectorAll("[role='tab']"));
+
+    function select(tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.classList.toggle("is-active", on);
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(t.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+
+    list.addEventListener("click", function (ev) {
+      var tab = ev.target.closest("[role='tab']");
+      if (tab) select(tab, false);
+    });
+
+    list.addEventListener("keydown", function (ev) {
+      var i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      var next = null;
+      if (ev.key === "ArrowRight" || ev.key === "ArrowDown") next = tabs[(i + 1) % tabs.length];
+      else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") next = tabs[(i - 1 + tabs.length) % tabs.length];
+      else if (ev.key === "Home") next = tabs[0];
+      else if (ev.key === "End") next = tabs[tabs.length - 1];
+      if (!next) return;
+      ev.preventDefault();
+      select(next, true);
+    });
+  }
+
+  /* ---------------------------------------------------------- certificates -- */
+
+  function initCerts() {
+    var wrap = document.getElementById("certs");
+    if (!wrap) return;
+
+    var box = document.getElementById("lightbox");
+    var img = document.getElementById("lightbox-img");
+    var title = document.getElementById("lightbox-title");
+    var org = document.getElementById("lightbox-org");
+    var opener = null;
+
+    CERTS.forEach(function (c) {
+      var li = document.createElement("li");
+      var el = document.createElement(c.img ? "button" : "div");
+      el.className = "cert" + (c.img ? " cert--ready" : "");
+      if (c.img) el.type = "button";
+
+      var frame = document.createElement("span");
+      frame.className = "cert__frame";
+      if (c.img) {
+        var thumb = new Image();
+        thumb.src = c.img;
+        thumb.alt = c.label + " — " + c.org;
+        thumb.loading = "lazy";
+        frame.appendChild(thumb);
+      } else {
+        frame.innerHTML =
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg>';
+      }
+
+      var meta = document.createElement("span");
+      meta.innerHTML =
+        '<span class="cert__label"></span>' +
+        '<span class="cert__org"></span>' +
+        '<span class="cert__note"></span>';
+      meta.querySelector(".cert__label").textContent = c.label;
+      meta.querySelector(".cert__org").textContent = c.org;
+      meta.querySelector(".cert__note").textContent = c.img
+        ? c.note
+        : "Sənəd skanı əlavə olunacaq";
+
+      el.appendChild(frame);
+      el.appendChild(meta);
+      li.appendChild(el);
+      wrap.appendChild(li);
+
+      if (!c.img) return;
+      el.addEventListener("click", function () { open(c, el); });
+    });
+
+    function open(c, from) {
+      if (!box) return;
+      opener = from;
+      img.src = c.img;
+      img.alt = c.label + " — " + c.org;
+      title.textContent = c.label;
+      org.textContent = c.org + " · " + c.note;
+      box.hidden = false;
+      document.body.classList.add("is-locked");
+      box.querySelector(".lightbox__x").focus();
+    }
+
+    function close() {
+      if (!box || box.hidden) return;
+      box.hidden = true;
+      img.removeAttribute("src");
+      document.body.classList.remove("is-locked");
+      if (opener) opener.focus();
+      opener = null;
+    }
+
+    if (!box) return;
+
+    box.addEventListener("click", function (ev) {
+      if (ev.target.closest("[data-close]")) close();
+    });
+
+    /* keep focus inside the dialog while it is open */
+    box.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") { close(); return; }
+      if (ev.key !== "Tab") return;
+      var focusable = box.querySelectorAll("button, [href], img[tabindex]");
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (ev.shiftKey && document.activeElement === first) {
+        ev.preventDefault();
+        last.focus();
+      } else if (!ev.shiftKey && document.activeElement === last) {
+        ev.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
   /* ------------------------------------------------------------ accordion -- */
 
   function initAccordion() {
@@ -188,11 +294,9 @@
     var nav = document.querySelector(".nav");
     var burger = document.querySelector(".nav__burger");
     var menu = document.querySelector(".nav__menu");
-    var lang = document.querySelector(".lang");
     var dock = document.querySelector(".dock");
     var foot = document.querySelector(".foot");
 
-    /* stuck state + dock visibility */
     var onScroll = function () {
       if (nav) nav.classList.toggle("is-stuck", window.scrollY > 24);
       if (dock && foot) {
@@ -203,16 +307,16 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
-    /* mobile menu */
     function setMenu(open) {
       if (!menu || !burger) return;
       menu.classList.toggle("is-open", open);
       burger.setAttribute("aria-expanded", String(open));
       document.body.classList.toggle("is-locked", open);
       menu.querySelectorAll("a").forEach(function (a, i) {
-        a.style.transitionDelay = open ? 0.08 + i * 0.05 + "s" : "0s";
+        a.style.transitionDelay = open ? 0.06 + i * 0.04 + "s" : "0s";
       });
     }
+
     if (burger) {
       burger.addEventListener("click", function () {
         setMenu(burger.getAttribute("aria-expanded") !== "true");
@@ -224,36 +328,8 @@
       });
     }
 
-    /* language dropdown */
-    if (lang) {
-      var btn = lang.querySelector(".lang__btn");
-      btn.addEventListener("click", function (ev) {
-        ev.stopPropagation();
-        var open = !lang.classList.contains("is-open");
-        lang.classList.toggle("is-open", open);
-        btn.setAttribute("aria-expanded", String(open));
-      });
-      lang.addEventListener("click", function (ev) {
-        var opt = ev.target.closest("[data-lang-opt]");
-        if (!opt) return;
-        applyLang(opt.dataset.langOpt);
-        lang.classList.remove("is-open");
-        btn.setAttribute("aria-expanded", "false");
-      });
-    }
-
-    document.addEventListener("click", function () {
-      if (lang) {
-        lang.classList.remove("is-open");
-        var b = lang.querySelector(".lang__btn");
-        if (b) b.setAttribute("aria-expanded", "false");
-      }
-    });
-
     document.addEventListener("keydown", function (ev) {
-      if (ev.key !== "Escape") return;
-      if (lang) lang.classList.remove("is-open");
-      setMenu(false);
+      if (ev.key === "Escape") setMenu(false);
     });
 
     /* active link highlight */
@@ -279,37 +355,88 @@
     }
   }
 
-  /* --------------------------------------------------------- hero parallax -- */
+  /* ----------------------------------------------------------------- form -- */
 
-  function initParallax() {
-    var stack = document.querySelector(".hero__stack");
-    if (!stack || reduced || window.matchMedia("(hover: none)").matches) return;
+  /* No backend: the request is composed into a WhatsApp message and handed to
+     the visitor's client. Validation stays inline — no alert(), no navigation
+     until every required field is filled. */
+  function initForm() {
+    var form = document.getElementById("request-form");
+    if (!form) return;
 
-    stack.classList.add("has-parallax");
+    var rules = [
+      { id: "f-name", err: "e-name", test: function (v) { return v.trim().length > 1; } },
+      {
+        id: "f-phone",
+        err: "e-phone",
+        test: function (v) { return (v.match(/\d/g) || []).length >= 7; }
+      },
+      { id: "f-type", err: "e-type", test: function (v) { return v !== ""; } }
+    ];
 
-    /* CSS composes --px/--py with each card's authored fan transform */
-    stack.addEventListener("mousemove", function (ev) {
-      var r = stack.getBoundingClientRect();
-      var x = (ev.clientX - r.left) / r.width - 0.5;
-      var y = (ev.clientY - r.top) / r.height - 0.5;
-      stack.style.setProperty("--px", (-x * 22).toFixed(2) + "px");
-      stack.style.setProperty("--py", (-y * 22).toFixed(2) + "px");
+    function mark(rule, ok) {
+      var field = document.getElementById(rule.id).closest(".field");
+      var err = document.getElementById(rule.err);
+      field.classList.toggle("has-error", !ok);
+      if (err) err.hidden = ok;
+    }
+
+    rules.forEach(function (rule) {
+      var input = document.getElementById(rule.id);
+      /* clear an error as soon as the visitor fixes it */
+      input.addEventListener("input", function () {
+        if (input.closest(".field").classList.contains("has-error")) {
+          mark(rule, rule.test(input.value));
+        }
+      });
+      input.addEventListener("change", function () {
+        if (input.closest(".field").classList.contains("has-error")) {
+          mark(rule, rule.test(input.value));
+        }
+      });
     });
 
-    stack.addEventListener("mouseleave", function () {
-      stack.style.setProperty("--px", "0px");
-      stack.style.setProperty("--py", "0px");
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+
+      var firstBad = null;
+      rules.forEach(function (rule) {
+        var input = document.getElementById(rule.id);
+        var ok = rule.test(input.value);
+        mark(rule, ok);
+        if (!ok && !firstBad) firstBad = input;
+      });
+      if (firstBad) { firstBad.focus(); return; }
+
+      var val = function (id) { return (document.getElementById(id).value || "").trim(); };
+      var lines = [
+        "Salam! heat.az saytından sorğu göndərirəm.",
+        "",
+        "Ad, Soyad: " + val("f-name"),
+        val("f-company") ? "Şirkət / Obyekt: " + val("f-company") : null,
+        "Əlaqə nömrəsi: " + val("f-phone"),
+        "Xidmət növü: " + val("f-type"),
+        val("f-msg") ? "Qeyd: " + val("f-msg") : null
+      ].filter(Boolean);
+
+      window.open(
+        "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(lines.join("\n")),
+        "_blank",
+        "noopener"
+      );
     });
   }
 
   /* ------------------------------------------------------------------ go -- */
 
-  applyLang(pickLang());
   initStagger();
   initMarquee();
+  initServiceCards();
+  initTabs();
+  initCerts();
   initAccordion();
   initNav();
   initCounters();
-  initParallax();
+  initForm();
   requestAnimationFrame(initReveals);
 })();

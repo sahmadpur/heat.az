@@ -1,18 +1,18 @@
 # heat.az — HeatTech MMC
 
-Static rebuild of heat.az, redesigned after the LaunchFolio Framer template
-(monochrome editorial layout, Switzer display type, pill controls, scroll
-reveals). No build step, no dependencies — plain HTML, CSS and vanilla JS.
+Static single-page site built against `docs/Design_system.md` and `docs/content.md`:
+deep industrial graphite ground, thermal-orange and tech-cyan accents, Inter type.
+No build step, no dependencies — plain HTML, CSS and vanilla JS. Azerbaijani only.
 
 ## Structure
 
 ```
-index.html              single-page site, all sections
-assets/css/style.css    design system + every component
-assets/js/i18n.js       AZ / EN / RU copy
-assets/js/main.js       i18n, reveals, marquee, accordion, nav, parallax
-assets/img/             hero, service, brand and about imagery
-assets/docs/            HeatTech brochure (PDF)
+index.html              single-page site, all ten sections
+assets/css/style.css    design tokens + every component
+assets/js/main.js       reveals, counters, marquee, tabs, lightbox, nav, form
+assets/img/             hero, brand and (optional) sector/certificate imagery
+assets/docs/            HeatTech service catalogue (PDF)
+docs/                   the design system and content specs this site implements
 ```
 
 ## Local preview
@@ -25,55 +25,59 @@ Opening `index.html` directly over `file://` also works.
 
 ## Deploy
 
-Upload the contents of this folder to the web root. There is nothing to
-compile. The only external request is the Switzer webfont from
-`api.fontshare.com`; if the site must be fully self-hosted, download the
-Switzer woff2 files into `assets/fonts/` and swap the `<link>` in
+Upload the contents of this folder to the web root. There is nothing to compile.
+The only external request is the Inter webfont from Google Fonts; to self-host,
+download the woff2 files into `assets/fonts/` and swap the `<link>` in
 `index.html` for a local `@font-face` block.
 
-## Languages
+## Design tokens
 
-Copy lives in `assets/js/i18n.js` as three dictionaries keyed by dotted
-strings. Markup binds to them through data attributes:
+The palette follows the 60/30/10 split in `docs/Design_system.md`:
 
-| attribute            | effect                                              |
-| -------------------- | --------------------------------------------------- |
-| `data-i18n`          | sets `textContent`                                  |
-| `data-i18n-html`     | sets `innerHTML` (for copy containing `<b>`)         |
-| `data-i18n-lines`    | builds a line-masked heading                        |
-| `data-i18n-attr`     | sets attributes, e.g. `aria-label:nav.cta`          |
+| role | token | value |
+| --- | --- | --- |
+| 60% ground | `--bg` / `--surface` | `#121517` / `#1A1D20` |
+| 30% surfaces | `--surface-2` / `--steel` | `#262C33` / `#F5F7FA` |
+| 10% heat | `--accent` / `--accent-deep` | `#FF5722` / `#E65100` |
+| 10% automation | `--cyan` / `--cyan-deep` | `#00ACC1` / `#0288D1` |
 
-In a `data-i18n-lines` value, `|` splits lines and a leading `~` renders that
-line in grey — this produces the two-tone headings used throughout. Keep both
-lines short enough not to wrap; each language sets its own break.
+Orange and cyan are reserved for numbers, icons, borders and buttons — never for
+small body copy, which would not clear contrast on graphite. The partners and
+certificates sections sit inside `.band`, a light steel zone that re-maps the ink
+and surface tokens; it also keeps the dark-on-transparent partner logos legible.
 
-Azerbaijani is the default. Language is resolved as `?lang=` →
-`localStorage` → `az`; browser locale is ignored on purpose. The visitor's
-choice is remembered.
+## Sections
 
-To edit text, change the dictionaries — not `index.html`.
-
-## Animations
-
-All motion is CSS transitions driven by class toggles from an
-`IntersectionObserver`:
-
-- `data-reveal` — fade and rise on entry. `--d` on the element, or
-  `data-stagger="0.08"` on a parent, sets the delay.
-- `.lines` — headings rise out of a clipping mask, line by line.
-- `data-count` — integers count up once in view (`data-count-suffix` for `+`).
-- `.marquee__track` — the brand row is duplicated in JS and slid `-50%`;
-  hovering pauses it.
-- Hero card stack — mouse position feeds `--px` / `--py`, which each card
-  scales by its own depth.
-
-`prefers-reduced-motion: reduce` disables all of it and shows the final state.
+The page implements the ten sections of `docs/content.md` in order: hero, stats,
+six services, flue gas analysis, service models, sectors, partners, certificates,
+FAQ, contact. Copy lives directly in `index.html` — there is no translation layer.
 
 ## Content notes
 
-- Imagery, partner logos and the brochure are the assets from the previous
-  heat.az. No stock people photos were added, so captions describe equipment.
-- The pricing section of the source template was replaced with service
-  packages carrying no figures — quotes are scoped per site.
-- Footer "Terms of service" and "Privacy policy" links are placeholders
-  (`href="#"`) until those pages exist.
+- **Certificates.** Tiles are rendered from the `CERTS` array at the top of
+  `assets/js/main.js`. Each entry is `{label, org, note, img}`. While `img` is
+  `null` the tile is an inert placeholder reading "Sənəd skanı əlavə olunacaq".
+  Drop a scan into `assets/img/certs/` and set `img` to its path — the tile then
+  becomes a button that opens the document in the lightbox.
+- **Sector photos.** The four cards in `#sahaler` are gradient panels with a
+  line-art watermark because no photographs of those site types exist yet. To use
+  a real photo, add `<img class="sector__img" src="…" alt="">` as the first child
+  of the `.sector` element; the dark overlay and text treatment already sit above it.
+- **Request form.** There is no backend. On submit the form validates inline, then
+  opens `https://wa.me/994553487675` with the answers pre-composed as a message.
+  The number is the `WHATSAPP` constant in `assets/js/main.js`.
+- Footer social links for Facebook and LinkedIn are placeholders until the real
+  profile URLs are available.
+
+## Animations
+
+All motion is CSS driven by class toggles from an `IntersectionObserver`:
+
+- `data-reveal` — fade and rise on entry. `--d` on the element, or
+  `data-stagger="0.07"` on a parent, sets the delay.
+- `data-count` — integers count up once in view (`data-count-suffix` for `+` / `%`).
+- `.marquee__track` — the partner row is duplicated in JS and slid `-50%`;
+  hovering pauses it.
+- Hero steam — two blurred blobs drift over a slow-panning particle layer, all CSS.
+
+`prefers-reduced-motion: reduce` disables all of it and shows the final state.
