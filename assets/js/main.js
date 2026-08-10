@@ -199,8 +199,6 @@
 
     function play() {
       if (stopped || paused || !visible || timer) return;
-      list.classList.add("is-playing");
-      list.classList.remove("is-paused");
       schedule(left);
     }
 
@@ -211,8 +209,6 @@
       else if (!keepProgress) left = AUTO_MS;
       clearTimeout(timer);
       timer = null;
-      list.classList.toggle("is-paused", !!keepProgress);
-      if (!keepProgress) list.classList.remove("is-playing");
     }
 
     /* the visitor picking a gas ends the rotation for good — nothing should
@@ -225,13 +221,8 @@
     function setPaused(state) {
       if (paused === state) return;
       paused = state;
-      if (paused) {
-        halt(true);
-      } else {
-        /* clear the frozen state even when play() declines (off screen, stopped) */
-        list.classList.remove("is-paused");
-        play();
-      }
+      if (paused) halt(true);
+      else play();
     }
 
     list.addEventListener("click", function (ev) {
@@ -264,9 +255,6 @@
         if (!grid.contains(document.activeElement)) setPaused(false);
       });
     }
-
-    /* one source of truth for the interval: the CSS sweep reads it from here */
-    list.style.setProperty("--auto", AUTO_MS + "ms");
 
     lockHeight();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
