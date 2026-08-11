@@ -1210,6 +1210,13 @@ h1, h2, h3, h4 {
   transition: opacity 0.25s var(--ease-out);
 }
 
+/* a solid square mark fills its bubble corner to corner, so it reads heavier
+   than the wordmarks beside it — draw it 10% smaller to even them out */
+.orbit.is-placed .orbit__dot img[src$="ilk-insaat.png"] {
+  max-width: 65%;
+  max-height: 65%;
+}
+
 /* the sun the system turns around — outside the orbits, so it never spins */
 .orbit.is-placed .orbit__core {
   position: absolute;
@@ -1406,15 +1413,11 @@ h1, h2, h3, h4 {
   width: auto;
   max-width: 172px;
   object-fit: contain;
-  filter: grayscale(1);
-  opacity: 0.82;
-  transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+  opacity: 0.92;
+  transition: opacity 0.25s var(--ease-out);
 }
 
-.logo-tile:hover img {
-  filter: none;
-  opacity: 1;
-}
+.logo-tile:hover img { opacity: 1; }
 
 /* entries with no logo file — set as a wordmark so they carry the same weight
    as the marks beside them */
