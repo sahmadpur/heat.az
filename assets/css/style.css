@@ -1185,6 +1185,9 @@ h1, h2, h3, h4 {
   width: var(--s);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
+  /* JS moves these <li> out of the <ul> and onto their orbit, and the reset only
+     kills markers on ul/ol — without this each planet trails a bullet */
+  list-style: none;
   pointer-events: auto;
   transition: transform 0.3s var(--ease-out);
 }
