@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<title>HeatTech MMC — Xidmət Kataloqu</title>
+<!-- Print source for assets/docs/heattech-brochure.pdf.
+     Regenerate:
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+         --headless --disable-gpu --no-pdf-header-footer \
+         --print-to-pdf=assets/docs/heattech-brochure.pdf \
+         --virtual-time-budget=20000 file://$PWD/brochure.html
+     Colours, type and section copy follow index.html / docs/design_system.md. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+/* ---------- tokens (mirrors assets/css/style.css) ---------- */
+:root {
+  --bg: #121517;
+  --surface: #1a1d20;
+  --surface-2: #262c33;
+  --surface-3: #2f363e;
+  --steel: #f5f7fa;
+  --line: rgba(255,255,255,.09);
+  --line-2: rgba(255,255,255,.16);
+  --accent: #ff5722;
+  --accent-deep: #e65100;
+  --cyan: #00acc1;
+  --cyan-deep: #0288d1;
+  --ink: #f5f7fa;
+  --ink-2: rgba(245,247,250,.72);
+  --ink-3: rgba(245,247,250,.5);
+  --ink-4: rgba(245,247,250,.34);
+  --r-card: 12px;
+  --r-lg: 20px;
+}
+
+@page { size: A4 portrait; margin: 0; }
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: #0b0d0e;
+  color: var(--ink);
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.55;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+img { display: block; max-width: 100%; }
+
+/* ---------- page frame ---------- */
+.page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  padding: 24mm 16mm 16mm;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--bg);
+  page-break-after: always;
+  break-after: page;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+.page--light { background: var(--steel); color: #16191c; }
+.page--flush { padding: 0; }
+
+/* running header / footer */
+.rh {
+  position: absolute;
+  top: 8mm; left: 16mm; right: 16mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.page--light .rh { color: rgba(22,25,28,.45); }
+/* the mark is a red wordmark on transparent — on the graphite ground it needs
+   its own white plate to read */
+.rh img {
+  height: 7mm;
+  width: auto;
+  padding: 1mm 2mm;
+  border-radius: 6px;
+  background: #fff;
+  box-sizing: content-box;
+}
+.rf {
+  position: absolute;
+  bottom: 8mm; left: 16mm; right: 16mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 7.5pt;
+  letter-spacing: .1em;
+  color: var(--ink-4);
+}
+.page--light .rf { color: rgba(22,25,28,.45); }
+.rf b { color: var(--accent); font-weight: 600; }
+
+/* ---------- type ---------- */
+h1, h2, h3, h4 { margin: 0; letter-spacing: -.01em; line-height: 1.18; }
+p { margin: 0 0 3mm; }
+em { font-style: normal; color: var(--accent); }
+em.cy { color: var(--cyan); }
+
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 3mm;
+  font-size: 7.5pt;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.eyebrow--cy { color: var(--cyan); }
+.h2 { font-size: 20pt; font-weight: 700; margin-bottom: 4mm; }
+.h3 { font-size: 12.5pt; font-weight: 600; }
+.h4 { font-size: 10.5pt; font-weight: 600; }
+.lead { font-size: 10.5pt; color: var(--ink-2); max-width: 150mm; }
+.page--light .lead { color: rgba(22,25,28,.7); }
+.body { color: var(--ink-2); }
+.page--light .body { color: rgba(22,25,28,.72); }
+.tiny { font-size: 8pt; color: var(--ink-3); }
+
+.sec-head { margin-bottom: 8mm; }
+.rule {
+  height: 2px;
+  width: 24mm;
+  margin: 0 0 5mm;
+  background: linear-gradient(90deg, var(--accent), rgba(255,87,34,0));
+}
+.rule--cy { background: linear-gradient(90deg, var(--cyan), rgba(0,172,193,0)); }
+
+/* ---------- cover ---------- */
+.cover { display: flex; flex-direction: column; height: 100%; }
+.cover__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cover__photo img { width: 100%; height: 100%; object-fit: cover; }
+.cover__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 78% 18%, rgba(255,87,34,.22), transparent 60%),
+    linear-gradient(180deg, rgba(10,12,13,.94) 0%, rgba(10,12,13,.82) 38%, rgba(10,12,13,.96) 100%);
+}
+.cover__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20mm 18mm 16mm;
+}
+.cover__logo {
+  height: 16mm;
+  width: auto;
+  align-self: flex-start;
+  padding: 3mm 5mm;
+  margin-bottom: 14mm;
+  border-radius: 12px;
+  background: #fff;
+  box-sizing: content-box;
+  box-shadow: 0 6mm 18mm rgba(0,0,0,.35);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5mm;
+  padding: 2mm 4mm;
+  border: 1px solid var(--line-2);
+  border-radius: 100px;
+  font-size: 8pt;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.badge i { width: 2mm; height: 2mm; border-radius: 50%; background: var(--accent); }
+.cover h1 {
+  margin: 8mm 0 6mm;
+  font-size: 30pt;
+  font-weight: 700;
+  max-width: 160mm;
+}
+.cover .lead { font-size: 11pt; max-width: 145mm; }
+.cover__spacer { flex: 1; }
+.cover__facts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3mm;
+  margin-bottom: 8mm;
+}
+.cover__fact {
+  padding: 4mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: rgba(255,255,255,.05);
+}
+.cover__fact b { display: block; font-size: 15pt; color: var(--accent); line-height: 1.1; }
+.cover__fact span { font-size: 7.5pt; color: var(--ink-2); }
+.cover__contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 5mm;
+  border-top: 1px solid var(--line);
+  font-size: 9pt;
+  color: var(--ink-2);
+}
+.cover__contact b { color: var(--ink); font-weight: 600; }
+
+/* ---------- stats ---------- */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; }
+.stat {
+  padding: 6mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: rgba(255,255,255,.04);
+}
+.stat--wide { grid-column: 1 / -1; }
+.stat__num { font-size: 22pt; font-weight: 700; color: var(--accent); line-height: 1.05; }
+.stat__num small { font-size: 11pt; color: var(--ink-2); font-weight: 500; }
+.stat__name { margin: 1.5mm 0 2mm; font-size: 11pt; font-weight: 600; }
+.stat p { margin: 0; font-size: 9pt; color: var(--ink-2); }
+
+.about { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-bottom: 8mm; }
+.about img { width: 100%; height: 46mm; object-fit: cover; border-radius: var(--r-card); }
+
+/* ---------- services ---------- */
+.svc {
+  display: grid;
+  grid-template-columns: 52mm 1fr;
+  gap: 5mm;
+  padding: 5mm 0;
+  border-top: 1px solid var(--line);
+}
+.svc:first-of-type { border-top: 0; padding-top: 0; }
+.svc__shot {
+  position: relative;
+  height: 38mm;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.svc__shot img { width: 100%; height: 100%; object-fit: cover; }
+.svc__shot span {
+  position: absolute;
+  left: 0; bottom: 0;
+  padding: 1.5mm 3mm;
+  border-top-right-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  font-weight: 700;
+}
+.svc--cy .svc__shot span { background: var(--cyan); }
+.svc h3 { font-size: 12pt; font-weight: 600; margin-bottom: 2.5mm; }
+.svc p { font-size: 9.2pt; color: var(--ink-2); }
+.svc p:last-child { margin-bottom: 0; }
+
+/* ---------- flue gas analysis ---------- */
+.readouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 6mm 0; }
+.readout {
+  padding: 4mm;
+  border: 1px solid rgba(0,172,193,.35);
+  border-radius: var(--r-card);
+  background: linear-gradient(180deg, rgba(0,172,193,.12), rgba(0,172,193,.03));
+}
+.readout b { display: block; font-size: 13pt; color: var(--cyan); }
+.readout u { display: block; text-decoration: none; font-size: 12pt; font-weight: 600; margin: 1mm 0; }
+.readout span { font-size: 7.5pt; color: var(--ink-3); }
+.gas { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; margin-bottom: 7mm; }
+.gas h4 { margin-bottom: 1.5mm; color: var(--ink); }
+.gas p { font-size: 9pt; color: var(--ink-2); margin: 0; }
+.benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.benefit {
+  padding: 5mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: rgba(255,255,255,.04);
+}
+.benefit b { display: block; font-size: 14pt; color: var(--accent); }
+.benefit h4 { margin: 1.5mm 0 2mm; }
+.benefit p { font-size: 8.6pt; color: var(--ink-2); margin: 0; }
+
+/* ---------- models ---------- */
+.models { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.model {
+  position: relative;
+  padding: 6mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: rgba(255,255,255,.04);
+}
+.model--hot { border-color: rgba(255,87,34,.55); background: rgba(255,87,34,.07); }
+.model__badge {
+  position: absolute;
+  top: -3mm; left: 6mm;
+  padding: 1.2mm 3mm;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 7.5pt;
+  font-weight: 700;
+}
+.model h3 { margin-bottom: 4mm; }
+.model dl { margin: 0; }
+.model dt {
+  font-size: 7.5pt;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+.model dd {
+  margin: .5mm 0 3mm;
+  font-size: 9.2pt;
+  color: var(--ink-2);
+  padding-bottom: 3mm;
+  border-bottom: 1px solid var(--line);
+}
+.model dd:last-child { border-bottom: 0; margin-bottom: 0; }
+
+.faq { margin-top: 8mm; display: grid; gap: 3mm; }
+.faq__item {
+  padding: 4mm 5mm;
+  border-left: 2px solid var(--accent);
+  background: rgba(255,255,255,.04);
+  border-radius: 0 var(--r-card) var(--r-card) 0;
+}
+.faq__item h4 { margin-bottom: 1.5mm; }
+.faq__item p { margin: 0; font-size: 9pt; color: var(--ink-2); }
+
+/* ---------- sectors ---------- */
+.sectors { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.sector {
+  position: relative;
+  height: 78mm;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.sector img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sector__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,12,13,.15) 0%, rgba(10,12,13,.86) 58%, rgba(10,12,13,.96) 100%);
+}
+.sector__body { position: absolute; left: 0; right: 0; bottom: 0; padding: 5mm; }
+.sector__body h3 { font-size: 11pt; font-weight: 600; margin-bottom: 2mm; }
+.sector__body p { margin: 0; font-size: 8.6pt; color: var(--ink-2); }
+
+/* ---------- certificates / brands / clients ---------- */
+.guarantees { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 7mm; }
+.guarantee {
+  padding: 5mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: rgba(255,255,255,.04);
+}
+.guarantee h4 { margin-bottom: 2mm; }
+.guarantee p { margin: 0; font-size: 8.8pt; color: var(--ink-2); }
+
+.certs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 7mm; }
+.cert { text-align: left; }
+.cert__frame {
+  height: 34mm;
+  padding: 2mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: #fff;
+  overflow: hidden;
+}
+.cert__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.cert b { display: block; margin-top: 2mm; font-size: 8.4pt; font-weight: 600; }
+.cert span { font-size: 7.6pt; color: var(--ink-3); }
+
+.brands { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2.5mm; }
+.brand {
+  display: grid;
+  place-items: center;
+  height: 12mm;
+  padding: 1.5mm;
+  border-radius: 8px;
+  background: #fff;
+}
+.brand img { max-height: 8mm; max-width: 100%; width: auto; object-fit: contain; }
+.brand span { font-size: 6.6pt; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #4a5158; }
+
+/* client tiles carry the mark and the name together, both in full colour */
+.clients { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.5mm; }
+.client {
+  display: grid;
+  grid-template-rows: 11mm auto;
+  align-items: center;
+  justify-items: center;
+  gap: 1.5mm;
+  padding: 2.5mm 2mm;
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+.client img { max-height: 11mm; max-width: 100%; width: auto; object-fit: contain; }
+.client span {
+  font-size: 6.8pt;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #2f363e;
+}
+
+/* ---------- back cover ---------- */
+.back { display: flex; flex-direction: column; height: 100%; }
+.back h2 { font-size: 24pt; max-width: 150mm; margin-bottom: 5mm; }
+.back__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 8mm; }
+.back__card {
+  padding: 6mm;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: rgba(255,255,255,.04);
+}
+.back__card--hot { border-color: rgba(255,87,34,.5); background: rgba(255,87,34,.08); }
+.back__card h3 { margin-bottom: 3mm; }
+.back__rows { margin: 0; }
+.back__rows dt { font-size: 7.5pt; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); }
+.back__rows dd { margin: .5mm 0 3.5mm; font-size: 10pt; color: var(--ink); }
+.back__steps { margin: 0; padding-left: 5mm; font-size: 9.2pt; color: var(--ink-2); }
+.back__steps li { margin-bottom: 2.5mm; }
+.back__shot { margin-top: 7mm; }
+.back__shot img { width: 100%; height: 58mm; object-fit: cover; border-radius: var(--r-lg); }
+.wordmark {
+  margin-top: 6mm;
+  font-size: 34pt;
+  font-weight: 700;
+  letter-spacing: .28em;
+  color: rgba(255,255,255,.07);
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. cover ===================== -->
+<section class="page page--flush">
+  <div class="cover__photo">
+    <img src="assets/img/shots/qazanxana/1.jpg" alt="">
+  </div>
+  <div class="cover__inner cover">
+    <img class="cover__logo" src="assets/img/logo.png" alt="HeatTech MMC">
+
+    <span class="badge"><i></i>24/7 Fasiləsiz Sənaye, Aqro və Mülki Mühəndislik Servisi</span>
+
+    <h1>Qazanxana, Odluq və Sənaye Avadanlıqlarının <em>Peşəkar Təmiri</em>, Avtomatlaşdırılması və Modifikasiyası</h1>
+
+    <p class="lead">
+      Binalar, istehsalat müəssisələri, fabriklər, aqrokomplekslər və asfalt zavodları
+      üçün istənilən gücdə qazanxanaların, sənaye odluqlarının (burner), CO₂ avtomatika
+      sistemlərinin, nasosların, generatorların və vintli hava kompressorlarının texniki
+      servisi, təmiri və retrofiti.
+    </p>
+
+    <div class="cover__spacer"></div>
+
+    <div class="cover__facts">
+      <div class="cover__fact"><b>15+</b><span>ildən artıq təcrübə</span></div>
+      <div class="cover__fact"><b>100%</b><span>zəmanətli icra</span></div>
+      <div class="cover__fact"><b>24/7</b><span>qəza müdaxiləsi</span></div>
+      <div class="cover__fact"><b>30%</b><span>-dək yanacaq qənaəti</span></div>
+    </div>
+
+    <div class="cover__contact">
+      <div>
+        <b>HeatTech MMC</b><br>
+        Ə. Nəvai küç. 10C, Babək prospekti, Bakı, Azərbaycan
+      </div>
+      <div style="text-align:right">
+        <b>+994 55 348 76 75</b><br>
+        info@heat.az · heat.az
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2. numbers ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Rəqəmlərlə biz</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Rəqəmlərlə biz</p>
+    <div class="rule"></div>
+    <h2 class="h2">2008-ci ildən <em>Azərbaycanda</em> sənaye istilik texnikası</h2>
+    <p class="lead">
+      Bir mühəndis komandası ilə altı istiqamətdə diaqnostika, əsaslı təmir,
+      modernizasiya və planlı texniki xidmət. Məqsədimiz — avadanlıqlarınızın fasiləsiz
+      işi, maksimal enerji səmərəliliyi və tam təhlükəsizlik.
+    </p>
+  </header>
+
+  <div class="about">
+    <img src="assets/img/about/burner.jpg" alt="Odluq üzərində servis işi">
+    <img src="assets/img/about/onsite.jpg" alt="Obyektdə mühəndis baxışı">
+  </div>
+
+  <div class="stats">
+    <article class="stat">
+      <div class="stat__num">15+</div>
+      <h3 class="stat__name">İldən Artıq Təcrübə</h3>
+      <p>2008-ci ildən etibarən servis sektorunda uğurlu fəaliyyətimiz, qazanxana və
+        sənaye avadanlıqlarının təmirində zəngin mühəndislik təcrübəmiz.</p>
+    </article>
+
+    <article class="stat">
+      <div class="stat__num">100%</div>
+      <h3 class="stat__name">Zəmanətli İcra</h3>
+      <p>Bütün təmir, modifikasiya və ehtiyat hissəsi dəyişimi işlərinə zəmanət
+        öhdəliyi.</p>
+    </article>
+
+    <article class="stat">
+      <div class="stat__num">24/7</div>
+      <h3 class="stat__name">Qəza Müdaxiləsi</h3>
+      <p>İstehsalatın və ya obyektin dayanmaması üçün operativ mobil servis xidməti.</p>
+    </article>
+
+    <article class="stat">
+      <div class="stat__num">30%<small>-dək</small></div>
+      <h3 class="stat__name">Yanacaq Qənaəti</h3>
+      <p>Odluqların dəqiq kalibrlənməsi və elektron modulyasiyaya keçirilməsi (retrofit)
+        nəticəsində əldə olunan maksimum səmərəlilik.</p>
+    </article>
+
+    <article class="stat stat--wide">
+      <div class="stat__num">∞</div>
+      <h3 class="stat__name">Məhdudiyyətsiz Güc Diapazonu</h3>
+      <p>Kiçik həcmli mərkəzi isitmə sistemlərindən tutmuş, nəhəng sənaye buxar
+        qazanlarına və asfalt plantı odluqlarına qədər tam texniki xidmət.</p>
+    </article>
+  </div>
+
+  <div class="rf"><span>heat.az · info@heat.az</span><b>02</b></div>
+</section>
+
+<!-- ===================== 3. services 1–3 ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Əsas xidmətlərimiz</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Əsas xidmətlərimiz</p>
+    <div class="rule"></div>
+    <h2 class="h2">Genişləndirilmiş <em>Mühəndislik Xidmətləri</em></h2>
+  </header>
+
+  <article class="svc">
+    <div class="svc__shot">
+      <img src="assets/img/shots/qazanxana/2.jpg" alt="Qazanxana sistemi">
+      <span>01</span>
+    </div>
+    <div>
+      <h3>Qazanxana Sistemlərinin Kompleks Servisi, Təmiri və Mövsümi Hazırlığı</h3>
+      <p>Biz istənilən gücdə və tipli (suqızdırıcı, buxar, qızgın yağ) qazanxanaların
+        kompleks texniki xidmətini, diaqnostikasını və əsaslı təmirini icra edirik.</p>
+      <p>Xidmətlərimizə qazanların daxili və xarici səthlərinin ərp və çöküntülərdən
+        kimyəvi/mexaniki təmizlənməsi, təhlükəsizlik klapanlarının və avtomatik idarəetmə
+        lövhələrinin tənzimlənməsi və mövsümə tam hazır vəziyyətə gətirilməsi daxildir.
+        Potensial qəzaları öncədən müəyyən edərək, gözlənilməz istehsalat dayanmalarının
+        qarşısını alırıq.</p>
+    </div>
+  </article>
+
+  <article class="svc">
+    <div class="svc__shot">
+      <img src="assets/img/shots/odluq/1.jpg" alt="Sənaye odluğu">
+      <span>02</span>
+    </div>
+    <div>
+      <h3>Sənaye və Qeyri-Sənaye Odluqlarının (Burner) Təmiri, Modifikasiyası və Retrofiti</h3>
+      <p>Qaz, dizel, mazut və kombinasiya olunmuş (çoxyanacaqlı) odluqların təmiri,
+        sınağı və kalibrlənməsini peşəkar səviyyədə həyata keçiririk.</p>
+      <p>Köhnəlmiş, mexaniki idarəetməli odluqları modernizasiya edərək (retrofit),
+        mikroprosessorlu elektron idarəetmə və servo-mühərrikli hava-yanacaq nisbəti
+        sistemlərinə keçiririk. Yanma prosesini rəqəmsal qaz analizatorları vasitəsilə
+        tənzimləməklə, CO və CO₂ emissiyalarını minimuma endirir və 15%-dən 30%-dək
+        yanacaq qənaəti əldə edirik.</p>
+    </div>
+  </article>
+
+  <article class="svc svc--cy">
+    <div class="svc__shot">
+      <img src="assets/img/shots/co2/1.jpg" alt="CO2 avtomatika sistemi">
+      <span>03</span>
+    </div>
+    <div>
+      <h3>Aqrokomplekslər üçün CO₂ Qurğularının Sensor və Avtomatika Yenilənməsi</h3>
+      <p>İstixana və aqrokomplekslərdə CO₂ səviyyəsinin normadan artıq və ya əskik
+        olması həm məhsula zərər verir, həm də heyət üçün təhlükə yaradır.</p>
+      <p>Biz CO₂ generatorlarının və dozajlama xətlərinin avtomatika sistemlərini
+        sıfırdan qurur və ya mövcud sistemləri yeniləyirik. Həssas CO₂ sensorlarının
+        kalibrlənməsi, avtomatik qaz sızma təhlükəsizlik klapanlarının inteqrasiyası və
+        mərkəzi idarəetmə pultuna (PLC) qoşulmasını təmin edirik.</p>
+    </div>
+  </article>
+
+  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>03</b></div>
+</section>
+
+<!-- ===================== 4. services 4–6 ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Əsas xidmətlərimiz</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Əsas xidmətlərimiz</p>
+    <div class="rule"></div>
+    <h2 class="h2">Nasos, Kompressor və <em>Generator Servisi</em></h2>
+  </header>
+
+  <article class="svc">
+    <div class="svc__shot">
+      <img src="assets/img/shots/nasos/1.jpg" alt="Nasos qrupu">
+      <span>04</span>
+    </div>
+    <div>
+      <h3>Dövriyyə və Təzyiq Nasoslarının Texniki Servisi</h3>
+      <p>Dövriyyə, təzyiq artırma (booster), yanğın və drenaj nasoslarının təmiri və
+        profilaktikası mühəndislik dəqiqliyi tələb edir.</p>
+      <p>Şaquli, üfüqi və mərkəzdənqaçma nasosların diaqnostikası, mexaniki salnik və
+        diyircəkli yastıqların dəyişdirilməsi, rotorların dinamik balanslaşdırılması,
+        mühərrik sarğılarının nəzarəti və tezlik çeviricilərinin (Inverter/VFD)
+        sazlanması. Bu sayədə kavitasiya riskini aradan qaldırır və elektrik enerjisi
+        sərfiyyatını ciddi şəkildə azaldırıq.</p>
+    </div>
+  </article>
+
+  <article class="svc">
+    <div class="svc__shot">
+      <img src="assets/img/shots/kompressor/1.jpg" alt="Vintli hava kompressoru">
+      <span>05</span>
+    </div>
+    <div>
+      <h3>Vintli Hava Kompressorlarının Servisi və Əsaslı Təmiri</h3>
+      <p>Sənaye müəssisələrinin pnevmatik avadanlıqlarını sıxılmış hava ilə təmin edən
+        vintli kompressorların dayanması bütün istehsalat xəttinin iflic olması deməkdir.</p>
+      <p>Planlı texniki baxış (yağ, hava və separator filtrlərinin dəyişdirilməsi), vint
+        blokunun (air-end) əsaslı təmiri, klapanların bərpası, soyutma radiatorlarının
+        təmizlənməsi və təzyiq sensorlarının sazlanması. Həddindən artıq qızmanın və
+        təzyiq düşmələrinin qarşısını alaraq istismar ömrünü uzadırıq.</p>
+    </div>
+  </article>
+
+  <article class="svc">
+    <div class="svc__shot">
+      <img src="assets/img/shots/generator/1.jpg" alt="Sənaye generatoru">
+      <span>06</span>
+    </div>
+    <div>
+      <h3>Sənaye Generatorlarının Servisi və İdarəetmə Panellərinin Təmiri</h3>
+      <p>Şəbəkədə kəsilmə baş verdikdə obyekti fasiləsiz enerji ilə təmin edən dizel və
+        qaz generatorlarının operativ işə düşməsi həyati əhəmiyyət kəsb edir.</p>
+      <p>Mühərrik və alternatör hissəsinin diaqnostikası, Avtomatik Transfer
+        Şalterlərinin (ATS) tənzimlənməsi, idarəetmə kartlarının proqramlaşdırılması, yük
+        altında sınaqlar və dövrü yağ/filtr dəyişimi. Generatorunuzun hər an qəza
+        rejimində problemsiz işə düşəcəyinə zəmanət veririk.</p>
+    </div>
+  </article>
+
+  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>04</b></div>
+</section>
+
+<!-- ===================== 5. flue gas analysis ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Baca qazı analizi</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow eyebrow--cy">Xüsusi mühəndislik xidməti</p>
+    <div class="rule rule--cy"></div>
+    <h2 class="h2">Rəqəmsal Baca Qazı Analizi ilə <em class="cy">Maksimum Səmərəlilik</em> və Minimum Emissiya</h2>
+    <p class="lead">
+      Yanacağın vizual yox, spektral cihazlarla təhlili: hər bir milliqram qaza nəzarət
+      edərək maliyyənizi və ətraf mühiti qoruyuruq. Kalibrlənmiş analizatorla CO, CO₂,
+      NO, NOx və O₂ göstəricilərini ölçür, hava/yanacaq nisbətini idarəetmə lövhəsindən
+      (servo-mühərriklərdən) dəqiq tənzimləyirik.
+    </p>
+  </header>
+
+  <div class="readouts">
+    <div class="readout"><b>O₂</b><u>3–4%</u><span>Oksigen · hədəf aralıq</span></div>
+    <div class="readout"><b>CO</b><u>ppm ↓</u><span>Dəm qazı · minimuma</span></div>
+    <div class="readout"><b>CO₂</b><u>Maks. ↑</u><span>Karbon dioksid · pik</span></div>
+    <div class="readout"><b>NOx</b><u>Low-NOx</u><span>Azot oksidləri · norma</span></div>
+  </div>
+
+  <div class="gas">
+    <div>
+      <h4 class="h4">Oksigen (O₂) — Yanma Hava Nisbətinin Açarı</h4>
+      <p>Azad oksigenin normadan çox olması lazımsız havanın qızdırılaraq bacadan bayıra
+        atılması (enerji itkisi), az olması isə yanacağın tam yanmaması deməkdir. Hava
+        damperini mikron dəqiqliyi ilə tənzimləyərək O₂-ni ideal həddə (təbii qaz üçün
+        3–4%) gətiririk.</p>
+    </div>
+    <div>
+      <h4 class="h4">Dəm Qazı (CO) — Gizli Yanacaq İtkisi və Təhlükə</h4>
+      <p>Yanacaq tam yanmadıqda karbon-monoksid əmələ gəlir — bu, birbaşa havaya
+        sovurulan yanmamış pul və zəhərlənmə riskidir. CO-nu ppm səviyyəsinə endirməklə
+        yanacağın 100%-ə yaxın effektivliklə enerjiyə çevrilməsini təmin edirik.</p>
+    </div>
+    <div>
+      <h4 class="h4">Karbon Dioksid (CO₂) — Yanma Keyfiyyətinin İndikatoru</h4>
+      <p>Bacada CO₂-nin pik səviyyəyə çatması yanacağın ideal yandığını göstərir.
+        Maksimum CO₂ verimini almaq üçün hava və yanacaq girişini tam balansa gətiririk.</p>
+    </div>
+    <div>
+      <h4 class="h4">Azot Oksidləri (NO və NOx) — Ətraf Mühit və Ekologiya</h4>
+      <p>Yanma kamerasında temperatur həddindən artıq yüksək olduqda zərərli NOx qazları
+        yaranır. Alovun formalı yanmasını və temperaturunu tənzimləyərək Low-NOx (aşağı
+        emissiya) standartlarını təmin edirik.</p>
+    </div>
+  </div>
+
+  <h3 class="h3" style="margin-bottom:4mm">Bu tənzimləmələrin biznesinizə və ətraf mühitə xeyri</h3>
+  <div class="benefits">
+    <article class="benefit">
+      <b>01</b>
+      <h4 class="h4">Yanacaq Sərfiyyatında Böyük Qənaət</h4>
+      <p>Düzgün tənzimlənməmiş sənaye odluqları il ərzində tonlarla artıq yanacaq və ya
+        minlərlə kubmetr artıq təbii qaz yandırır. Analizatorla edilən tənzimləmə bu
+        itkini anında dayandırır.</p>
+    </article>
+    <article class="benefit">
+      <b>02</b>
+      <h4 class="h4">Avadanlığın Ömrünün Uzanması</h4>
+      <p>Tam yanmayan yanacaq qazanın borularında qurum yaradır. 1 mm-lik qurum təbəqəsi
+        istilik ötürülməsini 10% zəiflədir. Analiz sayəsində qazan boruları təmiz qalır.</p>
+    </article>
+    <article class="benefit">
+      <b>03</b>
+      <h4 class="h4">Ekoloji Standartlar və Cərimələrdən Mühafizə</h4>
+      <p>CO və NOx qazlarının beynəlxalq ekoloji normalara uyğunlaşdırılması və Dövlət
+        Ekologiya müfəttişliklərinə rəsmi Baca Analizi Hesabatının təqdim edilməsi.</p>
+    </article>
+  </div>
+
+  <div class="rf"><span>heat.az · info@heat.az</span><b>05</b></div>
+</section>
+
+<!-- ===================== 6. service models + faq ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Xidmət modelləri</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Xidmət modelləri</p>
+    <div class="rule"></div>
+    <h2 class="h2">Sizə Uyğun <em>Xidmət Modelini</em> Seçin</h2>
+    <p class="lead">
+      Obyektinizin ehtiyaclarına uyğun olaraq istər təcili birdəfəlik təmir, istərsə də
+      uzunmüddətli dövri texniki xidmət müqaviləsi təklif edirik.
+    </p>
+  </header>
+
+  <div class="models">
+    <article class="model">
+      <h3 class="h3">Birdəfəlik Təmir və Servis</h3>
+      <dl>
+        <dt>Xidmət məqsədi</dt><dd>Mövcud nasazlığı və qəzanı aradan qaldırmaq</dd>
+        <dt>Reaksiya müddəti</dt><dd>Müraciət növbəsinə uyğun operativ müdaxilə</dd>
+        <dt>Maliyyə planlaması</dt><dd>Qəza anında gözlənilməz xərclər</dd>
+        <dt>Avadanlığın ömrü</dt><dd>Qısamüddətli bərpa</dd>
+        <dt>Yanacaq qənaəti</dt><dd>Yalnız təmir olunan detal çərçivəsində</dd>
+      </dl>
+    </article>
+
+    <article class="model model--hot">
+      <span class="model__badge">Maksimum Qənaət və Təhlükəsizlik</span>
+      <h3 class="h3">Dövri (Müqaviləli) Texniki Xidmət</h3>
+      <dl>
+        <dt>Xidmət məqsədi</dt><dd>Qəzaların baş verməsinin öncədən qarşısını almaq</dd>
+        <dt>Reaksiya müddəti</dt><dd>24/7 prioritetli və anında reaksiya</dd>
+        <dt>Maliyyə planlaması</dt><dd>Öncədən bəlli, sabit illik/aylıq büdcə</dd>
+        <dt>Avadanlığın ömrü</dt><dd>Maksimum uzunömürlülük və yüksək effektivlik</dd>
+        <dt>Yanacaq qənaəti</dt><dd>Daimi kalibrləmə sayəsində maksimum qənaət</dd>
+      </dl>
+    </article>
+  </div>
+
+  <div class="faq">
+    <div class="faq__item">
+      <h4 class="h4">Odluqların (burner) retrofit olunması nə üçün vacibdir?</h4>
+      <p>Mexaniki idarə olunan köhnə odluqlarda hava və yanacaq nisbəti dəqiq
+        tənzimlənmir. Retrofit zamanı rəqəmsal idarəetmə və servo-mühərriklər
+        quraşdırılır. Bu, yanacağın tam yanmasını təmin edərək 15–30% yanacaq qənaəti
+        verir.</p>
+    </div>
+    <div class="faq__item">
+      <h4 class="h4">Baca qazı analizi nə qədər vaxtdan bir aparılmalıdır?</h4>
+      <p>Sənaye obyektlərində və böyük qazanxanalarda ildə ən azı 4 dəfə (mövsüm
+        keçidlərində). Həmçinin yanacaq keyfiyyəti dəyişdikdə və ya təmir işindən sonra
+        mütləqdir.</p>
+    </div>
+    <div class="faq__item">
+      <h4 class="h4">Nə üçün təmir əvəzinə dövri texniki xidmət müqaviləsi bağlamalıyam?</h4>
+      <p>Dövri xidmət zamanı mühəndislərimiz kiçik nasazlıqları öncədən aşkar edir. Bu,
+        istehsalatın anidən dayanmasının və sonradan yaranacaq çox daha bahalı təmir
+        xərclərinin qarşısını alır.</p>
+    </div>
+  </div>
+
+  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>06</b></div>
+</section>
+
+<!-- ===================== 7. sectors ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>İxtisas sahələri</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Obyekt tipləri</p>
+    <div class="rule"></div>
+    <h2 class="h2">İxtisaslaşdığımız <em>Sahələr</em></h2>
+  </header>
+
+  <div class="sectors">
+    <article class="sector">
+      <img src="assets/img/shots/asfalt/1.jpg" alt="Asfalt zavodu">
+      <div class="sector__veil"></div>
+      <div class="sector__body">
+        <h3>Asfalt Zavodları və İnert Material Təsərrüfatları</h3>
+        <p>Yüksək güclü asfalt plantı odluqlarının (dizel, mazut, təbii qaz və ya
+          kombinasiya olunmuş) təcili təmiri, yanma kamerasının kalibrlənməsi, alov
+          sensorlarının təmizlənməsi və qaz/hava qarışığının optimal tənzimlənməsi.</p>
+      </div>
+    </article>
+
+    <article class="sector">
+      <img src="assets/img/shots/istixana/1.jpg" alt="İstixana təsərrüfatı">
+      <div class="sector__veil"></div>
+      <div class="sector__body">
+        <h3>Aqrokomplekslər və İstixana Təsərrüfatları</h3>
+        <p>İstixanaların CO₂ idarəetmə sistemləri, böyük həcmli isitmə qazanxanaları,
+          suvarma və təzyiq nasos stansiyalarının fasiləsiz servisi.</p>
+      </div>
+    </article>
+
+    <article class="sector">
+      <img src="assets/img/shots/fabrik/1.jpg" alt="Sənaye müəssisəsi">
+      <div class="sector__veil"></div>
+      <div class="sector__body">
+        <h3>Fabriklər və Sənaye Müəssisələri</h3>
+        <p>İstehsalat xətlərini təmin edən buxar və qızgın yağ qazanları, yüksək təzyiqli
+          vintli hava kompressorları və sənaye odluqlarının təmiri və retrofiti.</p>
+      </div>
+    </article>
+
+    <article class="sector">
+      <img src="assets/img/shots/bina/1.jpg" alt="Yaşayış və biznes binası">
+      <div class="sector__veil"></div>
+      <div class="sector__body">
+        <h3>Yaşayış Binaları, Otellər və Biznes Mərkəzləri</h3>
+        <p>Mərkəzi isitmə və isti su qazanxanaları, təzyiq artırma (booster) nasosları,
+          dövriyyə sistemləri və qəza generatorlarının kompleks baxışı.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="rf"><span>heat.az · info@heat.az</span><b>07</b></div>
+</section>
+
+<!-- ===================== 8. certificates + brands ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Sertifikatlar və brendlər</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Sertifikatlar və lisenziyalar</p>
+    <div class="rule"></div>
+    <h2 class="h2">Beynəlxalq Standartlar və <em>Rəsmi Lisenziyalarımız</em></h2>
+  </header>
+
+  <div class="guarantees">
+    <article class="guarantee">
+      <h4 class="h4">İqtisadiyyat Nazirliyinin Rəsmi Lisenziyaları</h4>
+      <p>Təhlükə potensiallı obyektlərdə (buxar və suqızdırıcı qazanlar, təzyiq altında
+        işləyən qablar) montaj, sazlama və təmir işlərinin, həmçinin texniki qurğuların
+        diaqnostikası və yoxlamalarının aparılması üçün rəsmi lisenziyalar.</p>
+    </article>
+    <article class="guarantee">
+      <h4 class="h4">İstehsalçı Avadanlıq Sertifikatları</h4>
+      <p>Mühəndis heyətimizin aparıcı beynəlxalq odluq, qazan, vintli kompressor və
+        generator istehsalçılarının xüsusi təlim mərkəzlərində keçdiyi ixtisaslaşma
+        akkreditasiyaları.</p>
+    </article>
+  </div>
+
+  <div class="certs">
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/lisenziya-diaqnostika-th.jpg" alt=""></div>
+      <b>Lisenziya EL-388/2026</b><span>İqtisadiyyat Nazirliyi</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/lisenziya-qurasdirma-th.jpg" alt=""></div>
+      <b>Lisenziya EL-380/2026</b><span>İqtisadiyyat Nazirliyi</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/lamtec-cms-th.jpg" alt=""></div>
+      <b>Combustion Management System</b><span>LAMTEC</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/lamtec-etamatic-th.jpg" alt=""></div>
+      <b>ETAMATIC Burner Control</b><span>LAMTEC</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/riello-brulor-th.jpg" alt=""></div>
+      <b>RIELLO Odluq Təlimi</b><span>E-GAZ / Riello</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/ducomp-melikov-th.jpg" alt=""></div>
+      <b>Kompressor Servisi</b><span>DUCOMP Compressor</span>
+    </div>
+    <div class="cert">
+      <div class="cert__frame"><img src="assets/img/certs/ducomp-bayramov-th.jpg" alt=""></div>
+      <b>Kompressor Servisi</b><span>DUCOMP Compressor</span>
+    </div>
+    <div class="cert" style="display:flex;align-items:center">
+      <p class="tiny" style="margin:0">Lisenziya və sertifikatların tam siyahısı və
+        skan nüsxələri: <b style="color:var(--accent)">heat.az/#sertifikatlar</b></p>
+    </div>
+  </div>
+
+  <h3 class="h3" style="margin-bottom:4mm">Servis Etdiyimiz Avadanlıq Brendləri</h3>
+  <div class="brands">
+    <div class="brand"><img src="assets/img/brands/siemens.png" alt="Siemens"></div>
+    <div class="brand"><img src="assets/img/brands/lamtec.png" alt="Lamtec"></div>
+    <div class="brand"><img src="assets/img/brands/autoflame.jpg" alt="Autoflame"></div>
+    <div class="brand"><img src="assets/img/brands/honeywell.png" alt="Honeywell"></div>
+    <div class="brand"><img src="assets/img/brands/alarko.svg" alt="Alarko"></div>
+    <div class="brand"><img src="assets/img/brands/buderus.svg" alt="Buderus"></div>
+    <div class="brand"><img src="assets/img/brands/ecoflam.png" alt="Ecoflam"></div>
+    <div class="brand"><img src="assets/img/brands/cib-unigas.svg" alt="Cib Unigas"></div>
+    <div class="brand"><img src="assets/img/brands/elco.png" alt="Elco"></div>
+    <div class="brand"><img src="assets/img/brands/weishaupt.svg" alt="Weishaupt"></div>
+    <div class="brand"><img src="assets/img/brands/baltur.png" alt="Baltur"></div>
+    <div class="brand"><img src="assets/img/brands/riello.png" alt="Riello"></div>
+    <div class="brand"><img src="assets/img/brands/vitotherm.png" alt="Vitotherm"></div>
+    <div class="brand"><img src="assets/img/brands/thermeta.png" alt="Thermeta"></div>
+    <div class="brand"><img src="assets/img/brands/zantingh.png" alt="Zantingh"></div>
+    <div class="brand"><img src="assets/img/brands/france-thermique.png" alt="France Thermique"></div>
+    <div class="brand"><img src="assets/img/brands/ecostar.png" alt="Ecostar"></div>
+    <div class="brand"><img src="assets/img/brands/fbr.svg" alt="F.B.R"></div>
+    <div class="brand"><img src="assets/img/brands/viessmann.png" alt="Viessmann"></div>
+    <div class="brand"><span>Cron</span></div>
+    <div class="brand"><img src="assets/img/brands/danfoss.png" alt="Danfoss"></div>
+    <div class="brand"><img src="assets/img/brands/aksa.jpg" alt="Aksa"></div>
+    <div class="brand"><img src="assets/img/brands/genpower.png" alt="Genpower"></div>
+    <div class="brand"><img src="assets/img/brands/teksan.png" alt="Teksan"></div>
+    <div class="brand"><img src="assets/img/brands/cukurova.png" alt="Çukurova"></div>
+    <div class="brand"><img src="assets/img/brands/wilo.png" alt="Wilo"></div>
+    <div class="brand"><img src="assets/img/brands/lowara.png" alt="Lowara"></div>
+    <div class="brand"><img src="assets/img/brands/teknopump.png" alt="Teknopump"></div>
+    <div class="brand"><img src="assets/img/brands/standart-pump.png" alt="Standart Pompa"></div>
+    <div class="brand"><img src="assets/img/brands/grundfos.png" alt="Grundfos"></div>
+    <div class="brand"><img src="assets/img/brands/almig.png" alt="Almig"></div>
+    <div class="brand"><img src="assets/img/brands/ecomak.png" alt="Ecomak"></div>
+    <div class="brand"><img src="assets/img/brands/filo.png" alt="Filo"></div>
+    <div class="brand"><img src="assets/img/brands/ducomp.png" alt="Ducomp"></div>
+    <div class="brand"><img src="assets/img/brands/havamak.svg" alt="Havamak"></div>
+  </div>
+
+  <div class="rf"><span>heat.az · info@heat.az</span><b>08</b></div>
+</section>
+
+<!-- ===================== 9. clients ===================== -->
+<section class="page">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Əməkdaşlıq</span>
+  </div>
+
+  <header class="sec-head">
+    <p class="eyebrow">Əməkdaşlıq</p>
+    <div class="rule"></div>
+    <h2 class="h2">Bizə Etibar Edən <em>Şirkətlər</em> və Tərəfdaşlarımız</h2>
+    <p class="lead">
+      2008-ci ildən bəri ölkənin aparıcı sənaye müəssisələri, tikinti şirkətləri, otel
+      şəbəkələri və aqrokompleksləri ilə uğurlu əməkdaşlıq edirik.
+    </p>
+  </header>
+
+  <div class="clients">
+    <div class="client"><img src="assets/img/clients/azfen.png" alt=""><span>Azfen</span></div>
+    <div class="client"><img src="assets/img/clients/caspian-plaza.svg" alt=""><span>Caspian Plaza</span></div>
+    <div class="client"><img src="assets/img/clients/demirchi-tower.svg" alt=""><span>Dəmirçi Tower</span></div>
+    <div class="client"><img src="assets/img/clients/aga.svg" alt=""><span>AGA İş Mərkəzi</span></div>
+    <div class="client"><img src="assets/img/clients/baki-saglamliq.png" alt=""><span>Bakı Sağlamlıq Mərkəzi</span></div>
+    <div class="client"><img src="assets/img/clients/rdm.png" alt=""><span>Respublika Diaqnostika Mərkəzi</span></div>
+    <div class="client"><img src="assets/img/clients/dunyagoz.png" alt=""><span>Dünyagöz Klinika</span></div>
+    <div class="client"><img src="assets/img/clients/ilk-insaat.png" alt=""><span>İlk İnşaat</span></div>
+    <div class="client"><img src="assets/img/clients/qebele-konserv.png" alt=""><span>Qəbələ Konserv Zavodu</span></div>
+    <div class="client"><img src="assets/img/clients/milla.svg" alt=""><span>Milla</span></div>
+    <div class="client"><img src="assets/img/clients/azertoxum.png" alt=""><span>Azərtoxum</span></div>
+    <div class="client"><img src="assets/img/clients/garabagh.svg" alt=""><span>Garabagh Resort &amp; SPA</span></div>
+    <div class="client"><img src="assets/img/clients/gashalti.svg" alt=""><span>Gashalti Health Hotel</span></div>
+    <div class="client"><img src="assets/img/clients/zira-gulculuk.png" alt=""><span>Zirə Gülçülük</span></div>
+    <div class="client"><img src="assets/img/clients/glassman.png" alt=""><span>Glassman</span></div>
+    <div class="client"><img src="assets/img/clients/semkir-agro.png" alt=""><span>Şəmkir Agro</span></div>
+    <div class="client"><img src="assets/img/clients/era-agro.svg" alt=""><span>Era Agro</span></div>
+    <div class="client"><img src="assets/img/clients/azerkarton.png" alt=""><span>Azərkarton</span></div>
+    <div class="client"><img src="assets/img/clients/greentech.png" alt=""><span>Greentech</span></div>
+    <div class="client"><img src="assets/img/clients/agrofavorit.png" alt=""><span>Agrofavorit</span></div>
+    <div class="client"><img src="assets/img/clients/ecoprod.png" alt=""><span>Ecoprod</span></div>
+    <div class="client"><img src="assets/img/clients/gozel-seeds.png" alt=""><span>Gözəl Seeds</span></div>
+    <div class="client"><img src="assets/img/clients/gfc.jpg" alt=""><span>GFC</span></div>
+    <div class="client"><img src="assets/img/clients/agrofresh.png" alt=""><span>Agrofresh</span></div>
+    <div class="client"><img src="assets/img/clients/pozitron-agro.jpg" alt=""><span>Pozitron Agro</span></div>
+    <div class="client"><img src="assets/img/clients/n1-corek.svg" alt=""><span>N1 Çörək Zavodu</span></div>
+    <div class="client"><img src="assets/img/clients/bakixanov.jpg" alt=""><span>Bakıxanov Çörək Zavodu</span></div>
+    <div class="client"><img src="assets/img/clients/red-globe.png" alt=""><span>Red Globe</span></div>
+    <div class="client"><img src="assets/img/clients/gbs.jpg" alt=""><span>GBS</span></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:7mm">
+    <img src="assets/img/shots/fabrik/2.jpg" alt="" style="width:100%;height:46mm;object-fit:cover;border-radius:12px">
+    <img src="assets/img/shots/istixana/2.jpg" alt="" style="width:100%;height:46mm;object-fit:cover;border-radius:12px">
+  </div>
+
+  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>09</b></div>
+</section>
+
+<!-- ===================== 10. back cover ===================== -->
+<section class="page back">
+  <div class="rh">
+    <img src="assets/img/logo.png" alt="HeatTech">
+    <span>Əlaqə</span>
+  </div>
+
+  <p class="eyebrow">Təcili çağırış və mühəndis baxışı</p>
+  <div class="rule"></div>
+  <h2 class="h2 back__h">Sistemlərinizdə Problem Var, Yoxsa <em>Yanacaq Qənaəti</em> Əldə Etmək İstəyirsiniz?</h2>
+  <p class="lead">
+    Mühəndisimizin obyektinizə baxış keçirməsi, mövcud avadanlıqların auditi və sizə
+    xüsusi texniki/kommersiya təklifinin hazırlanması üçün bizimlə əlaqə saxlayın.
+  </p>
+
+  <div class="back__grid">
+    <div class="back__card back__card--hot">
+      <h3 class="h3">Əlaqə</h3>
+      <dl class="back__rows">
+        <dt>Mobil / WhatsApp</dt><dd>+994 55 348 76 75</dd>
+        <dt>E-poçt</dt><dd>info@heat.az</dd>
+        <dt>Veb</dt><dd>heat.az</dd>
+        <dt>Ünvan</dt><dd>Ə. Nəvai küç. 10C, Babək prospekti, Bakı</dd>
+        <dt>İş saatları</dt><dd>B.e–Ş 09:00–18:00 · Təcili çağırış 24/7</dd>
+      </dl>
+    </div>
+
+    <div class="back__card">
+      <h3 class="h3">Necə işləyirik</h3>
+      <ol class="back__steps">
+        <li>Zəng və ya WhatsApp sorğusu — avadanlığın tipi və problem barədə qısa məlumat.</li>
+        <li>Obyektə mühəndis baxışı və mövcud avadanlıqların auditi.</li>
+        <li>Texniki-kommersiya təklifi: iş həcmi, ehtiyat hissələr, müddət.</li>
+        <li>İcra, sınaq və baca qazı analizi ilə yekun tənzimləmə.</li>
+        <li>Zəmanət və istəyə görə dövri texniki xidmət müqaviləsi.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="back__shot">
+    <img src="assets/img/shots/odluq/3.jpg" alt="">
+  </div>
+
+  <div class="wordmark">HEATTECH</div>
+
+  <div class="rf"><span>© 2026 HeatTech MMC. Bütün hüquqlar qorunur.</span><b>10</b></div>
+</section>
+
+</body>
+</html>
