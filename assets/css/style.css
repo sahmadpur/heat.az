@@ -555,9 +555,14 @@ h1, h2, h3, h4 {
   box-shadow: var(--shadow-float);
 }
 
+/* the stack holds the frame's shape — the photos inside it are absolute */
+.hero__media .shots {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+
 .hero__media img {
   width: 100%;
-  aspect-ratio: 4 / 5;
   object-fit: cover;
   /* the docs call for a darkened industrial photo */
   filter: contrast(1.06) saturate(0.85) brightness(0.72);
@@ -1087,7 +1092,9 @@ h1, h2, h3, h4 {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(to top, rgba(18, 21, 23, 0.95) 12%, rgba(18, 21, 23, 0.35) 70%);
+  /* the copy can run nearly the full height of the tallest card, so the veil
+     has to hold over the whole photo, not just fade out at the top */
+  background: linear-gradient(to top, rgba(18, 21, 23, 0.96) 14%, rgba(18, 21, 23, 0.7) 72%, rgba(18, 21, 23, 0.5));
 }
 
 /* icon sits in flow at the top so long copy can never run under it */
@@ -1164,6 +1171,10 @@ h1, h2, h3, h4 {
   aspect-ratio: 1;
   border: 1px solid rgba(22, 25, 28, 0.1);
   border-radius: 50%;
+  /* the ring's box is a square that covers everything inside it — leave the
+     pointer to the planets, or an outer orbit swallows the hover of every
+     planet it spans */
+  pointer-events: none;
   animation: orbit-spin var(--spin, 150s) linear infinite;
 }
 
@@ -1174,6 +1185,7 @@ h1, h2, h3, h4 {
   width: var(--s);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
+  pointer-events: auto;
   transition: transform 0.3s var(--ease-out);
 }
 
@@ -1253,6 +1265,11 @@ h1, h2, h3, h4 {
 
 .orbit.is-placed:hover .orbit__path,
 .orbit.is-placed:hover .orbit__dot { animation-play-state: paused; }
+
+/* each orbit is its own stacking context (it runs a `rotate` animation), so the
+   item's own z-index only lifts it above its ring-mates — lift the whole ring
+   too, or a label reads under the planets of the orbits outside it */
+.orbit.is-placed .orbit__path:has(.orbit__item:hover) { z-index: 20; }
 
 /* lift the hovered item out of source order, or its label reads under the
    neighbouring bubbles */
@@ -2021,7 +2038,7 @@ h1, h2, h3, h4 {
   .nav__menu.is-open a { opacity: 1; transform: none; }
 
   .hero__grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero__media img { aspect-ratio: 16 / 10; }
+  .hero__media .shots { aspect-ratio: 16 / 10; }
   .analyz__intro,
   .analyz__grid,
   .models,
