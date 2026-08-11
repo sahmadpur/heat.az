@@ -1140,7 +1140,7 @@ h1, h2, h3, h4 {
   top: 50%;
   display: grid;
   place-items: center;
-  width: 13%;
+  width: 26%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;

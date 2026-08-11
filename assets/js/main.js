@@ -137,19 +137,16 @@
      between them, so two bubbles can never touch — neither along a ring nor
      across two of them, since the rings themselves step out by DOT + GAP.
      Everything is in % of the box, so the rings scale with it. */
-  var DOT = 9;     /* % of the box — bubble diameter */
-  var GAP = 2;     /* % — clear space between neighbouring bubbles */
-  var R_IN = 20;   /* % — innermost ring, clear of the centre mark */
-  var R_OUT = 42;  /* % — outermost ring, with room left for its bubbles */
-  var PITCH = 11;  /* % — radius step; wider than a bubble, so rings never meet */
+  var DOT = 9;    /* % of the box — bubble diameter */
+  var GAP = 2;    /* % — clear space between neighbouring bubbles */
+  var R_IN = 20;  /* % — innermost ring, clear of the centre mark */
 
   function ringSlots(n) {
     /* a bubble spans 2*asin((DOT+GAP)/2r) of a ring of radius r; a full turn
-       holds floor(2π / that) of them. The rings themselves span the whole box
-       whatever the count, or a short list would huddle in the middle. */
+       holds floor(2π / that) of them */
     var rings = [];
     var room = 0;
-    for (var r = R_IN; r <= R_OUT || room < n; r += PITCH) {
+    for (var r = R_IN; room < n; r += DOT + GAP) {
       var cap = Math.floor(Math.PI / Math.asin(Math.min(1, (DOT + GAP) / (2 * r))));
       rings.push({ r: r, cap: cap });
       room += cap;
