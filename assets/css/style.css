@@ -238,6 +238,8 @@ h1, h2, h3, h4 {
     transition: none !important;
   }
   .marquee__track,
+  .orbit__ring,
+  .orbit__dot,
   .blob,
   .grain,
   .dot::after,
@@ -388,19 +390,15 @@ h1, h2, h3, h4 {
   flex: none;
 }
 
-/* logo.png is mark + wordmark in one raster; crop the mark with background-position */
-.nav__mark {
-  width: 16px;
-  height: 30px;
+/* the real logo (drop + wordmark + strapline in one raster) — the accessible
+   name lives on its alt, so no separate text node */
+.nav__logo {
+  height: 42px;
+  width: auto;
   flex: none;
-  background: url("../img/logo.png") left center / auto 30px no-repeat;
 }
 
-.nav__word {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
+.nav__logo--foot { height: 56px; }
 
 .nav__links { display: flex; align-items: center; gap: 2px; }
 
@@ -1069,12 +1067,190 @@ h1, h2, h3, h4 {
 }
 
 /* ==========================================================================
-   7. partners marquee (light band)
+   7. client orbit + partners marquee (light band)
    ========================================================================== */
+
+/* One spiral of dots, each dot a client. JS (initClientOrbit) writes --x/--y/--s
+   per item; with JS off the ring degrades to a plain wrapped list of names. */
+.orbit {
+  position: relative;
+  width: min(660px, 92vw);
+  aspect-ratio: 1;
+  margin: clamp(8px, 3vw, 32px) auto 0;
+}
+
+.orbit__ring {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.orbit.is-placed .orbit__item {
+  position: absolute;
+  left: calc(50% + var(--x));
+  top: calc(50% + var(--y));
+  width: var(--s);
+  height: var(--s);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease-out);
+}
+
+/* logo bubbles sit on a white plate so the marks keep the ground they were drawn
+   for; plain dots are the filler of the pattern, ink that fades outward */
+.orbit.is-placed .orbit__dot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: var(--o, 0.85);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+}
+
+.orbit.is-placed .orbit__item:has(img) .orbit__dot {
+  background: #fff;
+  opacity: 1;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* absolute + margin auto, not width/height %, because a percentage height on a
+   centred grid item never resolves — tall marks (n1-corek) burst the circle */
+.orbit.is-placed .orbit__dot img {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: auto;
+  height: auto;
+  max-width: 72%;
+  max-height: 72%;
+  object-fit: contain;
+  filter: grayscale(1) contrast(1.15);
+  opacity: 0.88;
+  transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+}
+
+/* repeated marks fill the core as pattern, not as claims — keep them quiet */
+.orbit.is-placed .orbit__item--deco .orbit__dot {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.orbit.is-placed .orbit__item--deco img {
+  max-width: 64%;
+  max-height: 64%;
+  opacity: 0.4;
+}
+
+/* the whole ring turns; each dot turns back at the same rate so logos and labels
+   stay upright. Hover scaling lives on the item, or it would fight the spin. */
+.orbit.is-placed .orbit__ring { animation: orbit-spin 150s linear infinite; }
+.orbit.is-placed .orbit__dot { animation: orbit-spin 150s linear infinite reverse; }
+
+.orbit.is-placed:hover .orbit__ring,
+.orbit.is-placed:hover .orbit__dot { animation-play-state: paused; }
+
+/* lift the hovered item out of source order, or its label reads under the
+   neighbouring bubbles */
+.orbit.is-placed .orbit__item:hover {
+  transform: translate(-50%, -50%) scale(1.12);
+  z-index: 10;
+}
+.orbit.is-placed .orbit__item:hover .orbit__dot { opacity: 1; }
+.orbit.is-placed .orbit__item:hover img { filter: none; opacity: 1; }
+
+@keyframes orbit-spin {
+  from { rotate: 0deg; }
+  to { rotate: 360deg; }
+}
+
+/* the name rides under its dot, revealed on hover/focus */
+.orbit.is-placed .orbit__label {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 160px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out);
+  z-index: 2;
+}
+
+.orbit.is-placed .orbit__item:hover .orbit__label { opacity: 1; }
+
+/* on a phone the box is half as wide: a bubble big enough to read a mark no
+   longer fits the spiral's packing, so drop the spiral for a plain grid and
+   leave the repeated filler marks out of it */
+@media (max-width: 640px) {
+  .orbit.is-placed { width: 100%; aspect-ratio: auto; }
+
+  .orbit.is-placed .orbit__ring {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 10px;
+    animation: none;
+  }
+
+  .orbit.is-placed .orbit__item {
+    position: relative; /* the dot is inset:0 on it — static would let it fill .orbit */
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    aspect-ratio: 1;
+    transform: none;
+  }
+
+  .orbit.is-placed .orbit__item:hover { transform: none; }
+  .orbit.is-placed .orbit__item--deco { display: none; }
+  .orbit.is-placed .orbit__dot { animation: none; }
+
+  /* no hover on a phone — a client without a logo reads as its plain name */
+  .orbit.is-placed .orbit__item:not(:has(img)) .orbit__dot {
+    background: none;
+    box-shadow: none;
+  }
+
+  .orbit.is-placed .orbit__item:not(:has(img)) .orbit__label {
+    position: static;
+    transform: none;
+    padding: 0;
+    background: none;
+    color: var(--ink-3);
+    font-size: 10px;
+    opacity: 1;
+  }
+}
+
+/* before placement (and with JS off) the ring is a plain readable roll of names */
+.orbit:not(.is-placed) { width: 100%; aspect-ratio: auto; }
+.orbit:not(.is-placed) .orbit__ring { position: static; display: flex; flex-wrap: wrap; gap: 10px 22px; justify-content: center; }
+.orbit:not(.is-placed) img { display: none; }
+.orbit:not(.is-placed) .orbit__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
 .marquee {
   overflow: hidden;
-  /* the shadow reaches 28px below the tile (4px offset + 24px blur) — leave more
-     room than that, or `overflow: hidden` shears it off */
+  /* the card shadow reaches 28px below the tile (4px offset + 24px blur) — leave
+     more room than that, or `overflow: hidden` shears it off */
   padding: 30px 0;
   mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
@@ -1090,14 +1266,15 @@ h1, h2, h3, h4 {
 
 .marquee:hover .marquee__track { animation-play-state: paused; }
 
-/* Each entry rides in its own white card. The card supplies the white ground the
-   logos were drawn for, so the PNGs with a baked-in white plate need no blend
-   trick and pale marks keep their own colour. Height is fixed for rhythm; width
+/* Each brand rides in its own white card. The card supplies the white ground the
+   logos were drawn for — several of these PNGs have a plate baked in, so on the
+   bare band they would read as grey boxes. Height is fixed for rhythm; width
    grows so wide wordmarks stay legible instead of shrinking into a square. */
 .logo-tile {
   flex: none;
   display: grid;
   place-items: center;
+  gap: 8px;
   min-width: 96px;
   height: 96px;
   padding: 0 22px;
@@ -1118,20 +1295,31 @@ h1, h2, h3, h4 {
   width: auto;
   max-width: 172px;
   object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.82;
+  transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
 }
 
-/* entries with no logo file — the name is set inside an identical tile so the
-   row keeps one shape throughout */
+.logo-tile:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+/* entries with no logo file — set as a wordmark so they carry the same weight
+   as the marks beside them */
 .logo-tile__name {
   max-width: 150px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.05em;
   line-height: 1.3;
   text-align: center;
   text-transform: uppercase;
-  color: var(--ink-2);
+  color: var(--ink-3);
+  transition: color 0.25s var(--ease-out);
 }
+
+.logo-tile:hover .logo-tile__name { color: var(--ink); }
 
 /* second carousel runs the other way so the pair does not scroll in lockstep */
 .marquee--rev .marquee__track { animation-direction: reverse; }

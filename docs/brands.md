@@ -4,10 +4,10 @@ Logo faylları `assets/img/brands/` qovluğundadır. Hər element karuseldə ağ
 `.logo-tile` kartının içindədir. `<!-- logo tapılmadı -->` işarəsi olan brendlər
 eyni kartda `.logo-tile__name` mətni kimi göstərilir.
 
-1  SİEMENS            → siemens.png
+1  SİEMENS            → siemens.png          (təmiz firuzəyi söz-nişanı ilə əvəzlənib)
 2  LAMTEC             → lamtec.png
 3  AUTOFLAME          → autoflame.jpg
-4  HONEYWELL          → honeywell.png
+4  HONEYWELL          → honeywell.png        (təmiz qırmızı söz-nişanı ilə əvəzlənib)
 5  ALARKO             → alarko.svg
 6  BUDERUS            → buderus.svg
 7  ECOFLAM            → ecoflam.png
@@ -16,12 +16,12 @@ eyni kartda `.logo-tile__name` mətni kimi göstərilir.
 10 WEISHAUPT          → weishaupt.svg
 11 BALTUR             → baltur.png
 12 RIELLO             → riello.png
-13 VITOTERM           <!-- logo tapılmadı — işlək sayt tapılmadı -->
+13 VITOTERM           → vitotherm.png        (rəsmi ad: Vitotherm, vitotherm.nl)
 14 THERMETA           → thermeta.png
 15 ZANTINGH           → zantingh.png
-16 FRANCE THERMİQUE   <!-- logo tapılmadı — işlək sayt tapılmadı -->
+16 FRANCE THERMİQUE   → france-thermique.png (FTE, francethermique.eu)
 17 ECOSTAR            → ecostar.png
-18 F.B.R              <!-- logo tapılmadı — fbr.it-dən alınmadı -->
+18 F.B.R              → fbr.svg              (fbr.it, açıq boz mətn tünd rəngə dəyişilib)
 19 CRON               <!-- logo tapılmadı — brend dəqiqləşdirilməlidir -->
 20 BUDERUS            (6 ilə eynidir — siyahıda təkrarlanıb, bir dəfə göstərilir)
 21 VİESSMAN           → viessmann.png        (rəsmi ad: Viessmann)
@@ -29,15 +29,15 @@ eyni kartda `.logo-tile__name` mətni kimi göstərilir.
 23 GENPOWER           → genpower.png
 24 TEKSAN             → teksan.png
 25 WILO               → wilo.png
-26 LOWARA             <!-- logo tapılmadı — lowara.com yalnız Xylem loqosunu verir -->
-27 STANDART PUMP      <!-- logo tapılmadı — standartpompa.com yalnız ağ variant verir -->
+26 LOWARA             → lowara.png           (Xylem ağ variantı, Xylem mavisinə boyanıb)
+27 STANDART PUMP      → standart-pump.png    (ağ variant, tünd göy rəngə boyanıb)
 28 TEKNOPUMP          → teknopump.png
-29 GRUNDFOSS          <!-- logo tapılmadı — grundfos.com JS ilə yüklənir -->
-30 ECOMAK             <!-- logo tapılmadı — sayt açılmadı -->
+29 GRUNDFOSS          → grundfos.png         (rəsmi ad: Grundfos)
+30 ECOMAK             → ecomak.png           (ecomak.in)
 31 ALMIG              → almig.png
 32 FILO               → filo.png
 33 DUCOMP             → ducomp.png
-34 HAVAMAK            <!-- logo tapılmadı — saytda yalnız məhsul şəkilləri var -->
+34 HAVAMAK            → havamak.svg          (ağ variant, tünd rəngə dəyişilib)
 
 ## Siyahıda olmayan, lakin saytda saxlanılan brendlər
 
@@ -47,4 +47,4 @@ Bu iki loqo əvvəlki dizayndan qalıb və karuseldə saxlanılıb — siyahıya
 - DANFOSS   → danfoss.png
 - ÇUKUROVA  → cukurova.png
 
-**Yekun:** 33 unikal brenddən 24-nün loqosu var, 9-u mətn kimi göstərilir.
+**Yekun:** 33 unikal brenddən 32-nin loqosu var, yalnız Cron mətn kimi göstərilir.

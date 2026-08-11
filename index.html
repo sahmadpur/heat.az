@@ -81,8 +81,7 @@
 <header class="nav">
   <div class="nav__pill">
     <a class="nav__brand" href="#top" aria-label="HeatTech — heat.az">
-      <span class="nav__mark" aria-hidden="true"></span>
-      <span class="nav__word">HeatTech</span>
+      <img class="nav__logo" src="assets/img/logo.png" alt="HeatTech" width="220" height="108">
     </a>
 
     <nav class="nav__links" aria-label="Əsas menyu">
@@ -636,40 +635,43 @@
           </p>
         </header>
 
-        <!-- clients without an available logo file get a name-only tile —
-             see docs/companies.md for which and why -->
-        <div class="marquee" data-reveal>
-          <div class="marquee__track">
-            <div class="logo-tile"><img src="assets/img/clients/azfen.png" alt="Azfen" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Caspian Plaza</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Dəmirçi Tower</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/baki-saglamliq.png" alt="Bakı Sağlamlıq Mərkəzi" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">AGA İş Mərkəzi</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">İlk İnşaat</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/dunyagoz.png" alt="Dünyagöz Klinika" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Respublika Diaqnostika Mərkəzi</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Qəbələ Konserv Zavodu</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/milla.svg" alt="Milla" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Azərtoxum</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Garabagh Resort &amp; SPA</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/gashalti.svg" alt="Gashalti Health Hotel" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Zirə Gülçülük</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Glassman</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/semkir-agro.png" alt="Şəmkir Agro" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Era Agro</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Azərkarton</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/greentech.png" alt="Greentech" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Agrofavorit</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Ecoprod</span></div>
-            <div class="logo-tile"><img src="assets/img/clients/gozel-seeds.png" alt="Gözəl Seeds" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Bakinski</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">GFC</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Agrofresh</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Pozitron Agro</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">N1 Çörək Zavodu</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Bakıxanov Çörək Zavodu</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Red Globe</span></div>
-          </div>
+        <!-- one spiral: every client is a dot on it. Clients with a logo file get
+             a logo bubble, the rest a plain dot with the name on hover —
+             see docs/companies.md for which and why. initClientOrbit() places
+             them; without JS the list stays a plain readable roll of names. -->
+        <div class="orbit" data-reveal>
+          <ul class="orbit__ring">
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/azfen.png" alt="Azfen" loading="lazy"><b class="orbit__label">Azfen</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/caspian-plaza.svg" alt="Caspian Plaza" loading="lazy"><b class="orbit__label">Caspian Plaza</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/demirchi-tower.svg" alt="Dəmirçi Tower" loading="lazy"><b class="orbit__label">Dəmirçi Tower</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/baki-saglamliq.png" alt="Bakı Sağlamlıq Mərkəzi" loading="lazy"><b class="orbit__label">Bakı Sağlamlıq Mərkəzi</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/aga.svg" alt="AGA İş Mərkəzi" loading="lazy"><b class="orbit__label">AGA İş Mərkəzi</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/ilk-insaat.png" alt="İlk İnşaat" loading="lazy"><b class="orbit__label">İlk İnşaat</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/dunyagoz.png" alt="Dünyagöz Klinika" loading="lazy"><b class="orbit__label">Dünyagöz Klinika</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/rdm.png" alt="Respublika Diaqnostika Mərkəzi" loading="lazy"><b class="orbit__label">Respublika Diaqnostika Mərkəzi</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/qebele-konserv.png" alt="Qəbələ Konserv Zavodu" loading="lazy"><b class="orbit__label">Qəbələ Konserv Zavodu</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/milla.svg" alt="Milla" loading="lazy"><b class="orbit__label">Milla</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/azertoxum.png" alt="Azərtoxum" loading="lazy"><b class="orbit__label">Azərtoxum</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/garabagh.svg" alt="Garabagh Resort & SPA" loading="lazy"><b class="orbit__label">Garabagh Resort &amp; SPA</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/gashalti.svg" alt="Gashalti Health Hotel" loading="lazy"><b class="orbit__label">Gashalti Health Hotel</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/zira-gulculuk.png" alt="Zirə Gülçülük" loading="lazy"><b class="orbit__label">Zirə Gülçülük</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/glassman.png" alt="Glassman" loading="lazy"><b class="orbit__label">Glassman</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/semkir-agro.png" alt="Şəmkir Agro" loading="lazy"><b class="orbit__label">Şəmkir Agro</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/era-agro.svg" alt="Era Agro" loading="lazy"><b class="orbit__label">Era Agro</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/azerkarton.png" alt="Azərkarton" loading="lazy"><b class="orbit__label">Azərkarton</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/greentech.png" alt="Greentech" loading="lazy"><b class="orbit__label">Greentech</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/agrofavorit.png" alt="Agrofavorit" loading="lazy"><b class="orbit__label">Agrofavorit</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/ecoprod.png" alt="Ecoprod" loading="lazy"><b class="orbit__label">Ecoprod</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/gozel-seeds.png" alt="Gözəl Seeds" loading="lazy"><b class="orbit__label">Gözəl Seeds</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><b class="orbit__label">Bakinski</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/gfc.jpg" alt="GFC" loading="lazy"><b class="orbit__label">GFC</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/agrofresh.png" alt="Agrofresh" loading="lazy"><b class="orbit__label">Agrofresh</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/pozitron-agro.jpg" alt="Pozitron Agro" loading="lazy"><b class="orbit__label">Pozitron Agro</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/n1-corek.svg" alt="N1 Çörək Zavodu" loading="lazy"><b class="orbit__label">N1 Çörək Zavodu</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/bakixanov.jpg" alt="Bakıxanov Çörək Zavodu" loading="lazy"><b class="orbit__label">Bakıxanov Çörək Zavodu</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/red-globe.png" alt="Red Globe" loading="lazy"><b class="orbit__label">Red Globe</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/gbs.jpg" alt="GBS — General Board System" loading="lazy"><b class="orbit__label">GBS</b></span></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -739,12 +741,12 @@
             <div class="logo-tile"><img src="assets/img/brands/weishaupt.svg" alt="Weishaupt" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/baltur.png" alt="Baltur" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/riello.png" alt="Riello" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Vitoterm</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/vitotherm.png" alt="Vitotherm" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/thermeta.png" alt="Thermeta" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/zantingh.png" alt="Zantingh" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">France Thermique</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/france-thermique.png" alt="France Thermique" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/ecostar.png" alt="Ecostar" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">F.B.R</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/fbr.svg" alt="F.B.R" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/viessmann.png" alt="Viessmann" height="40" loading="lazy"></div>
             <div class="logo-tile"><span class="logo-tile__name">Cron</span></div>
             <div class="logo-tile"><img src="assets/img/brands/danfoss.png" alt="Danfoss" height="40" loading="lazy"></div>
@@ -753,15 +755,15 @@
             <div class="logo-tile"><img src="assets/img/brands/teksan.png" alt="Teksan" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/cukurova.png" alt="Çukurova" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/wilo.png" alt="Wilo" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Lowara</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/lowara.png" alt="Lowara" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/teknopump.png" alt="Teknopump" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Standart Pompa</span></div>
-            <div class="logo-tile"><span class="logo-tile__name">Grundfos</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/standart-pump.png" alt="Standart Pompa" height="40" loading="lazy"></div>
+            <div class="logo-tile"><img src="assets/img/brands/grundfos.png" alt="Grundfos" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/almig.png" alt="Almig" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Ecomak</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/ecomak.png" alt="Ecomak" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/filo.png" alt="Filo" height="40" loading="lazy"></div>
             <div class="logo-tile"><img src="assets/img/brands/ducomp.png" alt="Ducomp" height="40" loading="lazy"></div>
-            <div class="logo-tile"><span class="logo-tile__name">Havamak</span></div>
+            <div class="logo-tile"><img src="assets/img/brands/havamak.svg" alt="Havamak" height="40" loading="lazy"></div>
           </div>
         </div>
       </div>
@@ -932,8 +934,7 @@
     <div class="foot__cols">
       <div class="foot__brand">
         <a class="nav__brand" href="#top" aria-label="HeatTech — heat.az">
-          <span class="nav__mark" aria-hidden="true"></span>
-          <span class="nav__word">HeatTech</span>
+          <img class="nav__logo nav__logo--foot" src="assets/img/logo.png" alt="HeatTech" width="220" height="108">
         </a>
         <p class="body">
           Qazanxana, odluq, CO<sub>2</sub> avtomatika, nasos, kompressor və generator

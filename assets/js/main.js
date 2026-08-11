@@ -130,6 +130,81 @@
     }
   }
 
+  /* --------------------------------------------------------- client orbit -- */
+
+  /* Lays the client list out as one dotted spiral: ARMS arms are walked from the
+     dense core out to the rim, each step advancing by the dot's own size, so the
+     dots chain into visible curves instead of settling into rings. The widest
+     outer slots go to the clients that have a logo file, the rest to the
+     name-only clients, and decorative dots fill whatever is left. Everything is
+     in % of the box, so the spiral scales with it. */
+  var ARMS = 8;
+  var TWIST = 2.6;   /* radians one arm sweeps from core to rim */
+  var R_IN = 5;
+  var R_OUT = 43;    /* % — leave room for the outermost bubble's radius */
+  var DECO_LOGO_MIN = 3.6; /* % — below this a bubble is too small to read a mark */
+
+  function spiralSlots() {
+    var slots = [];
+    for (var arm = 0; arm < ARMS; arm++) {
+      for (var rad = R_IN; rad < R_OUT; ) {
+        var t = (rad - R_IN) / (R_OUT - R_IN);
+        var size = 3.2 + 8.4 * Math.pow(t, 1.25);
+        var ang = (arm / ARMS) * Math.PI * 2 + TWIST * t;
+        slots.push({
+          x: rad * Math.cos(ang),
+          y: rad * Math.sin(ang),
+          s: size,
+          t: t
+        });
+        rad += size * 1.15 + 0.8; /* next dot clears this one, with a gap */
+      }
+    }
+    return slots.sort(function (a, b) { return b.t - a.t; }); /* rim first */
+  }
+
+  function initClientOrbit() {
+    var orbit = document.querySelector(".orbit");
+    if (!orbit) return;
+
+    var ring = orbit.querySelector(".orbit__ring");
+    var items = Array.prototype.slice.call(ring.children);
+    var withLogo = items.filter(function (li) { return li.querySelector("img"); });
+    var nameOnly = items.filter(function (li) { return !li.querySelector("img"); });
+
+    var slots = spiralSlots();
+    /* logos take the rim, then the named clients, then filler for the core */
+    var order = withLogo.concat(nameOnly);
+    var marks = withLogo.map(function (li) { return li.querySelector("img").getAttribute("src"); });
+    while (order.length < slots.length) {
+      var li = document.createElement("li");
+      li.className = "orbit__item orbit__item--deco";
+      li.setAttribute("aria-hidden", "true");
+      /* a filler bubble with room to read repeats a client mark, so the core of
+         the spiral carries the same logos instead of blank ink dots */
+      li.innerHTML = slots[order.length].s >= DECO_LOGO_MIN
+        ? '<span class="orbit__dot"><img src="' + marks[(order.length - withLogo.length) % marks.length] + '" alt="" loading="lazy"></span>'
+        : '<span class="orbit__dot"></span>';
+      ring.appendChild(li);
+      order.push(li);
+    }
+
+    order.forEach(function (el, idx) {
+      var slot = slots[idx];
+      /* a real client's logo needs room to stay readable even in a small slot;
+         the repeated filler marks keep whatever size the walk gave them */
+      var size = el.querySelector("img") && !el.classList.contains("orbit__item--deco")
+        ? Math.max(slot.s, 9.5)
+        : slot.s;
+      el.style.setProperty("--x", slot.x.toFixed(2) + "%");
+      el.style.setProperty("--y", slot.y.toFixed(2) + "%");
+      el.style.setProperty("--s", size.toFixed(2) + "%");
+      el.style.setProperty("--o", (0.14 + 0.3 * slot.t).toFixed(2));
+    });
+
+    orbit.classList.add("is-placed");
+  }
+
   /* -------------------------------------------------------------- marquee -- */
 
   function initMarquee() {
@@ -569,6 +644,7 @@
   /* ------------------------------------------------------------------ go -- */
 
   initStagger();
+  initClientOrbit();
   initMarquee();
   initServiceCards();
   initTabs();
