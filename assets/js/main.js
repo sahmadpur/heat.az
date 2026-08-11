@@ -220,30 +220,36 @@
 
   /* --------------------------------------------------------- photo stacks -- */
 
-  /* Every [data-shots] pile crossfades on one shared timer, so the service and
-     sector cards turn over in step rather than flickering independently. The
-     card under the pointer holds its frame — swapping the photo somebody is
-     looking at is the one thing this must not do. Reduced motion keeps frame 1. */
+  /* Every [data-shots] pile crossfades on its own timer, staggered by index so
+     the service and sector cards turn over one after another rather than all at
+     once. The card under the pointer holds its frame — swapping the photo
+     somebody is looking at is the one thing this must not do. Reduced motion
+     keeps frame 1. */
   function initShots() {
     var stacks = Array.prototype.slice.call(document.querySelectorAll("[data-shots]"));
     if (reduced || !stacks.length) return;
 
-    setInterval(function () {
-      stacks.forEach(function (stack) {
-        var imgs = stack.children;
-        if (imgs.length < 2) return;
+    stacks.forEach(function (stack, n) {
+      var imgs = stack.children;
+      if (imgs.length < 2) return;
 
-        var frame = stack.closest("article, figure");
-        if (frame && frame.matches(":hover")) return;
+      /* each pile gets its own period too, so piles never drift back into sync */
+      var period = SHOTS_MS + n * 900;
 
-        var cur = 0;
-        for (var i = 0; i < imgs.length; i++) {
-          if (imgs[i].classList.contains("is-on")) cur = i;
-        }
-        imgs[cur].classList.remove("is-on");
-        imgs[(cur + 1) % imgs.length].classList.add("is-on");
-      });
-    }, SHOTS_MS);
+      setTimeout(function () {
+        setInterval(function () {
+          var frame = stack.closest("article, figure");
+          if (frame && frame.matches(":hover")) return;
+
+          var cur = 0;
+          for (var i = 0; i < imgs.length; i++) {
+            if (imgs[i].classList.contains("is-on")) cur = i;
+          }
+          imgs[cur].classList.remove("is-on");
+          imgs[(cur + 1) % imgs.length].classList.add("is-on");
+        }, period);
+      }, n * 700);
+    });
   }
 
   /* -------------------------------------------------------------- marquee -- */

@@ -577,28 +577,6 @@ h1, h2, h3, h4 {
     linear-gradient(to right, rgba(255, 87, 34, 0.14), transparent 60%);
 }
 
-.hero__media figcaption {
-  position: absolute;
-  left: 22px;
-  right: 22px;
-  bottom: 20px;
-  z-index: 2;
-}
-
-.hero__mediaK {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-}
-
-.hero__mediaV {
-  display: block;
-  margin-top: 2px;
-  font-size: 13px;
-  color: var(--ink-3);
-}
-
 /* ==========================================================================
    2. stats — glassmorphism panel
    ========================================================================== */
@@ -912,8 +890,13 @@ h1, h2, h3, h4 {
 
 
 .analyz__panels {
+  position: relative;
+  isolation: isolate;
   padding: clamp(24px, 2.6vw, 34px);
-  background: rgba(255, 255, 255, 0.035);
+  /* analyser photo under a dark veil — the panel copy has to stay readable */
+  background:
+    linear-gradient(rgba(18, 21, 23, 0.74), rgba(18, 21, 23, 0.8)),
+    url("../img/analiz-panel.jpg") center / cover no-repeat;
   border: 1px solid var(--line);
   border-radius: var(--r-card);
   min-height: 100%;
@@ -1085,7 +1068,7 @@ h1, h2, h3, h4 {
 /* the .shots stack fills the card; the ::after gradient keeps the copy readable */
 .sector > .shots { position: absolute; inset: 0; z-index: 0; }
 
-.sector .shots__img { filter: contrast(1.03) saturate(0.8) brightness(0.6); }
+.sector .shots__img { filter: contrast(1.03) saturate(0.9) brightness(0.8); }
 
 .sector::after {
   content: "";
@@ -1094,7 +1077,7 @@ h1, h2, h3, h4 {
   z-index: 1;
   /* the copy can run nearly the full height of the tallest card, so the veil
      has to hold over the whole photo, not just fade out at the top */
-  background: linear-gradient(to top, rgba(18, 21, 23, 0.96) 14%, rgba(18, 21, 23, 0.7) 72%, rgba(18, 21, 23, 0.5));
+  background: linear-gradient(to top, rgba(18, 21, 23, 0.92) 14%, rgba(18, 21, 23, 0.5) 72%, rgba(18, 21, 23, 0.25));
 }
 
 /* icon sits in flow at the top so long copy can never run under it */
@@ -1222,9 +1205,8 @@ h1, h2, h3, h4 {
   max-width: 72%;
   max-height: 72%;
   object-fit: contain;
-  filter: grayscale(1) contrast(1.15);
-  opacity: 0.88;
-  transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+  opacity: 0.94;
+  transition: opacity 0.25s var(--ease-out);
 }
 
 /* the sun the system turns around — outside the orbits, so it never spins */
@@ -1281,7 +1263,7 @@ h1, h2, h3, h4 {
   z-index: 10;
 }
 .orbit.is-placed .orbit__item:hover .orbit__dot { opacity: 1; }
-.orbit.is-placed .orbit__item:hover img { filter: none; opacity: 1; }
+.orbit.is-placed .orbit__item:hover img { opacity: 1; }
 
 @keyframes orbit-spin {
   from { rotate: 0deg; }
