@@ -564,8 +564,7 @@ h1, h2, h3, h4 {
 .hero__media img {
   width: 100%;
   object-fit: cover;
-  /* the docs call for a darkened industrial photo */
-  filter: contrast(1.06) saturate(0.85) brightness(0.72);
+  filter: contrast(1.04) saturate(0.95) brightness(0.92);
 }
 
 .hero__media::after {
@@ -573,8 +572,10 @@ h1, h2, h3, h4 {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(18, 21, 23, 0.92) 4%, rgba(18, 21, 23, 0) 52%),
-    linear-gradient(to right, rgba(255, 87, 34, 0.14), transparent 60%);
+    /* no caption sits on the photo any more, so the foot veil only has to seat
+       the frame against the section, not carry text */
+    linear-gradient(to top, rgba(18, 21, 23, 0.55) 2%, rgba(18, 21, 23, 0) 34%),
+    linear-gradient(to right, rgba(255, 87, 34, 0.1), transparent 60%);
 }
 
 /* ==========================================================================
@@ -895,7 +896,7 @@ h1, h2, h3, h4 {
   padding: clamp(24px, 2.6vw, 34px);
   /* analyser photo under a dark veil — the panel copy has to stay readable */
   background:
-    linear-gradient(rgba(18, 21, 23, 0.74), rgba(18, 21, 23, 0.8)),
+    linear-gradient(rgba(18, 21, 23, 0.42), rgba(18, 21, 23, 0.5)),
     url("../img/analiz-panel.jpg") center / cover no-repeat;
   border: 1px solid var(--line);
   border-radius: var(--r-card);
