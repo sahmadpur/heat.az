@@ -233,8 +233,8 @@
         var imgs = stack.children;
         if (imgs.length < 2) return;
 
-        var card = stack.closest("article");
-        if (card && card.matches(":hover")) return;
+        var frame = stack.closest("article, figure");
+        if (frame && frame.matches(":hover")) return;
 
         var cur = 0;
         for (var i = 0; i < imgs.length; i++) {

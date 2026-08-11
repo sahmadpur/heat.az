@@ -4,3 +4,6 @@ node_modules/
 
 # source scans — rendered into assets/img/certs/ with pdftoppm, not deployed
 licenses/
+
+# source photos by category — resized into assets/img/shots/ with sips, not deployed
+photos/
