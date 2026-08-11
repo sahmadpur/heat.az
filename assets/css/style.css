@@ -1070,8 +1070,9 @@ h1, h2, h3, h4 {
    7. client orbit + partners marquee (light band)
    ========================================================================== */
 
-/* One spiral of dots, each dot a client. JS (initClientOrbit) writes --x/--y/--s
-   per item; with JS off the ring degrades to a plain wrapped list of names. */
+/* Rings of client logos turning around the HeatTech mark. JS (initClientOrbit)
+   writes --x/--y/--s per item; with JS off the ring degrades to a plain wrapped
+   list of names. */
 .orbit {
   position: relative;
   width: min(660px, 92vw);
@@ -1132,15 +1133,25 @@ h1, h2, h3, h4 {
   transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
 }
 
-/* repeated marks fill the core as pattern, not as claims — keep them quiet */
-.orbit.is-placed .orbit__item--deco .orbit__dot {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+/* the mark the rings turn around — outside .orbit__ring, so it never spins */
+.orbit.is-placed .orbit__core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 26%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  z-index: 3;
 }
 
-.orbit.is-placed .orbit__item--deco img {
-  max-width: 64%;
-  max-height: 64%;
-  opacity: 0.4;
+.orbit.is-placed .orbit__core img {
+  width: 70%;
+  height: auto;
 }
 
 /* the whole ring turns; each dot turns back at the same rate so logos and labels
@@ -1191,10 +1202,10 @@ h1, h2, h3, h4 {
 .orbit.is-placed .orbit__item:hover .orbit__label { opacity: 1; }
 
 /* on a phone the box is half as wide: a bubble big enough to read a mark no
-   longer fits the spiral's packing, so drop the spiral for a plain grid and
-   leave the repeated filler marks out of it */
+   longer fits the rings, so drop them for a plain grid */
 @media (max-width: 640px) {
   .orbit.is-placed { width: 100%; aspect-ratio: auto; }
+  .orbit.is-placed .orbit__core { display: none; }
 
   .orbit.is-placed .orbit__ring {
     position: static;
@@ -1215,7 +1226,6 @@ h1, h2, h3, h4 {
   }
 
   .orbit.is-placed .orbit__item:hover { transform: none; }
-  .orbit.is-placed .orbit__item--deco { display: none; }
   .orbit.is-placed .orbit__dot { animation: none; }
 
   /* no hover on a phone — a client without a logo reads as its plain name */

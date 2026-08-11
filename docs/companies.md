@@ -75,6 +75,10 @@ Yoxlanılmalı olanlar:
 
 ## Logosu tapılmayanlar (1)
 
+Loqosu olmayan şirkət orbitdə göstərilmir — orbitin hər nöqtəsi bir loqodur.
+Loqo tapılsa, faylı `assets/img/clients/` qovluğuna atıb `index.html`-də yeni
+`.orbit__item` sətri əlavə etmək kifayətdir.
+
 | # | Şirkət | Səbəb |
 |---|--------|-------|
 | 1  | Bakinski | sayt yoxdur, kataloqlarda loqo yoxdur |
