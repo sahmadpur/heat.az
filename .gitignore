@@ -2,6 +2,9 @@
 node_modules/
 .vercel
 
+# Claude Code local state (worktrees, session files)
+.claude/
+
 # source scans — rendered into assets/img/certs/ with pdftoppm, not deployed
 licenses/
 
