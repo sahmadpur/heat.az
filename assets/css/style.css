@@ -238,8 +238,9 @@ h1, h2, h3, h4 {
     transition: none !important;
   }
   .marquee__track,
-  .orbit__ring,
+  .orbit__path,
   .orbit__dot,
+  .orbit__core::after,
   .blob,
   .grain,
   .dot::after,
@@ -428,6 +429,29 @@ h1, h2, h3, h4 {
 
 .nav__burger,
 .nav__menu { display: none; }
+
+/* ==========================================================================
+   photo stacks
+   A .shots block is a pile of photos of one equipment category, all stacked on
+   top of each other; only the one carrying .is-on is opaque. JS (initShots)
+   moves that class along on a shared timer, so the whole page crossfades in
+   step. With no JS — or with reduced motion — the first photo simply stays up.
+   ========================================================================== */
+.shots__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.1s var(--ease);
+}
+
+.shots__img.is-on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .shots__img { transition: none; }
+}
 
 /* ==========================================================================
    hero
@@ -687,6 +711,39 @@ h1, h2, h3, h4 {
 }
 
 .svc__ico svg { width: 24px; height: 24px; }
+
+/* the photo band runs full-bleed across the card top, so it cancels the card
+   padding, and the icon drops out of the flow onto the photo's bottom-left */
+.svc__band {
+  position: relative;
+  height: 168px;
+  margin: -28px -26px 22px;
+  overflow: hidden;
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  background: var(--surface-3);
+}
+
+.svc__band .shots__img { filter: contrast(1.05) saturate(0.88) brightness(0.82); }
+
+.svc__band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, var(--surface-2) 1%, rgba(18, 21, 23, 0) 58%);
+}
+
+.svc__band .svc__ico {
+  position: absolute;
+  left: 24px;
+  bottom: 14px;
+  z-index: 2;
+  margin-bottom: 0;
+  /* over a photo the 10%-tint plate disappears, so it gets a dark base */
+  background: rgba(18, 21, 23, 0.74);
+}
+
+.svc--tech .svc__band .svc__ico { border-color: rgba(0, 172, 193, 0.4); }
 
 .svc__name {
   font-size: 19px;
@@ -1020,15 +1077,10 @@ h1, h2, h3, h4 {
   box-shadow: var(--glow-accent);
 }
 
-/* dark overlay treatment, ready for a real photo dropped into .sector__img */
-.sector__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
+/* the .shots stack fills the card; the ::after gradient keeps the copy readable */
+.sector > .shots { position: absolute; inset: 0; z-index: 0; }
+
+.sector .shots__img { filter: contrast(1.03) saturate(0.8) brightness(0.6); }
 
 .sector::after {
   content: "";
@@ -1070,14 +1122,25 @@ h1, h2, h3, h4 {
    7. client orbit + partners marquee (light band)
    ========================================================================== */
 
-/* Rings of client logos turning around the HeatTech mark. JS (initClientOrbit)
-   writes --x/--y/--s per item; with JS off the ring degrades to a plain wrapped
-   list of names. */
+/* A small solar system: the HeatTech mark is the sun, each client a planet on a
+   drawn orbit. JS (initClientOrbit) builds one .orbit__path per orbit and writes
+   --d/--spin on it and --x/--y/--s on the planets it carries; with JS off the
+   list degrades to a plain wrapped roll of names. */
 .orbit {
   position: relative;
   width: min(660px, 92vw);
   aspect-ratio: 1;
   margin: clamp(8px, 3vw, 32px) auto 0;
+}
+
+/* the sun's light, thrown across the whole system */
+.orbit.is-placed::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 87, 34, 0.14), rgba(255, 87, 34, 0.05) 34%, transparent 68%);
+  pointer-events: none;
 }
 
 .orbit__ring {
@@ -1088,12 +1151,28 @@ h1, h2, h3, h4 {
   padding: 0;
 }
 
+/* one orbit: a drawn circle that turns, carrying its own planets, so the outer
+   ones can run slower than the inner ones */
+/* centred by offset, not by transform: the `rotate` of the spin is applied
+   before `transform`, so a translate(-50%) here would itself be rotated and the
+   whole orbit would swing off centre */
+.orbit.is-placed .orbit__path {
+  position: absolute;
+  left: calc(50% - var(--d) / 2);
+  top: calc(50% - var(--d) / 2);
+  width: var(--d);
+  aspect-ratio: 1;
+  border: 1px solid rgba(22, 25, 28, 0.1);
+  border-radius: 50%;
+  animation: orbit-spin var(--spin, 150s) linear infinite;
+}
+
 .orbit.is-placed .orbit__item {
   position: absolute;
   left: calc(50% + var(--x));
   top: calc(50% + var(--y));
   width: var(--s);
-  height: var(--s);
+  aspect-ratio: 1;
   transform: translate(-50%, -50%);
   transition: transform 0.3s var(--ease-out);
 }
@@ -1133,7 +1212,7 @@ h1, h2, h3, h4 {
   transition: filter 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
 }
 
-/* the mark the rings turn around — outside .orbit__ring, so it never spins */
+/* the sun the system turns around — outside the orbits, so it never spins */
 .orbit.is-placed .orbit__core {
   position: absolute;
   left: 50%;
@@ -1144,9 +1223,22 @@ h1, h2, h3, h4 {
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  background: radial-gradient(circle at 50% 42%, #fff 58%, #fff4ea 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 87, 34, 0.14),
+    0 0 46px rgba(255, 87, 34, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.14);
   z-index: 3;
+}
+
+/* the corona: a soft ring that breathes just outside the sun */
+.orbit.is-placed .orbit__core::after {
+  content: "";
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 87, 34, 0.24);
+  animation: orbit-corona 4.5s var(--ease-out) infinite;
 }
 
 .orbit.is-placed .orbit__core img {
@@ -1154,12 +1246,12 @@ h1, h2, h3, h4 {
   height: auto;
 }
 
-/* the whole ring turns; each dot turns back at the same rate so logos and labels
-   stay upright. Hover scaling lives on the item, or it would fight the spin. */
-.orbit.is-placed .orbit__ring { animation: orbit-spin 150s linear infinite; }
-.orbit.is-placed .orbit__dot { animation: orbit-spin 150s linear infinite reverse; }
+/* each orbit turns at its own rate; every planet turns back at that same rate so
+   marks and labels stay upright. Hover scaling lives on the item, or it would
+   fight the spin. */
+.orbit.is-placed .orbit__dot { animation: orbit-spin var(--spin, 150s) linear infinite reverse; }
 
-.orbit.is-placed:hover .orbit__ring,
+.orbit.is-placed:hover .orbit__path,
 .orbit.is-placed:hover .orbit__dot { animation-play-state: paused; }
 
 /* lift the hovered item out of source order, or its label reads under the
@@ -1174,6 +1266,11 @@ h1, h2, h3, h4 {
 @keyframes orbit-spin {
   from { rotate: 0deg; }
   to { rotate: 360deg; }
+}
+
+@keyframes orbit-corona {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50% { transform: scale(1.06); opacity: 0.25; }
 }
 
 /* the name rides under its dot, revealed on hover/focus */
@@ -1205,6 +1302,7 @@ h1, h2, h3, h4 {
    longer fits the rings, so drop them for a plain grid */
 @media (max-width: 640px) {
   .orbit.is-placed { width: 100%; aspect-ratio: auto; }
+  .orbit.is-placed::before,
   .orbit.is-placed .orbit__core { display: none; }
 
   .orbit.is-placed .orbit__ring {

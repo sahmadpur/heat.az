@@ -1,13 +1,14 @@
 /* ==========================================================================
    heat.az — behaviour
-   Reveals, counters, marquee, service cards, analyzer tabs, certificates
-   lightbox, FAQ accordion, nav and the WhatsApp request form.
+   Reveals, counters, marquee, photo stacks, service cards, analyzer tabs,
+   certificates lightbox, FAQ accordion, nav and the WhatsApp request form.
    ========================================================================== */
 (function () {
   "use strict";
 
   var WHATSAPP = "994553487675";
   var AUTO_MS = 10000; /* flue-gas readouts rotate on this interval */
+  var SHOTS_MS = 6000; /* card photo stacks crossfade on this interval */
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* Certificate tiles. Scans live in assets/img/certs/ — `thumb` feeds the tile,
@@ -132,61 +133,117 @@
 
   /* --------------------------------------------------------- client orbit -- */
 
-  /* Lays the client list out as rings turning around the HeatTech mark. A ring's
-     capacity is how many DOT-wide bubbles fit on its circumference with GAP left
-     between them, so two bubbles can never touch — neither along a ring nor
-     across two of them, since the rings themselves step out by DOT + GAP.
-     Everything is in % of the box, so the rings scale with it. */
-  var DOT = 9;    /* % of the box — bubble diameter */
-  var GAP = 2;    /* % — clear space between neighbouring bubbles */
-  var R_IN = 20;  /* % — innermost ring, clear of the centre mark */
+  /* A small solar system: the HeatTech mark is the sun, each client a planet on
+     a drawn orbit. A ring holds only as many DOT-wide bubbles as fit its
+     circumference with GAP left between them, and the rings step out by DOT +
+     GAP, so no two planets can touch. Everything is in % of the box, so the
+     system scales with it. */
+  var DOT = 9;      /* % of the box — planet diameter */
+  var GAP = 2;      /* % — clear space between neighbouring planets */
+  var R_IN = 20;    /* % — innermost orbit, clear of the sun */
+  var SPIN_IN = 60; /* s — one turn of the innermost orbit */
 
-  function ringSlots(n) {
-    /* a bubble spans 2*asin((DOT+GAP)/2r) of a ring of radius r; a full turn
+  function ringPlan(n) {
+    /* a planet spans 2*asin((DOT+GAP)/2r) of an orbit of radius r; a full turn
        holds floor(2π / that) of them */
     var rings = [];
     var room = 0;
     for (var r = R_IN; room < n; r += DOT + GAP) {
       var cap = Math.floor(Math.PI / Math.asin(Math.min(1, (DOT + GAP) / (2 * r))));
-      rings.push({ r: r, cap: cap });
+      rings.push({ r: r, cap: cap, count: 0 });
       room += cap;
     }
 
     /* share the clients out in proportion to capacity, then hand the rounding
-       remainder to the roomiest (outermost) rings, so no ring is left holding a
-       single lonely bubble and none is pushed past its capacity */
-    var counts = rings.map(function (ring) { return Math.floor((n * ring.cap) / room); });
-    var left = n - counts.reduce(function (a, b) { return a + b; }, 0);
-    for (var i = counts.length - 1; left > 0; i = (i + counts.length - 1) % counts.length) {
-      if (counts[i] < rings[i].cap) { counts[i]++; left--; }
+       remainder to the roomiest (outermost) orbits, so no orbit is left holding
+       a single lonely planet and none is pushed past its capacity */
+    rings.forEach(function (ring) { ring.count = Math.floor((n * ring.cap) / room); });
+    var left = rings.reduce(function (rest, ring) { return rest - ring.count; }, n);
+    for (var i = rings.length - 1; left > 0; i = (i + rings.length - 1) % rings.length) {
+      if (rings[i].count < rings[i].cap) { rings[i].count++; left--; }
     }
-
-    var slots = [];
-    counts.forEach(function (count, idx) {
-      for (var k = 0; k < count; k++) {
-        /* every other ring starts half a step round, so the bubbles read as a
-           weave instead of lining up into spokes */
-        var ang = ((k + (idx % 2) * 0.5) / count) * Math.PI * 2;
-        slots.push({ x: rings[idx].r * Math.cos(ang), y: rings[idx].r * Math.sin(ang) });
-      }
-    });
-    return slots;
+    return rings;
   }
 
   function initClientOrbit() {
     var orbit = document.querySelector(".orbit");
     if (!orbit) return;
 
-    var items = Array.prototype.slice.call(orbit.querySelector(".orbit__ring").children);
-    var slots = ringSlots(items.length);
+    var list = orbit.querySelector(".orbit__ring");
+    var items = Array.prototype.slice.call(list.children);
+    /* a planet big enough to read a mark no longer fits the orbits on a phone —
+       there the same items lay out as a plain grid, so watch the breakpoint */
+    var narrow = window.matchMedia("(max-width: 640px)");
 
-    items.forEach(function (el, idx) {
-      el.style.setProperty("--x", slots[idx].x.toFixed(2) + "%");
-      el.style.setProperty("--y", slots[idx].y.toFixed(2) + "%");
-      el.style.setProperty("--s", DOT + "%");
-    });
+    function place() {
+      Array.prototype.forEach.call(orbit.querySelectorAll(".orbit__path"), function (path) {
+        path.remove();
+      });
 
-    orbit.classList.add("is-placed");
+      if (narrow.matches) {
+        items.forEach(function (el) { el.removeAttribute("style"); list.appendChild(el); });
+        orbit.classList.add("is-placed");
+        return;
+      }
+
+      var idx = 0;
+      ringPlan(items.length).forEach(function (ring, i) {
+        /* one turning ring per orbit: it draws the orbit line, and carries its
+           own planets so each orbit can run at its own speed */
+        var path = document.createElement("div");
+        path.className = "orbit__path";
+        path.style.setProperty("--d", (2 * ring.r).toFixed(2) + "%");
+        /* the outer planets take longer to come round, as they should */
+        path.style.setProperty("--spin", (SPIN_IN * Math.pow(ring.r / R_IN, 1.5)).toFixed(0) + "s");
+        orbit.appendChild(path);
+
+        for (var k = 0; k < ring.count; k++, idx++) {
+          /* every other orbit starts half a step round, so the planets read as a
+             weave instead of lining up into spokes */
+          var ang = ((k + (i % 2) * 0.5) / ring.count) * Math.PI * 2;
+          var el = items[idx];
+          /* --x/--y/--s are % of the orbit ring the planet now sits on, not of
+             the whole box: half its width is the orbit's radius */
+          el.style.setProperty("--x", (50 * Math.cos(ang)).toFixed(2) + "%");
+          el.style.setProperty("--y", (50 * Math.sin(ang)).toFixed(2) + "%");
+          el.style.setProperty("--s", ((100 * DOT) / (2 * ring.r)).toFixed(2) + "%");
+          path.appendChild(el);
+        }
+      });
+
+      orbit.classList.add("is-placed");
+    }
+
+    place();
+    narrow.addEventListener("change", place);
+  }
+
+  /* --------------------------------------------------------- photo stacks -- */
+
+  /* Every [data-shots] pile crossfades on one shared timer, so the service and
+     sector cards turn over in step rather than flickering independently. The
+     card under the pointer holds its frame — swapping the photo somebody is
+     looking at is the one thing this must not do. Reduced motion keeps frame 1. */
+  function initShots() {
+    var stacks = Array.prototype.slice.call(document.querySelectorAll("[data-shots]"));
+    if (reduced || !stacks.length) return;
+
+    setInterval(function () {
+      stacks.forEach(function (stack) {
+        var imgs = stack.children;
+        if (imgs.length < 2) return;
+
+        var card = stack.closest("article");
+        if (card && card.matches(":hover")) return;
+
+        var cur = 0;
+        for (var i = 0; i < imgs.length; i++) {
+          if (imgs[i].classList.contains("is-on")) cur = i;
+        }
+        imgs[cur].classList.remove("is-on");
+        imgs[(cur + 1) % imgs.length].classList.add("is-on");
+      });
+    }, SHOTS_MS);
   }
 
   /* -------------------------------------------------------------- marquee -- */
@@ -630,6 +687,7 @@
   initStagger();
   initClientOrbit();
   initMarquee();
+  initShots();
   initServiceCards();
   initTabs();
   initCerts();
