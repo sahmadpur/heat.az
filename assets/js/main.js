@@ -137,7 +137,7 @@
      between them, so two bubbles can never touch — neither along a ring nor
      across two of them, since the rings themselves step out by DOT + GAP.
      Everything is in % of the box, so the rings scale with it. */
-  var DOT = 4.5;   /* % of the box — bubble diameter */
+  var DOT = 9;     /* % of the box — bubble diameter */
   var GAP = 2;     /* % — clear space between neighbouring bubbles */
   var R_IN = 20;   /* % — innermost ring, clear of the centre mark */
   var R_OUT = 42;  /* % — outermost ring, with room left for its bubbles */
