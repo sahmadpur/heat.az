@@ -237,8 +237,9 @@
       var imgs = stack.children;
       if (imgs.length < 2) return;
 
-      /* each pile gets its own period too, so piles never drift back into sync */
-      var period = SHOTS_MS + n * 900;
+      /* each pile gets its own period too, so piles never drift back into sync;
+         a long pile (the hero holds every sector) can ask for a faster turn */
+      var period = +stack.getAttribute("data-shots-ms") || SHOTS_MS + n * 900;
 
       setTimeout(function () {
         setInterval(function () {

@@ -86,7 +86,7 @@
 
     <nav class="nav__links" aria-label="Əsas menyu">
       <a href="#xidmetler">Xidmətlər</a>
-      <a href="#analiz">Baca analizi</a>
+      <a href="#analiz">Baca qazı analizi</a>
       <a href="#modeller">Modellər</a>
       <a href="#sahaler">Sahələr</a>
       <a href="#sertifikatlar">Sertifikatlar</a>
@@ -166,13 +166,59 @@
         </div>
 
         <figure class="hero__media" data-reveal="media" style="--d:.2s">
-          <!-- boiler-house photos only -->
-          <div class="shots" data-shots>
-            <img class="shots__img is-on" src="assets/img/shots/qazanxana/1.jpg" alt="Sənaye qazanxanası — quraşdırılmış qazan və odluq qrupu" width="800" height="600" loading="eager" fetchpriority="high">
+          <!-- every sector: qazanxana, odluq, CO2, nasos, kompressor, generator,
+               asfalt, istixana, fabrik, bina — interleaved so the pile never
+               shows the same category twice in a row.
+               ponytail: all 47 frames ship in the markup; move to src-swap from a
+               JSON list if hero payload becomes a problem. -->
+          <div class="shots" data-shots data-shots-ms="2600">
+            <img class="shots__img is-on" src="assets/img/shots/qazanxana/1.jpg" alt="Sənaye qazanxanası — quraşdırılmış avadanlıq" width="800" height="600" loading="eager" fetchpriority="high">
+            <img class="shots__img" src="assets/img/shots/odluq/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/co2/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/nasos/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/kompressor/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/generator/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/asfalt/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/istixana/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/fabrik/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/bina/1.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
             <img class="shots__img" src="assets/img/shots/qazanxana/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/odluq/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/co2/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/nasos/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/kompressor/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/generator/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/asfalt/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/istixana/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/fabrik/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/bina/2.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
             <img class="shots__img" src="assets/img/shots/qazanxana/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/odluq/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/co2/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/nasos/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/kompressor/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/generator/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/asfalt/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/istixana/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/fabrik/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/bina/3.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
             <img class="shots__img" src="assets/img/shots/qazanxana/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/odluq/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/nasos/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/kompressor/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/generator/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/asfalt/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/istixana/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/fabrik/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/bina/4.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
             <img class="shots__img" src="assets/img/shots/qazanxana/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/odluq/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/nasos/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/kompressor/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/generator/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/istixana/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/fabrik/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
+            <img class="shots__img" src="assets/img/shots/bina/5.jpg" alt="" width="800" height="600" loading="lazy" decoding="async">
           </div>
         </figure>
       </div>
@@ -753,7 +799,7 @@
             <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/red-globe.png" alt="Red Globe" loading="lazy"><b class="orbit__label">Red Globe</b></span></li>
             <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/gbs.jpg" alt="GBS — General Board System" loading="lazy"><b class="orbit__label">GBS</b></span></li>
             <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/temiz-seher.png" alt="Təmiz Şəhər" loading="lazy"><b class="orbit__label">Təmiz Şəhər</b></span></li>
-            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/paprec.png" alt="Paprec" loading="lazy"><b class="orbit__label">Paprec</b></span></li>
+            <li class="orbit__item"><span class="orbit__dot"><img src="assets/img/clients/paprec.jpg" alt="Paprec" loading="lazy"><b class="orbit__label">Paprec</b></span></li>
           </ul>
         </div>
       </div>
