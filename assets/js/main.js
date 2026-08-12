@@ -171,6 +171,10 @@
 
     var list = orbit.querySelector(".orbit__ring");
     var items = Array.prototype.slice.call(list.children);
+    /* the client list alone leaves the outer orbits sparse — run a second copy of
+       it so the rings fill out. The copies land a full list behind the originals,
+       so a mark and its twin never sit on the same orbit */
+    items = items.concat(items.map(function (el) { return el.cloneNode(true); }));
     /* a planet big enough to read a mark no longer fits the orbits on a phone —
        there the same items lay out as a plain grid, so watch the breakpoint */
     var narrow = window.matchMedia("(max-width: 640px)");
