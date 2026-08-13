@@ -96,7 +96,7 @@
     {
       title: "Aksa AC400 markalı generatorun əsaslı təmiri və yenidənqurulması",
       dir: "aksa-ac400-generator",
-      n: 11
+      n: 10
     },
     {
       title: "Dəmirçi Tower qazanxana idarə panelinin yenidən qurulması",
@@ -106,7 +106,7 @@
     {
       title: "Gözəl Təbiət MMC 9 MW odluqlarının periodik servisi",
       dir: "gozel-tebiet-9mw",
-      n: 18
+      n: 15
     },
     {
       title: "Zirə Agro Zantingh odluqların periodik servisi",
@@ -116,7 +116,7 @@
     {
       title: "Era Agro MMC qazanxana servisi",
       dir: "era-agro-qazanxana",
-      n: 7
+      n: 6
     },
     {
       title:
@@ -138,6 +138,40 @@
       title: "Sənaye və dövriyyə nasoslarının sazlanması",
       dir: "senaye-nasos-sazlama",
       n: 7
+    },
+    {
+      title:
+        "Red Globe Agro 8,6 MW gücə sahib sənaye odluqlarının əsaslı rekonstruksiya və modifikasiyası",
+      dir: "red-globe-8-6mw",
+      n: 30
+    },
+    {
+      title:
+        "Azərtoxum MMC silo qurutma odluğunun avtomatika və qaz yolu modifikasiyası",
+      dir: "azertoxum-silo-odluq",
+      n: 15
+    },
+    {
+      title:
+        "GreenTech MMC Autoflame idarə sisteminin yenisi ilə əvəz olunması və proqramlanması",
+      dir: "greentech-autoflame",
+      n: 9
+    },
+    {
+      title:
+        "Ecoprod istixana kompleksi üçün karbonmonoksid nəzarət panelinin yenidən qurulması",
+      dir: "ecoprod-co2-panel",
+      n: 6
+    },
+    {
+      title: "STN Plaza qazanxana odluqlarının servisi",
+      dir: "stn-plaza-odluq",
+      n: 8
+    },
+    {
+      title: "Patron çərəz istehsalı müəssisəsində vintli hava kompressorunun servisi",
+      dir: "patron-kompressor",
+      n: 6
     }
   ];
 
