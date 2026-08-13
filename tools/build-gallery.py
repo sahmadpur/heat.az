@@ -25,7 +25,11 @@ import unicodedata
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 DEST = pathlib.Path(__file__).resolve().parent.parent / "assets/img/gallery"
-SUFFIXES = {".jpg", ".jpeg", ".png", ".heic", ".webp", ".tif", ".tiff"}
+SUFFIXES = {".jpg", ".jpeg", ".png", ".heic", ".dng", ".webp", ".tif", ".tiff"}
+
+# two photos whose 64-bit dHash differs in this many bits or fewer are the same
+# shot — burst frames, or a photo already sitting in another album
+DUPE_BITS = 6
 
 # Azerbaijani letters NFKD does not decompose into an ASCII base letter
 AZ = str.maketrans({"ə": "e", "ı": "i", "ğ": "g", "ş": "s", "ç": "c", "ö": "o", "ü": "u"})
@@ -57,11 +61,37 @@ def load(photo):
     return ImageOps.exif_transpose(im).convert("RGB")
 
 
+def dhash(im):
+    """64-bit perceptual hash: each bit says whether a pixel is brighter than
+    its right-hand neighbour, so re-encoding and resizing do not move it."""
+    px = list(im.convert("L").resize((9, 8), Image.LANCZOS).getdata())
+    bits = 0
+    for row in range(8):
+        for col in range(8):
+            bits = bits << 1 | (px[row * 9 + col] > px[row * 9 + col + 1])
+    return bits
+
+
+def seen_already(h, seen):
+    return any(bin(h ^ s).count("1") <= DUPE_BITS for s in seen)
+
+
+def published_hashes():
+    """Hashes of every photo already in the gallery, so a folder that overlaps
+    an earlier job does not publish the same shot twice."""
+    out = []
+    for webp in DEST.glob("*/thumb/*.webp"):
+        with Image.open(webp) as im:
+            out.append(dhash(im))
+    return out
+
+
 def build(src_dir):
     src = pathlib.Path(src_dir).expanduser()
     if not src.is_dir():
         sys.exit(f"not a folder: {src}")
 
+    seen = published_hashes()
     albums = []
     for folder in sorted(p for p in src.iterdir() if p.is_dir()):
         photos = sorted(p for p in folder.iterdir() if p.suffix.lower() in SUFFIXES)
@@ -73,9 +103,16 @@ def build(src_dir):
         out = DEST / slug
         (out / "thumb").mkdir(parents=True, exist_ok=True)
 
-        for i, photo in enumerate(photos, 1):
+        kept, dupes = 0, []
+        for photo in photos:
             im = load(photo)
-            name = f"{i:02d}.webp"
+            h = dhash(im)
+            if seen_already(h, seen):
+                dupes.append(photo.name)
+                continue
+            seen.append(h)
+            kept += 1
+            name = f"{kept:02d}.webp"
 
             full = im.copy()
             full.thumbnail((1600, 1600), Image.LANCZOS)
@@ -86,8 +123,11 @@ def build(src_dir):
             th.save(out / "thumb" / name, "WEBP", quality=72, method=6)
 
         size = sum(p.stat().st_size for p in out.rglob("*.webp")) / 1048576
-        print(f"{slug}: {len(photos)} photos, {size:.1f}MB")
-        albums.append((folder.name, slug, len(photos)))
+        print(f"{slug}: {kept} photos, {size:.1f}MB")
+        if dupes:
+            print(f"  skipped {len(dupes)} near-duplicate: {', '.join(dupes)}")
+        if kept:
+            albums.append((folder.name, slug, kept))
 
     print("\nPaste into ALBUMS in assets/js/main.js:\n")
     for title, slug, n in albums:
@@ -98,6 +138,10 @@ def self_test():
     assert slugify("Yello Bank güc panelinin hazırlanması") == "yello-bank-guc-panelinin"
     assert slugify("Pozitron MMC Hamworthy odluğun servisi") == "pozitron-mmc-hamworthy-odlugun"
     assert slugify("!!! ???") == "album"
+
+    shot = Image.effect_mandelbrot((320, 320), (-2, -1.5, 1, 1.5), 80).convert("RGB")
+    assert seen_already(dhash(shot), [dhash(shot.resize((900, 900)))])  # a resize is the same shot
+    assert not seen_already(dhash(shot), [dhash(ImageOps.mirror(shot))])  # a different one is not
     print("ok")
 
 
