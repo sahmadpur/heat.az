@@ -1454,12 +1454,24 @@ h1, h2, h3, h4 {
 .marquee__track {
   display: flex;
   align-items: center;
-  gap: clamp(14px, 1.4vw, 22px);
   width: max-content;
   animation: slide 42s linear infinite;
+  /* held until the logos have loaded — see initMarquee */
+  animation-play-state: paused;
 }
 
-.marquee:hover .marquee__track { animation-play-state: paused; }
+/* the gap rides on the items, not the flex container: a container gap sits
+   between items only, so the seam between the row and its copy would be one
+   gap short of a whole step and the loop would jog sideways every turn */
+.marquee__track > * { margin-right: clamp(14px, 1.4vw, 22px); }
+
+.marquee__track.is-ready { animation-play-state: running; }
+
+/* pause under the pointer, but only where a pointer can leave again — on touch
+   the :hover set by a tap sticks until the next tap and the row reads as frozen */
+@media (hover: hover) and (pointer: fine) {
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+}
 
 /* Each brand rides in its own white card. The card supplies the white ground the
    logos were drawn for — several of these PNGs have a plate baked in, so on the

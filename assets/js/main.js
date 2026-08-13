@@ -268,6 +268,41 @@
       Array.prototype.forEach.call(track.children, function (item, i) {
         if (i >= half) item.setAttribute("aria-hidden", "true");
       });
+
+      /* The -50% keyframe is a share of the track's own width, so every logo
+         that lands mid-run widens the track and yanks the row sideways. Hold
+         the run until the widths have settled. The row clips its overflow, so
+         a lazy logo parked past the edge would never load while the row stands
+         still — switch them to eager once the band is in view. */
+      var imgs = Array.prototype.slice.call(track.querySelectorAll("img"));
+      var pending = imgs.length;
+
+      function start() { track.classList.add("is-ready"); }
+      function settle() { if (--pending <= 0) start(); }
+
+      function load() {
+        /* never leave the row paused on a logo that never answers */
+        setTimeout(start, 3000);
+        if (!imgs.length) return start();
+        imgs.forEach(function (img) {
+          img.loading = "eager";
+          if (img.complete) return settle();
+          img.addEventListener("load", settle);
+          img.addEventListener("error", settle);
+        });
+      }
+
+      var band = track.closest(".marquee") || track;
+      if (!("IntersectionObserver" in window)) return load();
+      var io = new IntersectionObserver(
+        function (entries) {
+          if (!entries[0].isIntersecting) return;
+          io.disconnect();
+          load();
+        },
+        { rootMargin: "300px 0px" }
+      );
+      io.observe(band);
     });
   }
 
