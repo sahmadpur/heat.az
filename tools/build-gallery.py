@@ -17,10 +17,12 @@ Only Pillow is needed: python3 -m pip install pillow
 
 import pathlib
 import re
+import subprocess
 import sys
+import tempfile
 import unicodedata
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 DEST = pathlib.Path(__file__).resolve().parent.parent / "assets/img/gallery"
 SUFFIXES = {".jpg", ".jpeg", ".png", ".heic", ".webp", ".tif", ".tiff"}
@@ -35,6 +37,24 @@ def slugify(name, words=4):
     ascii_ = ascii_.encode("ascii", "ignore").decode()
     parts = [p for p in re.split(r"[^a-z0-9]+", ascii_) if p]
     return "-".join(parts[:words]) or "album"
+
+
+def load(photo):
+    """Open a photo upright. iPhone HEIC needs a decoder Pillow does not ship,
+    so hand those to sips, which every Mac already has."""
+    try:
+        im = Image.open(photo)
+        im.load()
+    except UnidentifiedImageError:
+        with tempfile.TemporaryDirectory() as tmp:
+            jpg = pathlib.Path(tmp) / "converted.jpg"
+            subprocess.run(
+                ["sips", "-s", "format", "jpeg", str(photo), "--out", str(jpg)],
+                check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            )
+            im = Image.open(jpg)
+            im.load()
+    return ImageOps.exif_transpose(im).convert("RGB")
 
 
 def build(src_dir):
@@ -54,7 +74,7 @@ def build(src_dir):
         (out / "thumb").mkdir(parents=True, exist_ok=True)
 
         for i, photo in enumerate(photos, 1):
-            im = ImageOps.exif_transpose(Image.open(photo)).convert("RGB")
+            im = load(photo)
             name = f"{i:02d}.webp"
 
             full = im.copy()

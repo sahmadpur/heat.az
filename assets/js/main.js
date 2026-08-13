@@ -92,6 +92,52 @@
       title: "Yello Bank güc panelinin hazırlanması",
       dir: "yello-bank",
       n: 10
+    },
+    {
+      title: "Aksa AC400 markalı generatorun əsaslı təmiri və yenidənqurulması",
+      dir: "aksa-ac400-generator",
+      n: 11
+    },
+    {
+      title: "Dəmirçi Tower qazanxana idarə panelinin yenidən qurulması",
+      dir: "demirci-tower-panel",
+      n: 10
+    },
+    {
+      title: "Gözəl Təbiət MMC 9 MW odluqlarının periodik servisi",
+      dir: "gozel-tebiet-9mw",
+      n: 18
+    },
+    {
+      title: "Zirə Agro Zantingh odluqların periodik servisi",
+      dir: "zire-agro-zantingh",
+      n: 6
+    },
+    {
+      title: "Era Agro MMC qazanxana servisi",
+      dir: "era-agro-qazanxana",
+      n: 7
+    },
+    {
+      title:
+        "Sienmar MMC-yə məxsus vintli hava kompressorunun rekonstruksiya və modernizasiyası",
+      dir: "sienmar-kompressor",
+      n: 9
+    },
+    {
+      title: "Dünyagöz klinikası Ecomak vintli hava kompressorunun periodik servisi",
+      dir: "dunyagoz-ecomak-kompressor",
+      n: 6
+    },
+    {
+      title: "Masallı Rayon Mərkəzi Xəstəxanası generator servisi",
+      dir: "masalli-xestexana-generator",
+      n: 12
+    },
+    {
+      title: "Sənaye və dövriyyə nasoslarının sazlanması",
+      dir: "senaye-nasos-sazlama",
+      n: 7
     }
   ];
 
