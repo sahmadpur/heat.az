@@ -13,6 +13,7 @@ assets/js/main.js       reveals, counters, marquee, tabs, lightbox, nav, form
 assets/img/             hero, brand and (optional) sector/certificate imagery
 assets/docs/            HeatTech service catalogue (PDF)
 docs/                   the design system and content specs this site implements
+tools/build-gallery.py  folders of job photos -> WebP albums for qalereya.html
 ```
 
 ## Local preview
@@ -59,6 +60,12 @@ FAQ, contact. Copy lives directly in `index.html` — there is no translation la
   `null` the tile is an inert placeholder reading "Sənəd skanı əlavə olunacaq".
   Drop a scan into `assets/img/certs/` and set `img` to its path — the tile then
   becomes a button that opens the document in the lightbox.
+- **Photo albums.** `qalereya.html` renders one stack per entry in the `ALBUMS`
+  array in `assets/js/main.js` (`{title, dir, n}`). Never copy photos in by hand
+  — run `python3 tools/build-gallery.py <folder-of-folders>` (needs Pillow). It
+  makes one album per subfolder, re-encodes every photo to WebP at 1600px for
+  the viewer and 640px for the stack, drops EXIF, and prints the `ALBUMS`
+  entries to paste. Photos that skip that step ship several times heavier.
 - **Sector photos.** The four cards in `#sahaler` are gradient panels with a
   line-art watermark because no photographs of those site types exist yet. To use
   a real photo, add `<img class="sector__img" src="…" alt="">` as the first child
