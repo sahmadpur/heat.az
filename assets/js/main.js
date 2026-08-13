@@ -1,7 +1,8 @@
 /* ==========================================================================
    heat.az — behaviour
    Reveals, counters, marquee, photo stacks, service cards, analyzer tabs,
-   certificates lightbox, FAQ accordion, nav and the WhatsApp request form.
+   certificates lightbox, photo albums, FAQ accordion, nav and the WhatsApp
+   request form.
    ========================================================================== */
 (function () {
   "use strict";
@@ -63,6 +64,33 @@
       note: "Hava kompressorlarının montaj, baxım və təmiri",
       img: "assets/img/certs/ducomp-bayramov.jpg",
       thumb: "assets/img/certs/ducomp-bayramov-th.jpg"
+    }
+  ];
+
+  /* Photo albums for qalereya.html. `dir` is the folder under
+     assets/img/gallery/ that holds 01.jpg…NN.jpg plus thumb/01.jpg…NN.jpg;
+     `n` is how many photos are in it. Adding an album = one entry here. */
+  var ALBUMS = [
+    {
+      title: "Lamtec BT320 idarə sistemli Baltur odluğun proqramlaşdırılması",
+      dir: "lamtec-baltur",
+      n: 4
+    },
+    {
+      title:
+        "Paprec Azerbaijan məişət tullantılarının yandırılması zavodunda 20 MW gücündə sənaye odluğunun periodik servisi",
+      dir: "paprec-20mw",
+      n: 13
+    },
+    {
+      title: "Pozitron MMC Hamworthy odluğun servisi",
+      dir: "pozitron-hamworthy",
+      n: 5
+    },
+    {
+      title: "Yello Bank güc panelinin hazırlanması",
+      dir: "yello-bank",
+      n: 10
     }
   ];
 
@@ -566,6 +594,137 @@
     });
   }
 
+  /* --------------------------------------------------------------- albums -- */
+
+  function initAlbums() {
+    var wrap = document.getElementById("albums");
+    if (!wrap) return;
+
+    var box = document.getElementById("viewer");
+    var img = document.getElementById("viewer-img");
+    var title = document.getElementById("viewer-title");
+    var count = document.getElementById("viewer-count");
+    var strip = document.getElementById("viewer-strip");
+    var album = null;
+    var index = 0;
+    var opener = null;
+
+    function photo(a, i, thumb) {
+      var file = (i + 1 < 10 ? "0" : "") + (i + 1) + ".jpg";
+      return "assets/img/gallery/" + a.dir + (thumb ? "/thumb/" : "/") + file;
+    }
+
+    ALBUMS.forEach(function (a) {
+      var card = document.createElement("button");
+      card.className = "album";
+      card.type = "button";
+
+      var stack = document.createElement("span");
+      stack.className = "album__stack";
+      /* three leaves at most — a taller pile reads as noise, not as depth */
+      for (var i = Math.min(a.n, 3) - 1; i >= 0; i--) {
+        var leaf = new Image();
+        leaf.src = photo(a, i, true);
+        leaf.alt = i === 0 ? a.title : "";
+        leaf.loading = "lazy";
+        stack.appendChild(leaf);
+      }
+
+      var name = document.createElement("span");
+      name.className = "album__title";
+      name.textContent = a.title;
+
+      var num = document.createElement("span");
+      num.className = "album__n";
+      num.textContent = a.n + " foto";
+
+      card.appendChild(stack);
+      card.appendChild(name);
+      card.appendChild(num);
+      wrap.appendChild(card);
+
+      card.addEventListener("click", function () { open(a, 0, card); });
+    });
+
+    function show(i) {
+      index = (i + album.n) % album.n;
+      img.src = photo(album, index);
+      img.alt = album.title + " — foto " + (index + 1);
+      count.textContent = index + 1 + " / " + album.n;
+
+      var on = strip.children[index];
+      strip.querySelectorAll(".is-on").forEach(function (b) {
+        b.classList.remove("is-on");
+      });
+      on.classList.add("is-on");
+      on.scrollIntoView({ block: "nearest", inline: "center" });
+    }
+
+    function open(a, i, from) {
+      album = a;
+      opener = from;
+      title.textContent = a.title;
+
+      strip.textContent = "";
+      for (var k = 0; k < a.n; k++) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-label", "Foto " + (k + 1));
+        var t = new Image();
+        t.src = photo(a, k, true);
+        t.alt = "";
+        t.loading = "lazy";
+        b.appendChild(t);
+        b.addEventListener("click", (function (n) {
+          return function () { show(n); };
+        })(k));
+        strip.appendChild(b);
+      }
+
+      box.hidden = false;
+      document.body.classList.add("is-locked");
+      show(i);
+      box.querySelector(".viewer__x").focus();
+    }
+
+    function close() {
+      if (box.hidden) return;
+      box.hidden = true;
+      img.removeAttribute("src");
+      document.body.classList.remove("is-locked");
+      if (opener) opener.focus();
+      opener = null;
+    }
+
+    box.addEventListener("click", function (ev) {
+      var step = ev.target.closest("[data-step]");
+      if (step) { show(index + Number(step.dataset.step)); return; }
+      if (ev.target.closest("[data-close]")) close();
+    });
+
+    document.addEventListener("keydown", function (ev) {
+      if (box.hidden) return;
+      if (ev.key === "Escape") close();
+      else if (ev.key === "ArrowLeft") show(index - 1);
+      else if (ev.key === "ArrowRight") show(index + 1);
+      else if (ev.key === "Tab") trap(ev);
+    });
+
+    /* keep focus inside the dialog while it is open */
+    function trap(ev) {
+      var focusable = box.querySelectorAll("button");
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (ev.shiftKey && document.activeElement === first) {
+        ev.preventDefault();
+        last.focus();
+      } else if (!ev.shiftKey && document.activeElement === last) {
+        ev.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
   /* ------------------------------------------------------------ accordion -- */
 
   function initAccordion() {
@@ -737,6 +896,7 @@
   initServiceCards();
   initTabs();
   initCerts();
+  initAlbums();
   initAccordion();
   initNav();
   initCounters();

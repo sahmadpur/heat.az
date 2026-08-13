@@ -3,50 +3,57 @@
 <head>
 <meta charset="utf-8">
 <title>HeatTech MMC — Xidmət Kataloqu</title>
-<!-- Print source for assets/docs/heattech-brochure.pdf.
+<!-- Print source for assets/docs/heattech-brochure.pdf — A4 LANDSCAPE.
      Regenerate:
        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
          --headless --disable-gpu --no-pdf-header-footer \
          --print-to-pdf=assets/docs/heattech-brochure.pdf \
          --virtual-time-budget=20000 file://$PWD/brochure.html
-     Colours, type and section copy follow index.html / docs/design_system.md. -->
+
+     This is deliberately NOT a print copy of index.html. The site is a dark,
+     rounded, card-driven layout; the catalogue is a light "technical dossier":
+     paper ground, square corners, hairline rules, mono micro-labels and a
+     vertical spine on every interior page. Only the brand colours are shared,
+     and they are shifted a stop darker so they hold on paper. Two spreads
+     (analysis, back cover) invert to ink so the book has a rhythm. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
 <style>
-/* ---------- tokens (mirrors assets/css/style.css) ---------- */
+/* ---------- tokens ---------- */
 :root {
-  --bg: #121517;
-  --surface: #1a1d20;
-  --surface-2: #262c33;
-  --surface-3: #2f363e;
-  --steel: #f5f7fa;
-  --line: rgba(255,255,255,.09);
-  --line-2: rgba(255,255,255,.16);
-  --accent: #ff5722;
-  --accent-deep: #e65100;
-  --cyan: #00acc1;
-  --cyan-deep: #0288d1;
-  --ink: #f5f7fa;
-  --ink-2: rgba(245,247,250,.72);
-  --ink-3: rgba(245,247,250,.5);
-  --ink-4: rgba(245,247,250,.34);
-  --r-card: 12px;
-  --r-lg: 20px;
+  --paper: #f1efea;          /* warm stock */
+  --paper-2: #fbfaf8;
+  --ink: #14171a;
+  --ink-2: #4b5359;
+  --ink-3: #858d94;
+  --ink-4: #a9b0b6;
+  --line: rgba(20,23,26,.15);
+  --line-2: rgba(20,23,26,.28);
+  --accent: #e14a12;         /* one stop deeper than the site orange, for paper */
+  --cyan: #00808f;
+  /* inverted spreads */
+  --dark: #101315;
+  --dark-2: #191d20;
+  --d-ink: #f2f0ec;
+  --d-ink-2: rgba(242,240,236,.7);
+  --d-ink-3: rgba(242,240,236,.44);
+  --d-line: rgba(242,240,236,.16);
+  --d-accent: #ff5722;
+  --d-cyan: #22c7d8;
 }
 
-@page { size: A4 portrait; margin: 0; }
+@page { size: A4 landscape; margin: 0; }
 
 * { box-sizing: border-box; }
-
 html, body { margin: 0; padding: 0; }
 
 body {
-  background: #0b0d0e;
+  background: #d8d5cf;
   color: var(--ink);
   font-family: Inter, "Helvetica Neue", Arial, sans-serif;
-  font-size: 10.5pt;
-  line-height: 1.55;
+  font-size: 9.4pt;
+  line-height: 1.5;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -56,862 +63,898 @@ img { display: block; max-width: 100%; }
 /* ---------- page frame ---------- */
 .page {
   position: relative;
-  width: 210mm;
-  height: 297mm;
-  padding: 24mm 16mm 16mm;
+  width: 297mm;
+  height: 210mm;
+  padding: 15mm 16mm 13mm 28mm;   /* left gutter clears the spine */
   margin: 0 auto;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--paper);
   page-break-after: always;
   break-after: page;
 }
 .page:last-child { page-break-after: auto; break-after: auto; }
-.page--light { background: var(--steel); color: #16191c; }
 .page--flush { padding: 0; }
+.page--dark { background: var(--dark); color: var(--d-ink); }
 
-/* running header / footer */
-.rh {
+/* the spine: a full-height band on the binding edge carrying the section name
+   and the folio. Landscape gives the width for it, portrait never did. */
+.spine {
   position: absolute;
-  top: 8mm; left: 16mm; right: 16mm;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 7.5pt;
-  letter-spacing: .14em;
+  top: 0; bottom: 0; left: 0;
+  width: 16mm;
+  border-right: 1px solid var(--line);
+  background: rgba(20,23,26,.035);
+}
+.page--dark .spine { border-right-color: var(--d-line); background: rgba(255,255,255,.04); }
+.spine__txt {
+  position: absolute;
+  left: 50%; top: 14mm;
+  transform: translateX(-50%);
+  writing-mode: vertical-rl;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.2pt;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--ink-4);
+  color: var(--ink-3);
+  white-space: nowrap;
 }
-.page--light .rh { color: rgba(22,25,28,.45); }
-/* the mark is a red wordmark on transparent — on the graphite ground it needs
-   its own white plate to read */
-.rh img {
-  height: 7mm;
-  width: auto;
-  padding: 1mm 2mm;
-  border-radius: 6px;
-  background: #fff;
-  box-sizing: content-box;
-}
-.rf {
+.page--dark .spine__txt { color: var(--d-ink-3); }
+.spine__no {
   position: absolute;
-  bottom: 8mm; left: 16mm; right: 16mm;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 7.5pt;
-  letter-spacing: .1em;
-  color: var(--ink-4);
+  left: 0; right: 0; bottom: 10mm;
+  text-align: center;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11pt;
+  font-weight: 600;
+  color: var(--accent);
 }
-.page--light .rf { color: rgba(22,25,28,.45); }
-.rf b { color: var(--accent); font-weight: 600; }
+.page--dark .spine__no { color: var(--d-accent); }
+.spine__mark {
+  position: absolute;
+  left: 50%; bottom: 20mm;
+  transform: translateX(-50%);
+  width: 2mm; height: 2mm;
+  background: var(--accent);
+}
+.page--dark .spine__mark { background: var(--d-accent); }
+
+/* top hairline + running kicker */
+.top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 2.5mm;
+  margin-bottom: 7mm;
+  border-bottom: 1px solid var(--line);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.2pt;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.page--dark .top { border-bottom-color: var(--d-line); color: var(--d-ink-3); }
+.top b { color: var(--ink); font-weight: 600; }
+.page--dark .top b { color: var(--d-ink); }
 
 /* ---------- type ---------- */
-h1, h2, h3, h4 { margin: 0; letter-spacing: -.01em; line-height: 1.18; }
-p { margin: 0 0 3mm; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.16; letter-spacing: -.015em; }
+p { margin: 0 0 2.5mm; }
 em { font-style: normal; color: var(--accent); }
+.page--dark em { color: var(--d-accent); }
 em.cy { color: var(--cyan); }
+.page--dark em.cy { color: var(--d-cyan); }
 
-.eyebrow {
-  display: inline-block;
-  margin: 0 0 3mm;
-  font-size: 7.5pt;
-  font-weight: 600;
+.mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.2pt;
+  font-weight: 500;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--accent);
 }
-.eyebrow--cy { color: var(--cyan); }
-.h2 { font-size: 20pt; font-weight: 700; margin-bottom: 4mm; }
-.h3 { font-size: 12.5pt; font-weight: 600; }
-.h4 { font-size: 10.5pt; font-weight: 600; }
-.lead { font-size: 10.5pt; color: var(--ink-2); max-width: 150mm; }
-.page--light .lead { color: rgba(22,25,28,.7); }
+.mono--ink { color: var(--ink-3); }
+.mono--cy { color: var(--cyan); }
+.page--dark .mono { color: var(--d-accent); }
+.page--dark .mono--cy { color: var(--d-cyan); }
+.page--dark .mono--ink { color: var(--d-ink-3); }
+
+.h1 { font-size: 27pt; font-weight: 800; letter-spacing: -.03em; }
+.h2 { font-size: 19pt; font-weight: 700; }
+.h3 { font-size: 11.5pt; font-weight: 600; }
+.h4 { font-size: 9.6pt; font-weight: 600; }
+.lead { font-size: 9.8pt; color: var(--ink-2); }
+.page--dark .lead { color: var(--d-ink-2); }
 .body { color: var(--ink-2); }
-.page--light .body { color: rgba(22,25,28,.72); }
-.tiny { font-size: 8pt; color: var(--ink-3); }
+.page--dark .body { color: var(--d-ink-2); }
+.tiny { font-size: 7.6pt; color: var(--ink-3); }
 
-.sec-head { margin-bottom: 8mm; }
-.rule {
-  height: 2px;
-  width: 24mm;
-  margin: 0 0 5mm;
-  background: linear-gradient(90deg, var(--accent), rgba(255,87,34,0));
-}
-.rule--cy { background: linear-gradient(90deg, var(--cyan), rgba(0,172,193,0)); }
+.sec-head { margin-bottom: 7mm; max-width: 190mm; }
+.sec-head .mono { display: block; margin-bottom: 2.5mm; }
+.sec-head .lead { margin-top: 3mm; max-width: 165mm; }
 
-/* ---------- cover ---------- */
-.cover { display: flex; flex-direction: column; height: 100%; }
-.cover__photo {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-.cover__photo img { width: 100%; height: 100%; object-fit: cover; }
-.cover__photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 80% at 78% 18%, rgba(255,87,34,.22), transparent 60%),
-    linear-gradient(180deg, rgba(10,12,13,.94) 0%, rgba(10,12,13,.82) 38%, rgba(10,12,13,.96) 100%);
-}
-.cover__inner {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 20mm 18mm 16mm;
-}
-.cover__logo {
-  height: 16mm;
-  width: auto;
-  align-self: flex-start;
-  padding: 3mm 5mm;
-  margin-bottom: 14mm;
-  border-radius: 12px;
-  background: #fff;
-  box-sizing: content-box;
-  box-shadow: 0 6mm 18mm rgba(0,0,0,.35);
-}
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 2.5mm;
-  padding: 2mm 4mm;
-  border: 1px solid var(--line-2);
-  border-radius: 100px;
-  font-size: 8pt;
-  font-weight: 500;
+/* ---------- 01 cover ---------- */
+.cover { display: grid; grid-template-columns: 118mm 1fr; height: 100%; }
+.cover__left { padding: 16mm 12mm 12mm 16mm; display: flex; flex-direction: column; }
+.cover__logo { width: 52mm; height: auto; margin-bottom: 12mm; }
+.cover__kick {
+  display: inline-flex; align-items: center; gap: 2.5mm;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.2pt; letter-spacing: .2em; text-transform: uppercase;
   color: var(--ink-2);
 }
-.badge i { width: 2mm; height: 2mm; border-radius: 50%; background: var(--accent); }
-.cover h1 {
-  margin: 8mm 0 6mm;
-  font-size: 30pt;
-  font-weight: 700;
-  max-width: 160mm;
-}
-.cover .lead { font-size: 11pt; max-width: 145mm; }
-.cover__spacer { flex: 1; }
+.cover__kick i { width: 8mm; height: 2px; background: var(--accent); }
+.cover h1 { margin: 6mm 0 5mm; font-size: 26pt; font-weight: 800; letter-spacing: -.03em; }
+.cover__lead { font-size: 9.4pt; color: var(--ink-2); }
+.cover__grow { flex: 1; }
 .cover__facts {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--line-2);
+}
+.cover__fact { padding: 3.5mm 0 0; border-bottom: 0; }
+.cover__fact + .cover__fact { padding-left: 0; }
+.cover__fact b {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 16pt; font-weight: 600; color: var(--accent); line-height: 1;
+}
+.cover__fact span { font-size: 7.6pt; color: var(--ink-2); }
+.cover__mosaic {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1.5mm;
+  background: var(--paper);
+  padding: 1.5mm 1.5mm 1.5mm 0;
+}
+.cover__mosaic figure { position: relative; margin: 0; overflow: hidden; background: var(--dark-2); }
+.cover__mosaic img { width: 100%; height: 100%; object-fit: cover; }
+.cover__mosaic figure:first-child { grid-row: 1 / 3; }
+.cover__mosaic figcaption {
+  position: absolute; left: 0; bottom: 0;
+  padding: 1.6mm 3mm;
+  background: var(--dark);
+  color: var(--d-ink);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 6.8pt; letter-spacing: .16em; text-transform: uppercase;
+}
+.cover__bar {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3.5mm 16mm;
+  background: var(--dark);
+  color: var(--d-ink-2);
+  font-size: 8.4pt;
+  z-index: 2;
+}
+.cover__bar b { color: var(--d-ink); font-weight: 600; }
+.cover__bar em { color: var(--d-accent); }
+
+/* ---------- 02 contents ---------- */
+.toc { display: grid; grid-template-columns: 1.15fr 1fr; gap: 12mm; }
+.toc__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.toc__list li {
+  display: grid;
+  grid-template-columns: 12mm 1fr auto;
+  align-items: baseline;
   gap: 3mm;
-  margin-bottom: 8mm;
-}
-.cover__fact {
-  padding: 4mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: rgba(255,255,255,.05);
-}
-.cover__fact b { display: block; font-size: 15pt; color: var(--accent); line-height: 1.1; }
-.cover__fact span { font-size: 7.5pt; color: var(--ink-2); }
-.cover__contact {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 5mm;
-  border-top: 1px solid var(--line);
-  font-size: 9pt;
-  color: var(--ink-2);
-}
-.cover__contact b { color: var(--ink); font-weight: 600; }
-
-/* ---------- stats ---------- */
-.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; }
-.stat {
-  padding: 6mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: rgba(255,255,255,.04);
-}
-.stat--wide { grid-column: 1 / -1; }
-.stat__num { font-size: 22pt; font-weight: 700; color: var(--accent); line-height: 1.05; }
-.stat__num small { font-size: 11pt; color: var(--ink-2); font-weight: 500; }
-.stat__name { margin: 1.5mm 0 2mm; font-size: 11pt; font-weight: 600; }
-.stat p { margin: 0; font-size: 9pt; color: var(--ink-2); }
-
-.about { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin-bottom: 8mm; }
-.about img { width: 100%; height: 46mm; object-fit: cover; border-radius: var(--r-card); }
-
-/* ---------- services ---------- */
-.svc {
-  display: grid;
-  grid-template-columns: 52mm 1fr;
-  gap: 5mm;
-  padding: 5mm 0;
-  border-top: 1px solid var(--line);
-}
-.svc:first-of-type { border-top: 0; padding-top: 0; }
-.svc__shot {
-  position: relative;
-  height: 38mm;
-  border-radius: var(--r-card);
-  overflow: hidden;
-  background: var(--surface-2);
-}
-.svc__shot img { width: 100%; height: 100%; object-fit: cover; }
-.svc__shot span {
-  position: absolute;
-  left: 0; bottom: 0;
-  padding: 1.5mm 3mm;
-  border-top-right-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 8pt;
-  font-weight: 700;
-}
-.svc--cy .svc__shot span { background: var(--cyan); }
-.svc h3 { font-size: 12pt; font-weight: 600; margin-bottom: 2.5mm; }
-.svc p { font-size: 9.2pt; color: var(--ink-2); }
-.svc p:last-child { margin-bottom: 0; }
-
-/* ---------- flue gas analysis ---------- */
-.readouts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin: 6mm 0; }
-.readout {
-  padding: 4mm;
-  border: 1px solid rgba(0,172,193,.35);
-  border-radius: var(--r-card);
-  background: linear-gradient(180deg, rgba(0,172,193,.12), rgba(0,172,193,.03));
-}
-.readout b { display: block; font-size: 13pt; color: var(--cyan); }
-.readout u { display: block; text-decoration: none; font-size: 12pt; font-weight: 600; margin: 1mm 0; }
-.readout span { font-size: 7.5pt; color: var(--ink-3); }
-.gas { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; margin-bottom: 7mm; }
-.gas h4 { margin-bottom: 1.5mm; color: var(--ink); }
-.gas p { font-size: 9pt; color: var(--ink-2); margin: 0; }
-.benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
-.benefit {
-  padding: 5mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: rgba(255,255,255,.04);
-}
-.benefit b { display: block; font-size: 14pt; color: var(--accent); }
-.benefit h4 { margin: 1.5mm 0 2mm; }
-.benefit p { font-size: 8.6pt; color: var(--ink-2); margin: 0; }
-
-/* ---------- models ---------- */
-.models { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
-.model {
-  position: relative;
-  padding: 6mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  background: rgba(255,255,255,.04);
-}
-.model--hot { border-color: rgba(255,87,34,.55); background: rgba(255,87,34,.07); }
-.model__badge {
-  position: absolute;
-  top: -3mm; left: 6mm;
-  padding: 1.2mm 3mm;
-  border-radius: 100px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 7.5pt;
-  font-weight: 700;
-}
-.model h3 { margin-bottom: 4mm; }
-.model dl { margin: 0; }
-.model dt {
-  font-size: 7.5pt;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--ink-4);
-}
-.model dd {
-  margin: .5mm 0 3mm;
-  font-size: 9.2pt;
-  color: var(--ink-2);
-  padding-bottom: 3mm;
+  padding: 2.6mm 0;
   border-bottom: 1px solid var(--line);
 }
-.model dd:last-child { border-bottom: 0; margin-bottom: 0; }
+.toc__list b { font-family: "IBM Plex Mono", monospace; font-size: 8.4pt; color: var(--accent); font-weight: 600; }
+.toc__list span { font-size: 10pt; font-weight: 500; }
+.toc__list u { text-decoration: none; font-family: "IBM Plex Mono", monospace; font-size: 8pt; color: var(--ink-3); }
+.toc__aside img { width: 100%; height: 62mm; object-fit: cover; margin-bottom: 5mm; }
+.pull {
+  padding: 5mm 6mm;
+  border-left: 3px solid var(--accent);
+  background: var(--paper-2);
+}
+.pull p { margin: 0; font-size: 9.6pt; color: var(--ink-2); }
 
-.faq { margin-top: 8mm; display: grid; gap: 3mm; }
-.faq__item {
-  padding: 4mm 5mm;
-  border-left: 2px solid var(--accent);
-  background: rgba(255,255,255,.04);
-  border-radius: 0 var(--r-card) var(--r-card) 0;
+/* ---------- 03 numbers ---------- */
+.figs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line-2); }
+.fig { padding: 5mm 5mm 5mm 0; border-right: 1px solid var(--line); }
+.fig:last-child { border-right: 0; padding-right: 0; }
+.fig:not(:first-child) { padding-left: 5mm; }
+.fig__n {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 25pt; font-weight: 600; line-height: 1; color: var(--accent);
 }
-.faq__item h4 { margin-bottom: 1.5mm; }
-.faq__item p { margin: 0; font-size: 9pt; color: var(--ink-2); }
+.fig__n small { font-size: 10pt; color: var(--ink-3); }
+.fig h3 { margin: 2.5mm 0 2mm; font-size: 10pt; font-weight: 600; }
+.fig p { margin: 0; font-size: 8.2pt; color: var(--ink-2); }
+.strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin-top: 7mm; }
+.strip img { width: 100%; height: 52mm; object-fit: cover; }
+.wide-note {
+  display: grid; grid-template-columns: 40mm 1fr; gap: 5mm;
+  margin-top: 6mm; padding-top: 4mm; border-top: 1px solid var(--line);
+}
+.wide-note p { margin: 0; font-size: 9pt; color: var(--ink-2); }
 
-/* ---------- sectors ---------- */
-.sectors { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
-.sector {
-  position: relative;
-  height: 78mm;
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  background: var(--surface-2);
+/* ---------- services ---------- */
+.svcs { display: grid; gap: 6mm; }
+.svcs--3 { grid-template-columns: repeat(3, 1fr); }
+.svcs--4 { grid-template-columns: repeat(4, 1fr); }
+.svc { display: flex; flex-direction: column; }
+.svc__shot { position: relative; height: 46mm; overflow: hidden; background: var(--dark-2); }
+.svcs--4 .svc__shot { height: 40mm; }
+.svc__shot img { width: 100%; height: 100%; object-fit: cover; }
+.svc__no {
+  position: absolute; left: 0; top: 0;
+  padding: 1.4mm 3mm;
+  background: var(--accent); color: #fff;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8pt; font-weight: 600;
 }
-.sector img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sector__veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10,12,13,.15) 0%, rgba(10,12,13,.86) 58%, rgba(10,12,13,.96) 100%);
+.svc--cy .svc__no { background: var(--cyan); }
+.svc h3 {
+  margin: 3.5mm 0 2.5mm;
+  padding-top: 3mm;
+  border-top: 2px solid var(--ink);
+  font-size: 10.2pt; font-weight: 600;
 }
-.sector__body { position: absolute; left: 0; right: 0; bottom: 0; padding: 5mm; }
-.sector__body h3 { font-size: 11pt; font-weight: 600; margin-bottom: 2mm; }
-.sector__body p { margin: 0; font-size: 8.6pt; color: var(--ink-2); }
+.svcs--4 .svc h3 { font-size: 9.6pt; }
+.svc p { font-size: 8.4pt; color: var(--ink-2); }
+.svcs--4 .svc p { font-size: 8pt; }
+.svc p:last-child { margin-bottom: 0; }
 
-/* ---------- certificates / brands / clients ---------- */
-.guarantees { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 7mm; }
-.guarantee {
-  padding: 5mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: rgba(255,255,255,.04);
+/* ---------- 06 analysis (inverted) ---------- */
+.gauges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 7mm; }
+.gauge {
+  padding: 4mm;
+  border: 1px solid rgba(34,199,216,.4);
+  border-left: 3px solid var(--d-cyan);
+  background: rgba(34,199,216,.08);
 }
-.guarantee h4 { margin-bottom: 2mm; }
-.guarantee p { margin: 0; font-size: 8.8pt; color: var(--ink-2); }
+.gauge b {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8pt; letter-spacing: .16em; color: var(--d-cyan);
+}
+.gauge u {
+  display: block; text-decoration: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 15pt; font-weight: 600; margin: 1.5mm 0;
+}
+.gauge span { font-size: 7.4pt; color: var(--d-ink-3); }
+.split { display: grid; grid-template-columns: 1.25fr 1fr; gap: 10mm; }
+.gas { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 7mm; }
+.gas h4 { margin-bottom: 1.5mm; }
+.gas p { margin: 0; font-size: 8.4pt; color: var(--d-ink-2); }
+.wins { margin: 0; padding: 0; list-style: none; }
+.wins li { padding: 3.5mm 0; border-top: 1px solid var(--d-line); display: grid; grid-template-columns: 9mm 1fr; }
+.wins li:first-child { border-top: 0; padding-top: 0; }
+.wins b { font-family: "IBM Plex Mono", monospace; color: var(--d-accent); font-size: 9pt; }
+.wins h4 { margin-bottom: 1.2mm; }
+.wins p { margin: 0; font-size: 8.2pt; color: var(--d-ink-2); }
 
-.certs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-bottom: 7mm; }
-.cert { text-align: left; }
-.cert__frame {
-  height: 34mm;
-  padding: 2mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-card);
-  background: #fff;
-  overflow: hidden;
+/* ---------- 07 models + faq ---------- */
+.cmp { width: 100%; border-collapse: collapse; margin-bottom: 7mm; }
+.cmp th, .cmp td { padding: 3.2mm 4mm; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.cmp thead th { border-bottom: 2px solid var(--ink); font-size: 10.5pt; font-weight: 600; }
+.cmp thead th:first-child { font-family: "IBM Plex Mono", monospace; font-size: 7.2pt; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; color: var(--ink-3); }
+.cmp tbody th {
+  width: 44mm;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.4pt; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-3);
 }
+.cmp td { font-size: 8.8pt; color: var(--ink-2); }
+.cmp .col-hot { background: rgba(225,74,18,.07); color: var(--ink); }
+.cmp thead .col-hot { border-bottom-color: var(--accent); }
+.cmp .flag {
+  display: inline-block; margin-left: 2mm; padding: .8mm 2mm;
+  background: var(--accent); color: #fff;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 6.6pt; letter-spacing: .12em; text-transform: uppercase; vertical-align: middle;
+}
+.faq { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+.faq h4 { margin-bottom: 2mm; padding-top: 3mm; border-top: 2px solid var(--accent); }
+.faq p { margin: 0; font-size: 8.4pt; color: var(--ink-2); }
+
+/* ---------- 08 sectors ---------- */
+.sectors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+.sector figure { margin: 0; height: 74mm; overflow: hidden; background: var(--dark-2); }
+.sector img { width: 100%; height: 100%; object-fit: cover; }
+.sector h3 { margin: 3.5mm 0 2mm; padding-top: 3mm; border-top: 2px solid var(--ink); font-size: 10pt; font-weight: 600; }
+.sector p { margin: 0; font-size: 8.2pt; color: var(--ink-2); }
+
+/* ---------- 09 certificates + brands ---------- */
+.certs { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4mm; margin-bottom: 7mm; }
+.cert__frame { height: 40mm; padding: 1.5mm; border: 1px solid var(--line); background: #fff; overflow: hidden; }
 .cert__frame img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.cert b { display: block; margin-top: 2mm; font-size: 8.4pt; font-weight: 600; }
-.cert span { font-size: 7.6pt; color: var(--ink-3); }
-
-.brands { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2.5mm; }
+.cert b { display: block; margin-top: 2mm; font-size: 8pt; font-weight: 600; }
+.cert span { font-family: "IBM Plex Mono", monospace; font-size: 6.8pt; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.lic { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; margin-bottom: 7mm; }
+.lic h4 { margin-bottom: 1.8mm; padding-top: 2.5mm; border-top: 2px solid var(--ink); }
+.lic p { margin: 0; font-size: 8.4pt; color: var(--ink-2); }
+.brands { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2mm; }
 .brand {
-  display: grid;
-  place-items: center;
-  height: 12mm;
-  padding: 1.5mm;
-  border-radius: 8px;
-  background: #fff;
+  display: grid; place-items: center;
+  height: 13mm; padding: 1.5mm;
+  background: #fff; border: 1px solid var(--line);
 }
-.brand img { max-height: 8mm; max-width: 100%; width: auto; object-fit: contain; }
-.brand span { font-size: 6.6pt; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #4a5158; }
+.brand img { max-height: 9mm; max-width: 100%; width: auto; object-fit: contain; }
+.brand span { font-size: 6.6pt; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #4a5158; }
 
-/* client tiles carry the mark and the name together, both in full colour */
-.clients { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2.5mm; }
+/* ---------- 10 clients ---------- */
+.clients { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2mm; }
 .client {
-  display: grid;
-  grid-template-rows: 11mm auto;
-  align-items: center;
-  justify-items: center;
-  gap: 1.5mm;
+  display: grid; grid-template-rows: 11mm auto; align-items: center; justify-items: center; gap: 1.5mm;
   padding: 2.5mm 2mm;
-  border-radius: 8px;
-  background: #fff;
+  background: #fff; border: 1px solid var(--line);
   text-align: center;
 }
 .client img { max-height: 11mm; max-width: 100%; width: auto; object-fit: contain; }
-.client span {
-  font-size: 6.8pt;
-  font-weight: 600;
-  line-height: 1.25;
-  color: #2f363e;
+.client span { font-size: 6.6pt; font-weight: 600; line-height: 1.25; color: #2f363e; }
+.works { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; margin-top: 6mm; }
+.works figure { margin: 0; }
+.works img { width: 100%; height: 44mm; object-fit: cover; }
+.works figcaption {
+  margin-top: 1.8mm;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 6.8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
 }
 
-/* ---------- back cover ---------- */
-.back { display: flex; flex-direction: column; height: 100%; }
-.back h2 { font-size: 24pt; max-width: 150mm; margin-bottom: 5mm; }
-.back__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; margin-top: 8mm; }
-.back__card {
-  padding: 6mm;
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  background: rgba(255,255,255,.04);
+/* ---------- 11 back cover ---------- */
+.back { display: grid; grid-template-columns: 1.05fr 1fr; height: 100%; }
+.back__left { padding: 16mm 12mm 12mm 16mm; display: flex; flex-direction: column; }
+.back h2 { font-size: 21pt; font-weight: 700; margin: 5mm 0 4mm; }
+.back__rows { margin: 6mm 0 0; }
+.back__rows div { display: grid; grid-template-columns: 34mm 1fr; padding: 2.6mm 0; border-top: 1px solid var(--d-line); }
+.back__rows dt {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 7.2pt; letter-spacing: .16em; text-transform: uppercase; color: var(--d-ink-3);
+  align-self: center;
 }
-.back__card--hot { border-color: rgba(255,87,34,.5); background: rgba(255,87,34,.08); }
-.back__card h3 { margin-bottom: 3mm; }
-.back__rows { margin: 0; }
-.back__rows dt { font-size: 7.5pt; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); }
-.back__rows dd { margin: .5mm 0 3.5mm; font-size: 10pt; color: var(--ink); }
-.back__steps { margin: 0; padding-left: 5mm; font-size: 9.2pt; color: var(--ink-2); }
-.back__steps li { margin-bottom: 2.5mm; }
-.back__shot { margin-top: 7mm; }
-.back__shot img { width: 100%; height: 58mm; object-fit: cover; border-radius: var(--r-lg); }
-.wordmark {
-  margin-top: 6mm;
-  font-size: 34pt;
-  font-weight: 700;
-  letter-spacing: .28em;
-  color: rgba(255,255,255,.07);
+.back__rows dd { margin: 0; font-size: 10.5pt; }
+.back__rows dd b { color: var(--d-accent); }
+.back__grow { flex: 1; }
+.back__wordmark {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 20pt; font-weight: 600; letter-spacing: .5em;
+  color: rgba(242,240,236,.12);
 }
+.back__right { position: relative; }
+.back__right > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.back__veil {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(16,19,21,.55) 0%, rgba(16,19,21,.9) 62%, rgba(16,19,21,.98) 100%);
+}
+.back__steps { position: absolute; left: 12mm; right: 12mm; bottom: 12mm; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.back__steps li {
+  counter-increment: s;
+  display: grid; grid-template-columns: 8mm 1fr; gap: 2mm;
+  padding: 2.4mm 0; border-top: 1px solid var(--d-line);
+  font-size: 8.8pt; color: var(--d-ink-2);
+}
+.back__steps li::before {
+  content: counter(s, decimal-leading-zero);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8pt; color: var(--d-accent);
+}
+.back__stepshead { position: absolute; left: 12mm; top: 14mm; }
 </style>
 </head>
 <body>
 
-<!-- ===================== 1. cover ===================== -->
+<!-- ===================== 01 cover ===================== -->
 <section class="page page--flush">
-  <div class="cover__photo">
-    <img src="assets/img/shots/qazanxana/1.jpg" alt="">
-  </div>
-  <div class="cover__inner cover">
-    <img class="cover__logo" src="assets/img/logo.png" alt="HeatTech MMC">
+  <div class="cover">
+    <div class="cover__left">
+      <img class="cover__logo" src="assets/img/logo.png" alt="HeatTech MMC">
 
-    <span class="badge"><i></i>24/7 Fasiləsiz Sənaye, Aqro və Mülki Mühəndislik Servisi</span>
+      <span class="cover__kick"><i></i>Xidmət kataloqu · 2026</span>
 
-    <h1>Qazanxana, Odluq və Sənaye Avadanlıqlarının <em>Peşəkar Təmiri</em>, Avtomatlaşdırılması və Modifikasiyası</h1>
+      <h1>Qazanxana, Odluq və Sənaye Avadanlıqlarının <em>Peşəkar Təmiri</em>, Avtomatlaşdırılması və Modifikasiyası</h1>
 
-    <p class="lead">
-      Binalar, istehsalat müəssisələri, fabriklər, aqrokomplekslər və asfalt zavodları
-      üçün istənilən gücdə qazanxanaların, sənaye odluqlarının (burner), CO₂ avtomatika
-      sistemlərinin, nasosların, generatorların və vintli hava kompressorlarının texniki
-      servisi, təmiri və retrofiti.
-    </p>
+      <p class="cover__lead">
+        Binalar, istehsalat müəssisələri, fabriklər, aqrokomplekslər və asfalt zavodları
+        üçün istənilən gücdə qazanxanaların, sənaye odluqlarının (burner), CO₂ avtomatika
+        sistemlərinin, nasosların, generatorların, vintli hava kompressorlarının və PLC/MCC
+        idarəetmə panolarının texniki servisi, təmiri və retrofiti.
+      </p>
 
-    <div class="cover__spacer"></div>
+      <div class="cover__grow"></div>
 
-    <div class="cover__facts">
-      <div class="cover__fact"><b>15+</b><span>ildən artıq təcrübə</span></div>
-      <div class="cover__fact"><b>100%</b><span>zəmanətli icra</span></div>
-      <div class="cover__fact"><b>24/7</b><span>qəza müdaxiləsi</span></div>
-      <div class="cover__fact"><b>30%</b><span>-dək yanacaq qənaəti</span></div>
+      <div class="cover__facts">
+        <div class="cover__fact"><b>15+</b><span>ildən artıq təcrübə</span></div>
+        <div class="cover__fact"><b>24/7</b><span>qəza müdaxiləsi</span></div>
+        <div class="cover__fact" style="padding-top:4mm"><b>100%</b><span>zəmanətli icra</span></div>
+        <div class="cover__fact" style="padding-top:4mm"><b>30%</b><span>-dək yanacaq qənaəti</span></div>
+      </div>
     </div>
 
-    <div class="cover__contact">
-      <div>
-        <b>HeatTech MMC</b><br>
-        Ə. Nəvai küç. 10C, Babək prospekti, Bakı, Azərbaycan
-      </div>
-      <div style="text-align:right">
-        <b>+994 55 348 76 75</b><br>
-        info@heat.az · heat.az
+    <div class="cover__mosaic">
+      <figure>
+        <img src="assets/img/shots/qazanxana/1.jpg" alt="Qazanxana">
+        <figcaption>Qazanxana</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/shots/odluq/1.jpg" alt="Sənaye odluğu">
+        <figcaption>Odluq · Burner</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/shots/pano/1.jpg" alt="İdarəetmə panosu">
+        <figcaption>PLC · MCC</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="cover__bar">
+    <div><b>HeatTech MMC</b> · Ə. Nəvai küç. 10C, Babək prospekti, Bakı, Azərbaycan</div>
+    <div><em>+994 55 348 76 75</em> · info@heat.az · heat.az</div>
+  </div>
+</section>
+
+<!-- ===================== 02 contents ===================== -->
+<section class="page">
+  <aside class="spine">
+    <span class="spine__txt">Kataloq · Mündəricat</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">02</span>
+  </aside>
+
+  <div class="top"><b>HeatTech MMC</b><span>heat.az · info@heat.az · +994 55 348 76 75</span></div>
+
+  <header class="sec-head">
+    <span class="mono">Kataloqun quruluşu</span>
+    <h2 class="h2">2008-ci ildən <em>Azərbaycanda</em> sənaye istilik texnikası</h2>
+    <p class="lead">
+      Bir mühəndis komandası, yeddi istiqamət: diaqnostika, əsaslı təmir, modernizasiya
+      (retrofit) və planlı texniki xidmət. Məqsədimiz — avadanlıqlarınızın fasiləsiz işi,
+      maksimal enerji səmərəliliyi və tam təhlükəsizlik.
+    </p>
+  </header>
+
+  <div class="toc">
+    <ol class="toc__list">
+      <li><b>03</b><span>Rəqəmlərlə biz</span><u>təcrübə · zəmanət · qənaət</u></li>
+      <li><b>04</b><span>Xidmətlər 01–03</span><u>qazanxana · odluq · CO₂</u></li>
+      <li><b>05</b><span>Xidmətlər 04–07</span><u>nasos · kompressor · generator · pano</u></li>
+      <li><b>06</b><span>Rəqəmsal baca qazı analizi</span><u>O₂ · CO · CO₂ · NOx</u></li>
+      <li><b>07</b><span>Xidmət modelləri və FAQ</span><u>birdəfəlik · müqaviləli</u></li>
+      <li><b>08</b><span>İxtisas sahələri</span><u>zavod · aqro · sənaye · bina</u></li>
+      <li><b>09</b><span>Sertifikatlar və brendlər</span><u>lisenziya · akkreditasiya</u></li>
+      <li><b>10</b><span>Müştərilər və iş kadrları</span><u>obyektlərdən</u></li>
+      <li><b>11</b><span>Əlaqə və iş axını</span><u>çağırış · audit · icra</u></li>
+    </ol>
+
+    <div class="toc__aside">
+      <img src="assets/img/about/onsite.jpg" alt="Obyektdə mühəndis baxışı">
+      <div class="pull">
+        <p>
+          Avadanlığı dəyişmək deyil, işlədiyi rejimi düzəltmək — işimizin əsası budur.
+          Odluğun kalibrlənməsi, panonun retrofiti və dövri baxış çox vaxt yeni avadanlıqdan
+          qat-qat ucuz başa gəlir və eyni nəticəni verir.
+        </p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== 2. numbers ===================== -->
+<!-- ===================== 03 numbers ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Rəqəmlərlə biz</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Rəqəmlərlə biz</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">03</span>
+  </aside>
+
+  <div class="top"><b>01 / Profil</b><span>Rəqəmlərlə biz</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Rəqəmlərlə biz</p>
-    <div class="rule"></div>
-    <h2 class="h2">2008-ci ildən <em>Azərbaycanda</em> sənaye istilik texnikası</h2>
-    <p class="lead">
-      Bir mühəndis komandası ilə altı istiqamətdə diaqnostika, əsaslı təmir,
-      modernizasiya və planlı texniki xidmət. Məqsədimiz — avadanlıqlarınızın fasiləsiz
-      işi, maksimal enerji səmərəliliyi və tam təhlükəsizlik.
-    </p>
+    <span class="mono">Rəqəmlərlə biz</span>
+    <h2 class="h2">Təcrübə, zəmanət və <em>ölçülə bilən qənaət</em></h2>
   </header>
 
-  <div class="about">
-    <img src="assets/img/about/burner.jpg" alt="Odluq üzərində servis işi">
-    <img src="assets/img/about/onsite.jpg" alt="Obyektdə mühəndis baxışı">
-  </div>
-
-  <div class="stats">
-    <article class="stat">
-      <div class="stat__num">15+</div>
-      <h3 class="stat__name">İldən Artıq Təcrübə</h3>
-      <p>2008-ci ildən etibarən servis sektorunda uğurlu fəaliyyətimiz, qazanxana və
-        sənaye avadanlıqlarının təmirində zəngin mühəndislik təcrübəmiz.</p>
+  <div class="figs">
+    <article class="fig">
+      <div class="fig__n">15+</div>
+      <h3>İldən Artıq Təcrübə</h3>
+      <p>2008-ci ildən etibarən servis sektorunda uğurlu fəaliyyət, qazanxana və sənaye
+        avadanlıqlarının təmirində zəngin mühəndislik təcrübəsi.</p>
     </article>
-
-    <article class="stat">
-      <div class="stat__num">100%</div>
-      <h3 class="stat__name">Zəmanətli İcra</h3>
-      <p>Bütün təmir, modifikasiya və ehtiyat hissəsi dəyişimi işlərinə zəmanət
-        öhdəliyi.</p>
+    <article class="fig">
+      <div class="fig__n">100%</div>
+      <h3>Zəmanətli İcra</h3>
+      <p>Bütün təmir, modifikasiya və ehtiyat hissəsi dəyişimi işlərinə zəmanət öhdəliyi.</p>
     </article>
-
-    <article class="stat">
-      <div class="stat__num">24/7</div>
-      <h3 class="stat__name">Qəza Müdaxiləsi</h3>
+    <article class="fig">
+      <div class="fig__n">24/7</div>
+      <h3>Qəza Müdaxiləsi</h3>
       <p>İstehsalatın və ya obyektin dayanmaması üçün operativ mobil servis xidməti.</p>
     </article>
-
-    <article class="stat">
-      <div class="stat__num">30%<small>-dək</small></div>
-      <h3 class="stat__name">Yanacaq Qənaəti</h3>
+    <article class="fig">
+      <div class="fig__n">30<small>%-dək</small></div>
+      <h3>Yanacaq Qənaəti</h3>
       <p>Odluqların dəqiq kalibrlənməsi və elektron modulyasiyaya keçirilməsi (retrofit)
         nəticəsində əldə olunan maksimum səmərəlilik.</p>
     </article>
-
-    <article class="stat stat--wide">
-      <div class="stat__num">∞</div>
-      <h3 class="stat__name">Məhdudiyyətsiz Güc Diapazonu</h3>
-      <p>Kiçik həcmli mərkəzi isitmə sistemlərindən tutmuş, nəhəng sənaye buxar
-        qazanlarına və asfalt plantı odluqlarına qədər tam texniki xidmət.</p>
-    </article>
   </div>
 
-  <div class="rf"><span>heat.az · info@heat.az</span><b>02</b></div>
+  <div class="wide-note">
+    <span class="mono mono--ink">Güc diapazonu · ∞</span>
+    <p>
+      Kiçik həcmli mərkəzi isitmə sistemlərindən tutmuş, nəhəng sənaye buxar qazanlarına,
+      20 MW-lıq qazanxanalara və asfalt plantı odluqlarına qədər tam texniki xidmət.
+      Mexaniki hissə, yanma prosesi və avtomatika — üçü də bir komandada.
+    </p>
+  </div>
+
+  <div class="strip">
+    <img src="assets/img/about/burner.jpg" alt="Odluq üzərində servis işi">
+    <img src="assets/img/shots/qazanxana/3.jpg" alt="Qazanxana avadanlığı">
+    <img src="assets/img/shots/pano/2.jpg" alt="İdarəetmə panosu">
+  </div>
 </section>
 
-<!-- ===================== 3. services 1–3 ===================== -->
+<!-- ===================== 04 services 01–03 ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Əsas xidmətlərimiz</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Xidmətlər 01–03</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">04</span>
+  </aside>
+
+  <div class="top"><b>02 / Xidmətlər</b><span>Qazanxana · Odluq · CO₂ avtomatika</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Əsas xidmətlərimiz</p>
-    <div class="rule"></div>
-    <h2 class="h2">Genişləndirilmiş <em>Mühəndislik Xidmətləri</em></h2>
+    <span class="mono">Əsas xidmətlərimiz</span>
+    <h2 class="h2">İstilik mənbəyi və <em>yanma prosesi</em></h2>
   </header>
 
-  <article class="svc">
-    <div class="svc__shot">
-      <img src="assets/img/shots/qazanxana/2.jpg" alt="Qazanxana sistemi">
-      <span>01</span>
-    </div>
-    <div>
+  <div class="svcs svcs--3">
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/qazanxana/2.jpg" alt="Qazanxana sistemi">
+        <span class="svc__no">01</span>
+      </div>
       <h3>Qazanxana Sistemlərinin Kompleks Servisi, Təmiri və Mövsümi Hazırlığı</h3>
-      <p>Biz istənilən gücdə və tipli (suqızdırıcı, buxar, qızgın yağ) qazanxanaların
-        kompleks texniki xidmətini, diaqnostikasını və əsaslı təmirini icra edirik.</p>
-      <p>Xidmətlərimizə qazanların daxili və xarici səthlərinin ərp və çöküntülərdən
-        kimyəvi/mexaniki təmizlənməsi, təhlükəsizlik klapanlarının və avtomatik idarəetmə
-        lövhələrinin tənzimlənməsi və mövsümə tam hazır vəziyyətə gətirilməsi daxildir.
-        Potensial qəzaları öncədən müəyyən edərək, gözlənilməz istehsalat dayanmalarının
-        qarşısını alırıq.</p>
-    </div>
-  </article>
+      <p>İstənilən gücdə və tipli (suqızdırıcı, buxar, qızgın yağ) qazanxanaların kompleks
+        texniki xidməti, diaqnostikası və əsaslı təmiri.</p>
+      <p>Qazanların daxili və xarici səthlərinin ərp və çöküntülərdən kimyəvi/mexaniki
+        təmizlənməsi, təhlükəsizlik klapanlarının və avtomatik idarəetmə lövhələrinin
+        tənzimlənməsi, mövsümə tam hazır vəziyyətə gətirilməsi. Potensial qəzaları öncədən
+        müəyyən edərək gözlənilməz istehsalat dayanmalarının qarşısını alırıq.</p>
+    </article>
 
-  <article class="svc">
-    <div class="svc__shot">
-      <img src="assets/img/shots/odluq/1.jpg" alt="Sənaye odluğu">
-      <span>02</span>
-    </div>
-    <div>
-      <h3>Sənaye və Qeyri-Sənaye Odluqlarının (Burner) Təmiri, Modifikasiyası və Retrofiti</h3>
-      <p>Qaz, dizel, mazut və kombinasiya olunmuş (çoxyanacaqlı) odluqların təmiri,
-        sınağı və kalibrlənməsini peşəkar səviyyədə həyata keçiririk.</p>
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/odluq/1.jpg" alt="Sənaye odluğu">
+        <span class="svc__no">02</span>
+      </div>
+      <h3>Sənaye Odluqlarının (Burner) Təmiri, Modifikasiyası və Retrofiti</h3>
+      <p>Qaz, dizel, mazut və kombinasiya olunmuş (çoxyanacaqlı) odluqların təmiri, sınağı
+        və kalibrlənməsi peşəkar səviyyədə.</p>
       <p>Köhnəlmiş, mexaniki idarəetməli odluqları modernizasiya edərək (retrofit),
         mikroprosessorlu elektron idarəetmə və servo-mühərrikli hava-yanacaq nisbəti
-        sistemlərinə keçiririk. Yanma prosesini rəqəmsal qaz analizatorları vasitəsilə
-        tənzimləməklə, CO və CO₂ emissiyalarını minimuma endirir və 15%-dən 30%-dək
-        yanacaq qənaəti əldə edirik.</p>
-    </div>
-  </article>
+        sistemlərinə keçiririk. Yanma prosesini rəqəmsal qaz analizatorları ilə tənzimləyərək
+        CO və CO₂ emissiyalarını minimuma endirir, 15–30% yanacaq qənaəti əldə edirik.</p>
+    </article>
 
-  <article class="svc svc--cy">
-    <div class="svc__shot">
-      <img src="assets/img/shots/co2/1.jpg" alt="CO2 avtomatika sistemi">
-      <span>03</span>
-    </div>
-    <div>
+    <article class="svc svc--cy">
+      <div class="svc__shot">
+        <img src="assets/img/shots/co2/1.jpg" alt="CO2 avtomatika sistemi">
+        <span class="svc__no">03</span>
+      </div>
       <h3>Aqrokomplekslər üçün CO₂ Qurğularının Sensor və Avtomatika Yenilənməsi</h3>
-      <p>İstixana və aqrokomplekslərdə CO₂ səviyyəsinin normadan artıq və ya əskik
-        olması həm məhsula zərər verir, həm də heyət üçün təhlükə yaradır.</p>
-      <p>Biz CO₂ generatorlarının və dozajlama xətlərinin avtomatika sistemlərini
-        sıfırdan qurur və ya mövcud sistemləri yeniləyirik. Həssas CO₂ sensorlarının
-        kalibrlənməsi, avtomatik qaz sızma təhlükəsizlik klapanlarının inteqrasiyası və
-        mərkəzi idarəetmə pultuna (PLC) qoşulmasını təmin edirik.</p>
-    </div>
-  </article>
-
-  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>03</b></div>
+      <p>İstixana və aqrokomplekslərdə CO₂ səviyyəsinin normadan artıq və ya əskik olması
+        həm məhsula zərər verir, həm də heyət üçün təhlükə yaradır.</p>
+      <p>CO₂ generatorlarının və dozajlama xətlərinin avtomatika sistemlərini sıfırdan qurur
+        və ya mövcud sistemləri yeniləyirik: həssas CO₂ sensorlarının kalibrlənməsi, avtomatik
+        qaz sızma təhlükəsizlik klapanlarının inteqrasiyası və mərkəzi idarəetmə pultuna (PLC)
+        qoşulması.</p>
+    </article>
+  </div>
 </section>
 
-<!-- ===================== 4. services 4–6 ===================== -->
+<!-- ===================== 05 services 04–07 ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Əsas xidmətlərimiz</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Xidmətlər 04–07</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">05</span>
+  </aside>
+
+  <div class="top"><b>02 / Xidmətlər</b><span>Nasos · Kompressor · Generator · Pano</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Əsas xidmətlərimiz</p>
-    <div class="rule"></div>
-    <h2 class="h2">Nasos, Kompressor və <em>Generator Servisi</em></h2>
+    <span class="mono">Əsas xidmətlərimiz</span>
+    <h2 class="h2">Mexanika, enerji və <em>avtomatika</em></h2>
   </header>
 
-  <article class="svc">
-    <div class="svc__shot">
-      <img src="assets/img/shots/nasos/1.jpg" alt="Nasos qrupu">
-      <span>04</span>
-    </div>
-    <div>
+  <div class="svcs svcs--4">
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/nasos/1.jpg" alt="Nasos qrupu">
+        <span class="svc__no">04</span>
+      </div>
       <h3>Dövriyyə və Təzyiq Nasoslarının Texniki Servisi</h3>
       <p>Dövriyyə, təzyiq artırma (booster), yanğın və drenaj nasoslarının təmiri və
-        profilaktikası mühəndislik dəqiqliyi tələb edir.</p>
+        profilaktikası.</p>
       <p>Şaquli, üfüqi və mərkəzdənqaçma nasosların diaqnostikası, mexaniki salnik və
-        diyircəkli yastıqların dəyişdirilməsi, rotorların dinamik balanslaşdırılması,
-        mühərrik sarğılarının nəzarəti və tezlik çeviricilərinin (Inverter/VFD)
-        sazlanması. Bu sayədə kavitasiya riskini aradan qaldırır və elektrik enerjisi
-        sərfiyyatını ciddi şəkildə azaldırıq.</p>
-    </div>
-  </article>
+        yastıqların dəyişdirilməsi, rotorların dinamik balanslaşdırılması, mühərrik
+        sarğılarının nəzarəti və tezlik çeviricilərinin (VFD) sazlanması. Kavitasiya riskini
+        aradan qaldırır, elektrik sərfiyyatını azaldırıq.</p>
+    </article>
 
-  <article class="svc">
-    <div class="svc__shot">
-      <img src="assets/img/shots/kompressor/1.jpg" alt="Vintli hava kompressoru">
-      <span>05</span>
-    </div>
-    <div>
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/kompressor/1.jpg" alt="Vintli hava kompressoru">
+        <span class="svc__no">05</span>
+      </div>
       <h3>Vintli Hava Kompressorlarının Servisi və Əsaslı Təmiri</h3>
-      <p>Sənaye müəssisələrinin pnevmatik avadanlıqlarını sıxılmış hava ilə təmin edən
-        vintli kompressorların dayanması bütün istehsalat xəttinin iflic olması deməkdir.</p>
-      <p>Planlı texniki baxış (yağ, hava və separator filtrlərinin dəyişdirilməsi), vint
-        blokunun (air-end) əsaslı təmiri, klapanların bərpası, soyutma radiatorlarının
-        təmizlənməsi və təzyiq sensorlarının sazlanması. Həddindən artıq qızmanın və
-        təzyiq düşmələrinin qarşısını alaraq istismar ömrünü uzadırıq.</p>
-    </div>
-  </article>
+      <p>Pnevmatik avadanlığı sıxılmış hava ilə təmin edən vintli kompressorun dayanması
+        bütün xəttin dayanması deməkdir.</p>
+      <p>Planlı baxış (yağ, hava və separator filtrləri), vint blokunun (air-end) əsaslı
+        təmiri, klapanların bərpası, soyutma radiatorlarının təmizlənməsi və təzyiq
+        sensorlarının sazlanması. Həddindən artıq qızmanın və təzyiq düşmələrinin qarşısını
+        alırıq.</p>
+    </article>
 
-  <article class="svc">
-    <div class="svc__shot">
-      <img src="assets/img/shots/generator/1.jpg" alt="Sənaye generatoru">
-      <span>06</span>
-    </div>
-    <div>
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/generator/1.jpg" alt="Sənaye generatoru">
+        <span class="svc__no">06</span>
+      </div>
       <h3>Sənaye Generatorlarının Servisi və İdarəetmə Panellərinin Təmiri</h3>
-      <p>Şəbəkədə kəsilmə baş verdikdə obyekti fasiləsiz enerji ilə təmin edən dizel və
-        qaz generatorlarının operativ işə düşməsi həyati əhəmiyyət kəsb edir.</p>
-      <p>Mühərrik və alternatör hissəsinin diaqnostikası, Avtomatik Transfer
-        Şalterlərinin (ATS) tənzimlənməsi, idarəetmə kartlarının proqramlaşdırılması, yük
-        altında sınaqlar və dövrü yağ/filtr dəyişimi. Generatorunuzun hər an qəza
-        rejimində problemsiz işə düşəcəyinə zəmanət veririk.</p>
-    </div>
-  </article>
+      <p>Şəbəkə kəsildikdə obyekti enerji ilə təmin edən dizel və qaz generatorlarının
+        operativ işə düşməsi həyati əhəmiyyət daşıyır.</p>
+      <p>Mühərrik və alternatör diaqnostikası, Avtomatik Transfer Şalterlərinin (ATS)
+        tənzimlənməsi, idarəetmə kartlarının proqramlaşdırılması, yük altında sınaqlar və
+        dövri yağ/filtr dəyişimi.</p>
+    </article>
 
-  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>04</b></div>
+    <article class="svc">
+      <div class="svc__shot">
+        <img src="assets/img/shots/pano/3.jpg" alt="PLC/MCC idarəetmə panosu">
+        <span class="svc__no">07</span>
+      </div>
+      <h3>Sənaye Avtomatikası və PLC/MCC Panolarının Yığılması, Proqramlaşdırılması</h3>
+      <p>Elektrik paylayıcı, avtomatika və PLC/SCADA idarəetmə panolarının sıfırdan
+        yığılması, retrofiti və operativ təmiri — IEC/EN standartlarına uyğun.</p>
+      <p>PLC/HMI/SCADA lövhələri, güc və paylayıcı panolar (MCC/MDB), generator avtomatikası
+        (ATS/AMF), tezlik çeviricilərinin (VFD) inteqrasiyası ilə 20–40% elektrik qənaəti,
+        sensor və aktuatorların kalibrlənməsi.</p>
+    </article>
+  </div>
 </section>
 
-<!-- ===================== 5. flue gas analysis ===================== -->
-<section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Baca qazı analizi</span>
-  </div>
+<!-- ===================== 06 flue gas analysis (inverted) ===================== -->
+<section class="page page--dark">
+  <aside class="spine">
+    <span class="spine__txt">Baca qazı analizi</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">06</span>
+  </aside>
+
+  <div class="top"><b>03 / Xüsusi mühəndislik xidməti</b><span>Rəqəmsal baca qazı analizi</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow eyebrow--cy">Xüsusi mühəndislik xidməti</p>
-    <div class="rule rule--cy"></div>
+    <span class="mono mono--cy">Ölçmədən tənzimləmə yoxdur</span>
     <h2 class="h2">Rəqəmsal Baca Qazı Analizi ilə <em class="cy">Maksimum Səmərəlilik</em> və Minimum Emissiya</h2>
     <p class="lead">
-      Yanacağın vizual yox, spektral cihazlarla təhlili: hər bir milliqram qaza nəzarət
-      edərək maliyyənizi və ətraf mühiti qoruyuruq. Kalibrlənmiş analizatorla CO, CO₂,
+      Yanacağın vizual yox, spektral cihazlarla təhlili. Kalibrlənmiş analizatorla CO, CO₂,
       NO, NOx və O₂ göstəricilərini ölçür, hava/yanacaq nisbətini idarəetmə lövhəsindən
       (servo-mühərriklərdən) dəqiq tənzimləyirik.
     </p>
   </header>
 
-  <div class="readouts">
-    <div class="readout"><b>O₂</b><u>3–4%</u><span>Oksigen · hədəf aralıq</span></div>
-    <div class="readout"><b>CO</b><u>ppm ↓</u><span>Dəm qazı · minimuma</span></div>
-    <div class="readout"><b>CO₂</b><u>Maks. ↑</u><span>Karbon dioksid · pik</span></div>
-    <div class="readout"><b>NOx</b><u>Low-NOx</u><span>Azot oksidləri · norma</span></div>
+  <div class="gauges">
+    <div class="gauge"><b>O₂</b><u>3–4%</u><span>Oksigen · hədəf aralıq</span></div>
+    <div class="gauge"><b>CO</b><u>ppm ↓</u><span>Dəm qazı · minimuma</span></div>
+    <div class="gauge"><b>CO₂</b><u>Maks. ↑</u><span>Karbon dioksid · pik</span></div>
+    <div class="gauge"><b>NOx</b><u>Low-NOx</u><span>Azot oksidləri · norma</span></div>
   </div>
 
-  <div class="gas">
-    <div>
-      <h4 class="h4">Oksigen (O₂) — Yanma Hava Nisbətinin Açarı</h4>
-      <p>Azad oksigenin normadan çox olması lazımsız havanın qızdırılaraq bacadan bayıra
-        atılması (enerji itkisi), az olması isə yanacağın tam yanmaması deməkdir. Hava
-        damperini mikron dəqiqliyi ilə tənzimləyərək O₂-ni ideal həddə (təbii qaz üçün
-        3–4%) gətiririk.</p>
+  <div class="split">
+    <div class="gas">
+      <div>
+        <h4 class="h4">Oksigen (O₂) — hava nisbətinin açarı</h4>
+        <p>Azad oksigenin çox olması lazımsız havanın qızdırılıb bacadan atılması (enerji
+          itkisi), az olması yanacağın tam yanmaması deməkdir. Hava damperini dəqiq
+          tənzimləyərək O₂-ni ideal həddə (təbii qaz üçün 3–4%) gətiririk.</p>
+      </div>
+      <div>
+        <h4 class="h4">Dəm qazı (CO) — gizli yanacaq itkisi</h4>
+        <p>Yanacaq tam yanmadıqda karbon-monoksid əmələ gəlir — birbaşa havaya sovrulan
+          yanmamış pul və zəhərlənmə riski. CO-nu ppm səviyyəsinə endirməklə yanacağın
+          100%-ə yaxın effektivliklə enerjiyə çevrilməsini təmin edirik.</p>
+      </div>
+      <div>
+        <h4 class="h4">Karbon dioksid (CO₂) — yanma keyfiyyəti</h4>
+        <p>Bacada CO₂-nin pik səviyyəyə çatması yanacağın ideal yandığını göstərir. Maksimum
+          CO₂ verimi üçün hava və yanacaq girişini tam balansa gətiririk.</p>
+      </div>
+      <div>
+        <h4 class="h4">Azot oksidləri (NO, NOx) — ekologiya</h4>
+        <p>Yanma kamerasında temperatur həddindən artıq yüksək olduqda zərərli NOx qazları
+          yaranır. Alovun formasını və temperaturunu tənzimləyərək Low-NOx standartlarını
+          təmin edirik.</p>
+      </div>
     </div>
+
     <div>
-      <h4 class="h4">Dəm Qazı (CO) — Gizli Yanacaq İtkisi və Təhlükə</h4>
-      <p>Yanacaq tam yanmadıqda karbon-monoksid əmələ gəlir — bu, birbaşa havaya
-        sovurulan yanmamış pul və zəhərlənmə riskidir. CO-nu ppm səviyyəsinə endirməklə
-        yanacağın 100%-ə yaxın effektivliklə enerjiyə çevrilməsini təmin edirik.</p>
-    </div>
-    <div>
-      <h4 class="h4">Karbon Dioksid (CO₂) — Yanma Keyfiyyətinin İndikatoru</h4>
-      <p>Bacada CO₂-nin pik səviyyəyə çatması yanacağın ideal yandığını göstərir.
-        Maksimum CO₂ verimini almaq üçün hava və yanacaq girişini tam balansa gətiririk.</p>
-    </div>
-    <div>
-      <h4 class="h4">Azot Oksidləri (NO və NOx) — Ətraf Mühit və Ekologiya</h4>
-      <p>Yanma kamerasında temperatur həddindən artıq yüksək olduqda zərərli NOx qazları
-        yaranır. Alovun formalı yanmasını və temperaturunu tənzimləyərək Low-NOx (aşağı
-        emissiya) standartlarını təmin edirik.</p>
+      <span class="mono" style="display:block;margin-bottom:4mm">Biznesə və ətraf mühitə xeyri</span>
+      <ol class="wins">
+        <li>
+          <b>01</b>
+          <div>
+            <h4 class="h4">Yanacaq sərfiyyatında böyük qənaət</h4>
+            <p>Düzgün tənzimlənməmiş sənaye odluqları il ərzində tonlarla artıq yanacaq və
+              ya minlərlə kubmetr artıq təbii qaz yandırır. Analizatorla tənzimləmə bu itkini
+              anında dayandırır.</p>
+          </div>
+        </li>
+        <li>
+          <b>02</b>
+          <div>
+            <h4 class="h4">Avadanlığın ömrünün uzanması</h4>
+            <p>Tam yanmayan yanacaq qazan borularında qurum yaradır. 1 mm-lik qurum təbəqəsi
+              istilik ötürülməsini 10% zəiflədir. Analiz sayəsində borular təmiz qalır.</p>
+          </div>
+        </li>
+        <li>
+          <b>03</b>
+          <div>
+            <h4 class="h4">Ekoloji standartlar və cərimələrdən mühafizə</h4>
+            <p>CO və NOx qazlarının beynəlxalq ekoloji normalara uyğunlaşdırılması və Dövlət
+              Ekologiya müfəttişliklərinə rəsmi Baca Analizi Hesabatının təqdim edilməsi.</p>
+          </div>
+        </li>
+      </ol>
     </div>
   </div>
-
-  <h3 class="h3" style="margin-bottom:4mm">Bu tənzimləmələrin biznesinizə və ətraf mühitə xeyri</h3>
-  <div class="benefits">
-    <article class="benefit">
-      <b>01</b>
-      <h4 class="h4">Yanacaq Sərfiyyatında Böyük Qənaət</h4>
-      <p>Düzgün tənzimlənməmiş sənaye odluqları il ərzində tonlarla artıq yanacaq və ya
-        minlərlə kubmetr artıq təbii qaz yandırır. Analizatorla edilən tənzimləmə bu
-        itkini anında dayandırır.</p>
-    </article>
-    <article class="benefit">
-      <b>02</b>
-      <h4 class="h4">Avadanlığın Ömrünün Uzanması</h4>
-      <p>Tam yanmayan yanacaq qazanın borularında qurum yaradır. 1 mm-lik qurum təbəqəsi
-        istilik ötürülməsini 10% zəiflədir. Analiz sayəsində qazan boruları təmiz qalır.</p>
-    </article>
-    <article class="benefit">
-      <b>03</b>
-      <h4 class="h4">Ekoloji Standartlar və Cərimələrdən Mühafizə</h4>
-      <p>CO və NOx qazlarının beynəlxalq ekoloji normalara uyğunlaşdırılması və Dövlət
-        Ekologiya müfəttişliklərinə rəsmi Baca Analizi Hesabatının təqdim edilməsi.</p>
-    </article>
-  </div>
-
-  <div class="rf"><span>heat.az · info@heat.az</span><b>05</b></div>
 </section>
 
-<!-- ===================== 6. service models + faq ===================== -->
+<!-- ===================== 07 models + faq ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Xidmət modelləri</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Xidmət modelləri</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">07</span>
+  </aside>
+
+  <div class="top"><b>04 / Əməkdaşlıq formatı</b><span>Birdəfəlik təmir · Müqaviləli xidmət</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Xidmət modelləri</p>
-    <div class="rule"></div>
+    <span class="mono">Xidmət modelləri</span>
     <h2 class="h2">Sizə Uyğun <em>Xidmət Modelini</em> Seçin</h2>
-    <p class="lead">
-      Obyektinizin ehtiyaclarına uyğun olaraq istər təcili birdəfəlik təmir, istərsə də
-      uzunmüddətli dövri texniki xidmət müqaviləsi təklif edirik.
-    </p>
   </header>
 
-  <div class="models">
-    <article class="model">
-      <h3 class="h3">Birdəfəlik Təmir və Servis</h3>
-      <dl>
-        <dt>Xidmət məqsədi</dt><dd>Mövcud nasazlığı və qəzanı aradan qaldırmaq</dd>
-        <dt>Reaksiya müddəti</dt><dd>Müraciət növbəsinə uyğun operativ müdaxilə</dd>
-        <dt>Maliyyə planlaması</dt><dd>Qəza anında gözlənilməz xərclər</dd>
-        <dt>Avadanlığın ömrü</dt><dd>Qısamüddətli bərpa</dd>
-        <dt>Yanacaq qənaəti</dt><dd>Yalnız təmir olunan detal çərçivəsində</dd>
-      </dl>
-    </article>
+  <table class="cmp">
+    <thead>
+      <tr>
+        <th>Meyar</th>
+        <th>Birdəfəlik Təmir və Servis</th>
+        <th class="col-hot">Dövri (Müqaviləli) Texniki Xidmət<span class="flag">Maksimum qənaət</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Xidmət məqsədi</th>
+        <td>Mövcud nasazlığı və qəzanı aradan qaldırmaq</td>
+        <td class="col-hot">Qəzaların baş verməsinin öncədən qarşısını almaq</td>
+      </tr>
+      <tr>
+        <th>Reaksiya müddəti</th>
+        <td>Müraciət növbəsinə uyğun operativ müdaxilə</td>
+        <td class="col-hot">24/7 prioritetli və anında reaksiya</td>
+      </tr>
+      <tr>
+        <th>Maliyyə planlaması</th>
+        <td>Qəza anında gözlənilməz xərclər</td>
+        <td class="col-hot">Öncədən bəlli, sabit illik/aylıq büdcə</td>
+      </tr>
+      <tr>
+        <th>Avadanlığın ömrü</th>
+        <td>Qısamüddətli bərpa</td>
+        <td class="col-hot">Maksimum uzunömürlülük və yüksək effektivlik</td>
+      </tr>
+      <tr>
+        <th>Yanacaq qənaəti</th>
+        <td>Yalnız təmir olunan detal çərçivəsində</td>
+        <td class="col-hot">Daimi kalibrləmə sayəsində maksimum qənaət</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <article class="model model--hot">
-      <span class="model__badge">Maksimum Qənaət və Təhlükəsizlik</span>
-      <h3 class="h3">Dövri (Müqaviləli) Texniki Xidmət</h3>
-      <dl>
-        <dt>Xidmət məqsədi</dt><dd>Qəzaların baş verməsinin öncədən qarşısını almaq</dd>
-        <dt>Reaksiya müddəti</dt><dd>24/7 prioritetli və anında reaksiya</dd>
-        <dt>Maliyyə planlaması</dt><dd>Öncədən bəlli, sabit illik/aylıq büdcə</dd>
-        <dt>Avadanlığın ömrü</dt><dd>Maksimum uzunömürlülük və yüksək effektivlik</dd>
-        <dt>Yanacaq qənaəti</dt><dd>Daimi kalibrləmə sayəsində maksimum qənaət</dd>
-      </dl>
-    </article>
-  </div>
-
+  <span class="mono" style="display:block;margin-bottom:4mm">Tez-tez verilən suallar</span>
   <div class="faq">
-    <div class="faq__item">
+    <div>
       <h4 class="h4">Odluqların (burner) retrofit olunması nə üçün vacibdir?</h4>
-      <p>Mexaniki idarə olunan köhnə odluqlarda hava və yanacaq nisbəti dəqiq
-        tənzimlənmir. Retrofit zamanı rəqəmsal idarəetmə və servo-mühərriklər
-        quraşdırılır. Bu, yanacağın tam yanmasını təmin edərək 15–30% yanacaq qənaəti
-        verir.</p>
+      <p>Mexaniki idarə olunan köhnə odluqlarda hava və yanacaq nisbəti dəqiq tənzimlənmir.
+        Retrofit zamanı rəqəmsal idarəetmə və servo-mühərriklər quraşdırılır. Bu, yanacağın
+        tam yanmasını təmin edərək 15–30% qənaət verir.</p>
     </div>
-    <div class="faq__item">
+    <div>
       <h4 class="h4">Baca qazı analizi nə qədər vaxtdan bir aparılmalıdır?</h4>
       <p>Sənaye obyektlərində və böyük qazanxanalarda ildə ən azı 4 dəfə (mövsüm
         keçidlərində). Həmçinin yanacaq keyfiyyəti dəyişdikdə və ya təmir işindən sonra
         mütləqdir.</p>
     </div>
-    <div class="faq__item">
-      <h4 class="h4">Nə üçün təmir əvəzinə dövri texniki xidmət müqaviləsi bağlamalıyam?</h4>
+    <div>
+      <h4 class="h4">Nə üçün təmir əvəzinə dövri xidmət müqaviləsi bağlamalıyam?</h4>
       <p>Dövri xidmət zamanı mühəndislərimiz kiçik nasazlıqları öncədən aşkar edir. Bu,
         istehsalatın anidən dayanmasının və sonradan yaranacaq çox daha bahalı təmir
         xərclərinin qarşısını alır.</p>
     </div>
   </div>
-
-  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>06</b></div>
 </section>
 
-<!-- ===================== 7. sectors ===================== -->
+<!-- ===================== 08 sectors ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>İxtisas sahələri</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">İxtisas sahələri</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">08</span>
+  </aside>
+
+  <div class="top"><b>05 / Obyekt tipləri</b><span>Zavod · Aqro · Sənaye · Bina</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Obyekt tipləri</p>
-    <div class="rule"></div>
-    <h2 class="h2">İxtisaslaşdığımız <em>Sahələr</em></h2>
+    <span class="mono">İxtisas sahələri</span>
+    <h2 class="h2">İşlədiyimiz <em>obyekt tipləri</em></h2>
   </header>
 
   <div class="sectors">
     <article class="sector">
-      <img src="assets/img/shots/asfalt/1.jpg" alt="Asfalt zavodu">
-      <div class="sector__veil"></div>
-      <div class="sector__body">
-        <h3>Asfalt Zavodları və İnert Material Təsərrüfatları</h3>
-        <p>Yüksək güclü asfalt plantı odluqlarının (dizel, mazut, təbii qaz və ya
-          kombinasiya olunmuş) təcili təmiri, yanma kamerasının kalibrlənməsi, alov
-          sensorlarının təmizlənməsi və qaz/hava qarışığının optimal tənzimlənməsi.</p>
-      </div>
+      <figure><img src="assets/img/shots/asfalt/1.jpg" alt="Asfalt zavodu"></figure>
+      <h3>Asfalt Zavodları və İnert Material Təsərrüfatları</h3>
+      <p>Yüksək güclü asfalt plantı odluqlarının (dizel, mazut, təbii qaz və ya kombinasiya
+        olunmuş) təcili təmiri, yanma kamerasının kalibrlənməsi, alov sensorlarının
+        təmizlənməsi və qaz/hava qarışığının optimal tənzimlənməsi.</p>
     </article>
-
     <article class="sector">
-      <img src="assets/img/shots/istixana/1.jpg" alt="İstixana təsərrüfatı">
-      <div class="sector__veil"></div>
-      <div class="sector__body">
-        <h3>Aqrokomplekslər və İstixana Təsərrüfatları</h3>
-        <p>İstixanaların CO₂ idarəetmə sistemləri, böyük həcmli isitmə qazanxanaları,
-          suvarma və təzyiq nasos stansiyalarının fasiləsiz servisi.</p>
-      </div>
+      <figure><img src="assets/img/shots/istixana/1.jpg" alt="İstixana təsərrüfatı"></figure>
+      <h3>Aqrokomplekslər və İstixana Təsərrüfatları</h3>
+      <p>İstixanaların CO₂ idarəetmə sistemləri, böyük həcmli isitmə qazanxanaları, suvarma
+        və təzyiq nasos stansiyalarının fasiləsiz servisi.</p>
     </article>
-
     <article class="sector">
-      <img src="assets/img/shots/fabrik/1.jpg" alt="Sənaye müəssisəsi">
-      <div class="sector__veil"></div>
-      <div class="sector__body">
-        <h3>Fabriklər və Sənaye Müəssisələri</h3>
-        <p>İstehsalat xətlərini təmin edən buxar və qızgın yağ qazanları, yüksək təzyiqli
-          vintli hava kompressorları və sənaye odluqlarının təmiri və retrofiti.</p>
-      </div>
+      <figure><img src="assets/img/shots/fabrik/1.jpg" alt="Sənaye müəssisəsi"></figure>
+      <h3>Fabriklər və Sənaye Müəssisələri</h3>
+      <p>İstehsalat xətlərini təmin edən buxar və qızgın yağ qazanları, yüksək təzyiqli
+        vintli hava kompressorları, sənaye odluqları və MCC panolarının təmiri, retrofiti.</p>
     </article>
-
     <article class="sector">
-      <img src="assets/img/shots/bina/1.jpg" alt="Yaşayış və biznes binası">
-      <div class="sector__veil"></div>
-      <div class="sector__body">
-        <h3>Yaşayış Binaları, Otellər və Biznes Mərkəzləri</h3>
-        <p>Mərkəzi isitmə və isti su qazanxanaları, təzyiq artırma (booster) nasosları,
-          dövriyyə sistemləri və qəza generatorlarının kompleks baxışı.</p>
-      </div>
+      <figure><img src="assets/img/shots/bina/1.jpg" alt="Yaşayış və biznes binası"></figure>
+      <h3>Yaşayış Binaları, Otellər və Biznes Mərkəzləri</h3>
+      <p>Mərkəzi isitmə və isti su qazanxanaları, təzyiq artırma (booster) nasosları,
+        dövriyyə sistemləri və qəza generatorlarının kompleks baxışı.</p>
     </article>
   </div>
-
-  <div class="rf"><span>heat.az · info@heat.az</span><b>07</b></div>
 </section>
 
-<!-- ===================== 8. certificates + brands ===================== -->
+<!-- ===================== 09 certificates + brands ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Sertifikatlar və brendlər</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Sertifikatlar · Brendlər</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">09</span>
+  </aside>
+
+  <div class="top"><b>06 / Səlahiyyət</b><span>Lisenziyalar · Akkreditasiyalar · Servis brendləri</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Sertifikatlar və lisenziyalar</p>
-    <div class="rule"></div>
+    <span class="mono">Sertifikatlar və lisenziyalar</span>
     <h2 class="h2">Beynəlxalq Standartlar və <em>Rəsmi Lisenziyalarımız</em></h2>
   </header>
 
-  <div class="guarantees">
-    <article class="guarantee">
-      <h4 class="h4">İqtisadiyyat Nazirliyinin Rəsmi Lisenziyaları</h4>
+  <div class="lic">
+    <div>
+      <h4 class="h4">İqtisadiyyat Nazirliyinin rəsmi lisenziyaları</h4>
       <p>Təhlükə potensiallı obyektlərdə (buxar və suqızdırıcı qazanlar, təzyiq altında
         işləyən qablar) montaj, sazlama və təmir işlərinin, həmçinin texniki qurğuların
         diaqnostikası və yoxlamalarının aparılması üçün rəsmi lisenziyalar.</p>
-    </article>
-    <article class="guarantee">
-      <h4 class="h4">İstehsalçı Avadanlıq Sertifikatları</h4>
-      <p>Mühəndis heyətimizin aparıcı beynəlxalq odluq, qazan, vintli kompressor və
-        generator istehsalçılarının xüsusi təlim mərkəzlərində keçdiyi ixtisaslaşma
-        akkreditasiyaları.</p>
-    </article>
+    </div>
+    <div>
+      <h4 class="h4">İstehsalçı avadanlıq sertifikatları</h4>
+      <p>Mühəndis heyətimizin aparıcı beynəlxalq odluq, qazan, vintli kompressor və generator
+        istehsalçılarının xüsusi təlim mərkəzlərində keçdiyi ixtisaslaşma akkreditasiyaları.
+        Tam siyahı və skan nüsxələr: <b style="color:var(--accent)">heat.az/#sertifikatlar</b></p>
+    </div>
   </div>
 
   <div class="certs">
@@ -943,13 +986,9 @@ em.cy { color: var(--cyan); }
       <div class="cert__frame"><img src="assets/img/certs/ducomp-bayramov-th.jpg" alt=""></div>
       <b>Kompressor Servisi</b><span>DUCOMP Compressor</span>
     </div>
-    <div class="cert" style="display:flex;align-items:center">
-      <p class="tiny" style="margin:0">Lisenziya və sertifikatların tam siyahısı və
-        skan nüsxələri: <b style="color:var(--accent)">heat.az/#sertifikatlar</b></p>
-    </div>
   </div>
 
-  <h3 class="h3" style="margin-bottom:4mm">Servis Etdiyimiz Avadanlıq Brendləri</h3>
+  <span class="mono mono--ink" style="display:block;margin-bottom:3mm">Servis etdiyimiz avadanlıq brendləri</span>
   <div class="brands">
     <div class="brand"><img src="assets/img/brands/siemens.png" alt="Siemens"></div>
     <div class="brand"><img src="assets/img/brands/lamtec.png" alt="Lamtec"></div>
@@ -988,25 +1027,21 @@ em.cy { color: var(--cyan); }
     <div class="brand"><img src="assets/img/brands/ducomp.png" alt="Ducomp"></div>
     <div class="brand"><img src="assets/img/brands/havamak.svg" alt="Havamak"></div>
   </div>
-
-  <div class="rf"><span>heat.az · info@heat.az</span><b>08</b></div>
 </section>
 
-<!-- ===================== 9. clients ===================== -->
+<!-- ===================== 10 clients + work shots ===================== -->
 <section class="page">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Əməkdaşlıq</span>
-  </div>
+  <aside class="spine">
+    <span class="spine__txt">Müştərilər · İşlər</span>
+    <span class="spine__mark"></span>
+    <span class="spine__no">10</span>
+  </aside>
+
+  <div class="top"><b>07 / Əməkdaşlıq</b><span>Obyektlərdə görülən işlər · heat.az/qalereya</span></div>
 
   <header class="sec-head">
-    <p class="eyebrow">Əməkdaşlıq</p>
-    <div class="rule"></div>
-    <h2 class="h2">Bizə Etibar Edən <em>Şirkətlər</em> və Tərəfdaşlarımız</h2>
-    <p class="lead">
-      2008-ci ildən bəri ölkənin aparıcı sənaye müəssisələri, tikinti şirkətləri, otel
-      şəbəkələri və aqrokompleksləri ilə uğurlu əməkdaşlıq edirik.
-    </p>
+    <span class="mono">Bizə etibar edən şirkətlər</span>
+    <h2 class="h2">Sənaye, tikinti, otel və <em>aqro sektoru</em></h2>
   </header>
 
   <div class="clients">
@@ -1043,60 +1078,64 @@ em.cy { color: var(--cyan); }
     <div class="client"><img src="assets/img/clients/paprec.jpg" alt=""><span>Paprec</span></div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm;margin-top:7mm">
-    <img src="assets/img/shots/fabrik/2.jpg" alt="" style="width:100%;height:46mm;object-fit:cover;border-radius:12px">
-    <img src="assets/img/shots/istixana/2.jpg" alt="" style="width:100%;height:46mm;object-fit:cover;border-radius:12px">
+  <div class="works">
+    <figure>
+      <img src="assets/img/gallery/paprec-20mw/01.jpg" alt="">
+      <figcaption>Qazanxana · montaj və sazlama</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/gallery/lamtec-baltur/01.jpg" alt="">
+      <figcaption>Odluq · Lamtec avtomatika</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/gallery/pozitron-hamworthy/01.jpg" alt="">
+      <figcaption>Odluq · əsaslı təmir</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/img/gallery/yello-bank/01.jpg" alt="">
+      <figcaption>Obyekt · isitmə sistemi</figcaption>
+    </figure>
   </div>
-
-  <div class="rf"><span>heat.az · +994 55 348 76 75</span><b>09</b></div>
 </section>
 
-<!-- ===================== 10. back cover ===================== -->
-<section class="page back">
-  <div class="rh">
-    <img src="assets/img/logo.png" alt="HeatTech">
-    <span>Əlaqə</span>
-  </div>
+<!-- ===================== 11 back cover ===================== -->
+<section class="page page--flush page--dark">
+  <div class="back">
+    <div class="back__left">
+      <span class="mono">Təcili çağırış və mühəndis baxışı</span>
+      <h2>Sistemlərinizdə Problem Var, Yoxsa <em>Yanacaq Qənaəti</em> Əldə Etmək İstəyirsiniz?</h2>
+      <p class="lead">
+        Mühəndisimizin obyektinizə baxış keçirməsi, mövcud avadanlıqların auditi və sizə
+        xüsusi texniki/kommersiya təklifinin hazırlanması üçün bizimlə əlaqə saxlayın.
+      </p>
 
-  <p class="eyebrow">Təcili çağırış və mühəndis baxışı</p>
-  <div class="rule"></div>
-  <h2 class="h2 back__h">Sistemlərinizdə Problem Var, Yoxsa <em>Yanacaq Qənaəti</em> Əldə Etmək İstəyirsiniz?</h2>
-  <p class="lead">
-    Mühəndisimizin obyektinizə baxış keçirməsi, mövcud avadanlıqların auditi və sizə
-    xüsusi texniki/kommersiya təklifinin hazırlanması üçün bizimlə əlaqə saxlayın.
-  </p>
-
-  <div class="back__grid">
-    <div class="back__card back__card--hot">
-      <h3 class="h3">Əlaqə</h3>
       <dl class="back__rows">
-        <dt>Mobil / WhatsApp</dt><dd>+994 55 348 76 75</dd>
-        <dt>E-poçt</dt><dd>info@heat.az</dd>
-        <dt>Veb</dt><dd>heat.az</dd>
-        <dt>Ünvan</dt><dd>Ə. Nəvai küç. 10C, Babək prospekti, Bakı</dd>
-        <dt>İş saatları</dt><dd>B.e–Ş 09:00–18:00 · Təcili çağırış 24/7</dd>
+        <div><dt>Mobil / WhatsApp</dt><dd><b>+994 55 348 76 75</b></dd></div>
+        <div><dt>E-poçt</dt><dd>info@heat.az</dd></div>
+        <div><dt>Veb</dt><dd>heat.az</dd></div>
+        <div><dt>Ünvan</dt><dd>Ə. Nəvai küç. 10C, Babək prospekti, Bakı</dd></div>
+        <div><dt>İş saatları</dt><dd>B.e–Ş 09:00–18:00 · Təcili çağırış 24/7</dd></div>
       </dl>
+
+      <div class="back__grow"></div>
+
+      <div class="back__wordmark">HEATTECH</div>
+      <p class="tiny" style="margin:3mm 0 0;color:var(--d-ink-3)">© 2026 HeatTech MMC. Bütün hüquqlar qorunur.</p>
     </div>
 
-    <div class="back__card">
-      <h3 class="h3">Necə işləyirik</h3>
+    <div class="back__right">
+      <img src="assets/img/shots/odluq/3.jpg" alt="">
+      <div class="back__veil"></div>
+      <div class="back__stepshead"><span class="mono">Necə işləyirik</span></div>
       <ol class="back__steps">
-        <li>Zəng və ya WhatsApp sorğusu — avadanlığın tipi və problem barədə qısa məlumat.</li>
-        <li>Obyektə mühəndis baxışı və mövcud avadanlıqların auditi.</li>
-        <li>Texniki-kommersiya təklifi: iş həcmi, ehtiyat hissələr, müddət.</li>
-        <li>İcra, sınaq və baca qazı analizi ilə yekun tənzimləmə.</li>
-        <li>Zəmanət və istəyə görə dövri texniki xidmət müqaviləsi.</li>
+        <li><span>Zəng və ya WhatsApp sorğusu — avadanlığın tipi və problem barədə qısa məlumat.</span></li>
+        <li><span>Obyektə mühəndis baxışı və mövcud avadanlıqların auditi.</span></li>
+        <li><span>Texniki-kommersiya təklifi: iş həcmi, ehtiyat hissələr, müddət.</span></li>
+        <li><span>İcra, sınaq və baca qazı analizi ilə yekun tənzimləmə.</span></li>
+        <li><span>Zəmanət və istəyə görə dövri texniki xidmət müqaviləsi.</span></li>
       </ol>
     </div>
   </div>
-
-  <div class="back__shot">
-    <img src="assets/img/shots/odluq/3.jpg" alt="">
-  </div>
-
-  <div class="wordmark">HEATTECH</div>
-
-  <div class="rf"><span>© 2026 HeatTech MMC. Bütün hüquqlar qorunur.</span><b>10</b></div>
 </section>
 
 </body>

@@ -107,24 +107,49 @@
           </p>
         </div>
 
-        <!-- Add one <figure> per photo. Files live in assets/img/gallery/.
-             The alt text is what search engines and screen readers read — keep it
-             a real description of the job, not a file name. -->
-        <div class="gal">
-          <!--
-          <figure>
-            <a href="assets/img/gallery/nummer.jpg" target="_blank" rel="noopener">
-              <img src="assets/img/gallery/nummer.jpg" alt="Qazanxanada odluq dəyişimi" loading="lazy">
-            </a>
-            <figcaption class="tiny">Odluq dəyişimi — Bakı, sənaye qazanxanası</figcaption>
-          </figure>
-          -->
-        </div>
-
-        <p class="body gal__empty">Fotolar tezliklə əlavə olunacaq.</p>
+        <!-- Albums are rendered by initAlbums() in assets/js/main.js from the
+             ALBUMS list there. Photos live in assets/img/gallery/<slug>/NN.jpg,
+             their 640px thumbnails in assets/img/gallery/<slug>/thumb/NN.jpg. -->
+        <div class="albums" id="albums"></div>
       </div>
     </section>
   </main>
+
+  <!-- ===================== photo viewer ===================== -->
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Foto baxışı" hidden>
+    <div class="viewer__backdrop" data-close></div>
+
+    <button class="viewer__x" type="button" aria-label="Bağla" data-close>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+
+    <button class="viewer__nav viewer__nav--prev" type="button" data-step="-1" aria-label="Əvvəlki foto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" />
+      </svg>
+    </button>
+
+    <figure class="viewer__stage">
+      <img id="viewer-img" src="" alt="">
+      <figcaption class="viewer__cap">
+        <span class="label" id="viewer-title"></span>
+        <span class="tiny" id="viewer-count"></span>
+      </figcaption>
+    </figure>
+
+    <button class="viewer__nav viewer__nav--next" type="button" data-step="1" aria-label="Növbəti foto">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    <div class="viewer__strip" id="viewer-strip"></div>
+  </div>
 
   <!-- ===================== footer ===================== -->
   <footer class="foot">
