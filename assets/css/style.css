@@ -692,7 +692,7 @@ h1, h2, h3, h4 {
 }
 
 /* ==========================================================================
-   3. services — 3x2 grid
+   3. services — 3-col grid, 7 cards
    ========================================================================== */
 .svc-grid {
   display: grid;
@@ -741,6 +741,32 @@ h1, h2, h3, h4 {
   background: linear-gradient(to top, var(--surface-2) 1%, rgba(18, 21, 23, 0) 58%);
 }
 
+/* the 7th card would sit alone on the last row, so it runs the full row width
+   instead — photo band on the left, copy on the right */
+.svc--wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  column-gap: 30px;
+  align-content: start;
+}
+
+.svc--wide > :not(.svc__band) { grid-column: 2; }
+
+.svc--wide .svc__band {
+  grid-column: 1;
+  /* the rows are implicit, so 1 / -1 would collapse to a single row */
+  grid-row: 1 / span 5;
+  height: auto;
+  min-height: 240px;
+  margin: -28px 0 -22px -26px;
+  border-radius: var(--r-card) 0 0 var(--r-card);
+}
+
+.svc--wide .svc__band::after {
+  background: linear-gradient(to right, rgba(18, 21, 23, 0) 55%, var(--surface-2) 99%);
+}
+
 .svc__name {
   font-size: 19px;
   line-height: 1.25;
@@ -752,6 +778,45 @@ h1, h2, h3, h4 {
   line-height: 1.6;
   color: var(--ink-2);
 }
+
+.svc__txt strong { color: var(--ink); font-weight: 600; }
+
+.svc__lead {
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.svc__list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.svc__list li { position: relative; padding-left: 16px; }
+
+.svc__list li::before {
+  content: "";
+  position: absolute;
+  top: 0.62em;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.svc--tech .svc__list li::before { background: var(--cyan); }
+.svc__list strong { color: var(--ink); font-weight: 600; }
+
+/* the wide card has room for two columns of bullets */
+.svc--wide .svc__list { grid-template-columns: 1fr 1fr; column-gap: 30px; }
 
 /* inline expand — same 0fr/1fr technique as the FAQ accordion */
 .svc__more {
@@ -2058,6 +2123,19 @@ h1, h2, h3, h4 {
 @media (max-width: 760px) {
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .svc-grid { grid-template-columns: 1fr; }
+
+  /* the wide card folds back into the normal stacked card */
+  .svc--wide { display: flex; }
+  .svc--wide .svc__list { grid-template-columns: 1fr; }
+  .svc--wide .svc__band {
+    height: 168px;
+    min-height: 0;
+    margin: -28px -26px 22px;
+    border-radius: var(--r-card) var(--r-card) 0 0;
+  }
+  .svc--wide .svc__band::after {
+    background: linear-gradient(to top, var(--surface-2) 1%, rgba(18, 21, 23, 0) 58%);
+  }
   .sectors { grid-template-columns: 1fr; }
   .sector { min-height: 280px; }
   .readouts { grid-template-columns: 1fr 1fr; }
