@@ -68,8 +68,9 @@
   ];
 
   /* Photo albums for qalereya.html. `dir` is the folder under
-     assets/img/gallery/ that holds 01.jpg…NN.jpg plus thumb/01.jpg…NN.jpg;
-     `n` is how many photos are in it. Adding an album = one entry here. */
+     assets/img/gallery/ that holds 01.webp…NN.webp (long side 1600) plus
+     thumb/01.webp…NN.webp (long side 640); `n` is how many photos are in it.
+     Adding an album = one entry here. */
   var ALBUMS = [
     {
       title: "Lamtec BT320 idarə sistemli Baltur odluğun proqramlaşdırılması",
@@ -610,7 +611,7 @@
     var opener = null;
 
     function photo(a, i, thumb) {
-      var file = (i + 1 < 10 ? "0" : "") + (i + 1) + ".jpg";
+      var file = (i + 1 < 10 ? "0" : "") + (i + 1) + ".webp";
       return "assets/img/gallery/" + a.dir + (thumb ? "/thumb/" : "/") + file;
     }
 
