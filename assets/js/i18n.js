@@ -917,9 +917,19 @@
     if (el.__az === undefined) {
       el.__az = el.innerHTML;
       el.__key = norm(el.textContent);
+      /* Decorative markup opening a phrase — the badge dot, an inline icon —
+         carries no text, so it never reaches the dictionary. Keep it and put
+         it back in front of the translation. */
+      var deco = "";
+      for (var n = el.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3) { if (LETTERS.test(n.nodeValue)) break; continue; }
+        if (n.nodeType !== 1 || LETTERS.test(n.textContent || "")) break;
+        deco += n.outerHTML;
+      }
+      el.__deco = deco;
     }
     var t = lang === "az" ? null : look(lang, el.__key);
-    el.innerHTML = t === null ? el.__az : t;
+    el.innerHTML = t === null ? el.__az : el.__deco + t;
   }
 
   function attrs(el, lang) {
