@@ -2,7 +2,8 @@
 
 Static single-page site built against `docs/Design_system.md` and `docs/content.md`:
 deep industrial graphite ground, thermal-orange and tech-cyan accents, Inter type.
-No build step, no dependencies — plain HTML, CSS and vanilla JS. Azerbaijani only.
+No build step, no dependencies — plain HTML, CSS and vanilla JS. Azerbaijani is the
+page itself; Russian and English are swapped in at runtime by `assets/js/i18n.js`.
 
 ## Structure
 
@@ -10,6 +11,7 @@ No build step, no dependencies — plain HTML, CSS and vanilla JS. Azerbaijani o
 index.html              single-page site, all ten sections
 assets/css/style.css    design tokens + every component
 assets/js/main.js       reveals, counters, marquee, tabs, lightbox, nav, form
+assets/js/i18n.js       Russian and English dictionaries + the language switch
 assets/img/             hero, brand and (optional) sector/certificate imagery
 assets/docs/            HeatTech service catalogue (PDF)
 docs/                   the design system and content specs this site implements
@@ -55,6 +57,31 @@ and surface tokens; it also keeps the dark-on-transparent partner logos legible.
 The page implements the ten sections of `docs/content.md` in order: hero, stats,
 six services, flue gas analysis, service models, sectors, partners, certificates,
 FAQ, contact. Copy lives directly in `index.html` — there is no translation layer.
+
+## Languages
+
+The page is written in Azerbaijani and stays that way in the source. `assets/js/i18n.js`
+holds one Russian and one English dictionary **keyed by the Azerbaijani text itself** —
+there are no key names to invent or keep in sync. A dictionary value is HTML, because
+`<em>`, `<strong>` and `<sub>` land in different places in each language.
+
+At runtime the walker picks the outermost element whose children are all inline
+(`em`, `strong`, `span`, `sub`, `a` …), caches its Azerbaijani `innerHTML`, and swaps in
+the translation; `<title>`, the meta description, the Open Graph tags and the
+`aria-label` / `alt` / `placeholder` attributes go through the same lookup. A phrase that
+is missing from a dictionary simply stays Azerbaijani, so adding copy never breaks a
+language — it only leaves that one line untranslated.
+
+To change or add copy: edit the Azerbaijani in the HTML, then update (or add) the same
+string as a key in both dictionaries. Elements carrying `data-count` are skipped so the
+counters keep their numbers. Strings that `main.js` writes after render — the card
+toggle, the certificate lightbox, album titles — go through `T()`, which calls
+`window.heatT`. The AZ / RU / EN switch lives in the nav pill (`.lang`) and remembers the
+choice in `localStorage` under `heat-lang`; the default is Azerbaijani.
+
+Translation is client side, so search engines index the Azerbaijani page only. Company,
+brand and product names are deliberately absent from the dictionaries and stay as they
+are in every language. `brochure.html` and `order.html` are Azerbaijani only.
 
 ## Content notes
 

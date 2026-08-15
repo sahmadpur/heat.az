@@ -8,6 +8,12 @@
   "use strict";
 
   var WHATSAPP = "994553487675";
+
+  /* Strings this file writes after the page is built are translated through
+     assets/js/i18n.js; everything it renders as plain text is picked up by the
+     i18n walker instead. Falls back to Azerbaijani if i18n.js is absent. */
+  function T(s) { return window.heatT ? window.heatT(s) : s; }
+
   var AUTO_MS = 10000; /* flue-gas readouts rotate on this interval */
   var SHOTS_MS = 6000; /* card photo stacks crossfade on this interval */
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -425,7 +431,7 @@
         var open = !card.classList.contains("is-open");
         card.classList.toggle("is-open", open);
         btn.setAttribute("aria-expanded", String(open));
-        if (txt) txt.textContent = open ? "Yığışdır" : "Ətraflı";
+        if (txt) txt.textContent = open ? T("Yığışdır") : T("Ətraflı");
       });
     });
   }
@@ -602,7 +608,7 @@
       if (c.img) {
         var thumb = new Image();
         thumb.src = c.thumb || c.img;
-        thumb.alt = c.label + " — " + c.org;
+        thumb.alt = T(c.label) + " — " + T(c.org);
         thumb.loading = "lazy";
         frame.appendChild(thumb);
       } else {
@@ -634,9 +640,9 @@
       if (!box) return;
       opener = from;
       img.src = c.img;
-      img.alt = c.label + " — " + c.org;
-      title.textContent = c.label;
-      org.textContent = c.org + " · " + c.note;
+      img.alt = T(c.label) + " — " + T(c.org);
+      title.textContent = T(c.label);
+      org.textContent = T(c.org) + " · " + T(c.note);
       box.hidden = false;
       document.body.classList.add("is-locked");
       box.querySelector(".lightbox__x").focus();
@@ -715,9 +721,12 @@
       name.className = "album__title";
       name.textContent = a.title;
 
+      /* the count stays a bare text node and only the unit is an element, so
+         the i18n walker can translate "foto" without touching the number */
       var num = document.createElement("span");
       num.className = "album__n";
-      num.textContent = a.n + " foto";
+      num.appendChild(document.createTextNode(a.n + " "));
+      num.appendChild(document.createElement("span")).textContent = "foto";
 
       card.appendChild(stack);
       card.appendChild(name);
@@ -730,7 +739,7 @@
     function show(i) {
       index = (i + album.n) % album.n;
       img.src = photo(album, index);
-      img.alt = album.title + " — foto " + (index + 1);
+      img.alt = T(album.title) + " — " + T("foto") + " " + (index + 1);
       count.textContent = index + 1 + " / " + album.n;
 
       var on = strip.children[index];
@@ -744,7 +753,7 @@
     function open(a, i, from) {
       album = a;
       opener = from;
-      title.textContent = a.title;
+      title.textContent = T(a.title);
 
       strip.textContent = "";
       for (var k = 0; k < a.n; k++) {
