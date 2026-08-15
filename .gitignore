@@ -8,5 +8,8 @@ node_modules/
 # source scans — rendered into assets/img/certs/ with pdftoppm, not deployed
 licenses/
 
+# cPanel deploy steps, server paths — not for the repo
+DEPLOY.md
+
 # source photos by category — resized into assets/img/shots/ with sips, not deployed
 photos/
