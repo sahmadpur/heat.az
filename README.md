@@ -15,6 +15,7 @@ assets/docs/            HeatTech service catalogue (PDF)
 docs/                   the design system and content specs this site implements
 tools/build-gallery.py  folders of job photos -> WebP albums for qalereya.html
 tools/apply-order.py    applies a gallery order plan copied out of order.html
+tools/watermark.py      burns the logo into the 1600px gallery photos
 order.html              client-facing drag-and-drop tool for the gallery order
 ```
 
@@ -68,6 +69,11 @@ FAQ, contact. Copy lives directly in `index.html` — there is no translation la
   makes one album per subfolder, re-encodes every photo to WebP at 1600px for
   the viewer and 640px for the stack, drops EXIF, and prints the `ALBUMS`
   entries to paste. Photos that skip that step ship several times heavier.
+- **Watermark.** The 1600px photos carry the logo in their pixels (top right),
+  so a saved copy keeps it — `tools/build-gallery.py` stamps every new import,
+  and `python3 tools/watermark.py` catches anything that predates it. The
+  640px thumbnails stay clean. `assets/img/gallery/.watermarked` is the list of
+  files already stamped; deleting it makes the next run stamp them twice.
 - **Album and photo order.** Album order is the order of the `ALBUMS` entries;
   photo order is the `01.webp…NN.webp` file names. The client reorders both in
   `order.html` (site root, `noindex`) and sends back the text plan it copies;
@@ -81,8 +87,9 @@ FAQ, contact. Copy lives directly in `index.html` — there is no translation la
 - **Request form.** There is no backend. On submit the form validates inline, then
   opens `https://wa.me/994553487675` with the answers pre-composed as a message.
   The number is the `WHATSAPP` constant in `assets/js/main.js`.
-- Footer social links for Facebook and LinkedIn are placeholders until the real
-  profile URLs are available.
+- Footer socials are WhatsApp, Facebook (`/heattechaz`) and Instagram
+  (`/_heat_tech_`), followed by a Linktree QR code (`assets/img/qr-linktree.png`)
+  that resolves to every contact channel at once.
 
 ## Animations
 

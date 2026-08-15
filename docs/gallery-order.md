@@ -66,6 +66,11 @@ and the `ALBUMS` entries in `assets/js/main.js` get moved by hand.
 - `assets/img/brochure/` holds its own copies of the six photos printed in
   `brochure.html`, so renumbering an album never changes the catalogue. Never
   point `brochure.html` at `assets/img/gallery/` — copy the file over instead.
+- `tools/watermark.py` — burns the logo into the 1600px photos. Renaming files
+  does not disturb it; the ledger it keeps
+  (`assets/img/gallery/.watermarked`) is a list of file names, so after a
+  reorder the names still match, they just point at different photos. Every
+  photo is stamped either way, so nothing gets a second logo.
 - `tools/build-gallery.py` — imports new folders of job photos as albums
   (WebP, 1600px + 640px thumbs). Always the way new photos enter the gallery.
 - The brochure PDF (`assets/docs/heattech-brochure.pdf`) is printed from

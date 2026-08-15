@@ -24,6 +24,8 @@ import unicodedata
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
+from watermark import record, stamp
+
 DEST = pathlib.Path(__file__).resolve().parent.parent / "assets/img/gallery"
 SUFFIXES = {".jpg", ".jpeg", ".png", ".heic", ".dng", ".webp", ".tif", ".tiff"}
 
@@ -116,7 +118,8 @@ def build(src_dir):
 
             full = im.copy()
             full.thumbnail((1600, 1600), Image.LANCZOS)
-            full.save(out / name, "WEBP", quality=80, method=6)
+            stamp(full).save(out / name, "WEBP", quality=80, method=6)
+            record(out / name)
 
             th = im.copy()
             th.thumbnail((640, 640), Image.LANCZOS)

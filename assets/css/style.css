@@ -555,21 +555,6 @@ h1, h2, h3, h4 {
   height: 100%;
 }
 
-/* the photo is centred and letterboxed, so its corner is wherever the aspect
-   ratio puts it — main.js measures it and moves the watermark there */
-.viewer__mark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: clamp(64px, 13%, 116px);
-  aspect-ratio: 220 / 108;
-  background: url("../img/logo.png") center / contain no-repeat;
-  opacity: 0.72;
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.85));
-  pointer-events: none;
-  visibility: hidden;    /* until main.js has a photo box to measure */
-}
-
 .viewer__stage img {
   align-self: center;
   max-width: 100%;
@@ -2095,6 +2080,19 @@ h1, h2, h3, h4 {
 }
 
 .socials svg { width: 18px; height: 18px; }
+
+.foot__qr {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 10px;
+  line-height: 0;
+  transition: transform 0.35s var(--ease);
+}
+
+.foot__qr:hover { transform: translateY(-2px); }
+.foot__qr img { width: 96px; height: 96px; display: block; }
 
 .foot__k {
   font-size: 12px;
