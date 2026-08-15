@@ -727,6 +727,22 @@
       card.addEventListener("click", function () { open(a, 0, card); });
     });
 
+    /* the photo is letterboxed inside the stage, so the only way to sit the
+       watermark on its top-right corner is to measure the rendered box */
+    var mark = document.getElementById("viewer-mark");
+
+    function placeMark() {
+      if (!mark || !img.naturalWidth) return;
+      var s = img.parentNode.getBoundingClientRect();
+      var r = img.getBoundingClientRect();
+      mark.style.top = r.top - s.top + 14 + "px";
+      mark.style.left = r.right - s.left - mark.offsetWidth - 14 + "px";
+      mark.style.visibility = "visible";
+    }
+
+    img.addEventListener("load", placeMark);
+    window.addEventListener("resize", placeMark);
+
     function show(i) {
       index = (i + album.n) % album.n;
       img.src = photo(album, index);
