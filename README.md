@@ -14,6 +14,8 @@ assets/img/             hero, brand and (optional) sector/certificate imagery
 assets/docs/            HeatTech service catalogue (PDF)
 docs/                   the design system and content specs this site implements
 tools/build-gallery.py  folders of job photos -> WebP albums for qalereya.html
+tools/apply-order.py    applies a gallery order plan copied out of order.html
+order.html              client-facing drag-and-drop tool for the gallery order
 ```
 
 ## Local preview
@@ -66,6 +68,12 @@ FAQ, contact. Copy lives directly in `index.html` — there is no translation la
   makes one album per subfolder, re-encodes every photo to WebP at 1600px for
   the viewer and 640px for the stack, drops EXIF, and prints the `ALBUMS`
   entries to paste. Photos that skip that step ship several times heavier.
+- **Album and photo order.** Album order is the order of the `ALBUMS` entries;
+  photo order is the `01.webp…NN.webp` file names. The client reorders both in
+  `order.html` (site root, `noindex`) and sends back the text plan it copies;
+  `python3 tools/apply-order.py plan.txt` renames the files. See
+  [docs/gallery-order.md](docs/gallery-order.md) — it also lists what to
+  re-check in `brochure.html` afterwards.
 - **Sector photos.** The four cards in `#sahaler` are gradient panels with a
   line-art watermark because no photographs of those site types exist yet. To use
   a real photo, add `<img class="sector__img" src="…" alt="">` as the first child
