@@ -73,35 +73,10 @@
      Adding an album = one entry here. */
   var ALBUMS = [
     {
-      title: "Lamtec BT320 idarə sistemli Baltur odluğun proqramlaşdırılması",
-      dir: "lamtec-baltur",
-      n: 4
-    },
-    {
       title:
         "Paprec Azerbaijan məişət tullantılarının yandırılması zavodunda 20 MW gücündə sənaye odluğunun periodik servisi",
       dir: "paprec-20mw",
       n: 13
-    },
-    {
-      title: "Pozitron MMC Hamworthy odluğun servisi",
-      dir: "pozitron-hamworthy",
-      n: 5
-    },
-    {
-      title: "Yello Bank güc panelinin hazırlanması",
-      dir: "yello-bank",
-      n: 10
-    },
-    {
-      title: "Aksa AC400 markalı generatorun əsaslı təmiri və yenidənqurulması",
-      dir: "aksa-ac400-generator",
-      n: 10
-    },
-    {
-      title: "Dəmirçi Tower qazanxana idarə panelinin yenidən qurulması",
-      dir: "demirci-tower-panel",
-      n: 10
     },
     {
       title: "Gözəl Təbiət MMC 9 MW odluqlarının periodik servisi",
@@ -114,42 +89,9 @@
       n: 6
     },
     {
-      title: "Era Agro MMC qazanxana servisi",
-      dir: "era-agro-qazanxana",
-      n: 6
-    },
-    {
-      title:
-        "Sienmar MMC-yə məxsus vintli hava kompressorunun rekonstruksiya və modernizasiyası",
-      dir: "sienmar-kompressor",
-      n: 9
-    },
-    {
-      title: "Dünyagöz klinikası Ecomak vintli hava kompressorunun periodik servisi",
-      dir: "dunyagoz-ecomak-kompressor",
-      n: 6
-    },
-    {
-      title: "Masallı Rayon Mərkəzi Xəstəxanası generator servisi",
-      dir: "masalli-xestexana-generator",
-      n: 12
-    },
-    {
-      title: "Sənaye və dövriyyə nasoslarının sazlanması",
-      dir: "senaye-nasos-sazlama",
-      n: 7
-    },
-    {
-      title:
-        "Red Globe Agro 8,6 MW gücə sahib sənaye odluqlarının əsaslı rekonstruksiya və modifikasiyası",
-      dir: "red-globe-8-6mw",
-      n: 30
-    },
-    {
-      title:
-        "Azərtoxum MMC silo qurutma odluğunun avtomatika və qaz yolu modifikasiyası",
-      dir: "azertoxum-silo-odluq",
-      n: 15
+      title: "Pozitron MMC Hamworthy odluğun servisi",
+      dir: "pozitron-hamworthy",
+      n: 5
     },
     {
       title:
@@ -164,14 +106,72 @@
       n: 6
     },
     {
+      title:
+        "Red Globe Agro 8,6 MW gücə sahib sənaye odluqlarının əsaslı rekonstruksiya və modifikasiyası",
+      dir: "red-globe-8-6mw",
+      n: 30
+    },
+    {
       title: "STN Plaza qazanxana odluqlarının servisi",
       dir: "stn-plaza-odluq",
       n: 8
     },
     {
+      title: "Era Agro MMC qazanxana servisi",
+      dir: "era-agro-qazanxana",
+      n: 6
+    },
+    {
+      title: "Lamtec BT320 idarə sistemli Baltur odluğun proqramlaşdırılması",
+      dir: "lamtec-baltur",
+      n: 4
+    },
+    {
+      title:
+        "Azərtoxum MMC silo qurutma odluğunun avtomatika və qaz yolu modifikasiyası",
+      dir: "azertoxum-silo-odluq",
+      n: 15
+    },
+    {
+      title: "Yello Bank güc panelinin hazırlanması",
+      dir: "yello-bank",
+      n: 10
+    },
+    {
+      title: "Dəmirçi Tower qazanxana idarə panelinin yenidən qurulması",
+      dir: "demirci-tower-panel",
+      n: 10
+    },
+    {
+      title: "Dünyagöz klinikası Ecomak vintli hava kompressorunun periodik servisi",
+      dir: "dunyagoz-ecomak-kompressor",
+      n: 6
+    },
+    {
       title: "Patron çərəz istehsalı müəssisəsində vintli hava kompressorunun servisi",
       dir: "patron-kompressor",
       n: 6
+    },
+    {
+      title:
+        "Sienmar MMC-yə məxsus vintli hava kompressorunun rekonstruksiya və modernizasiyası",
+      dir: "sienmar-kompressor",
+      n: 9
+    },
+    {
+      title: "Aksa AC400 markalı generatorun əsaslı təmiri və yenidənqurulması",
+      dir: "aksa-ac400-generator",
+      n: 10
+    },
+    {
+      title: "Masallı Rayon Mərkəzi Xəstəxanası generator servisi",
+      dir: "masalli-xestexana-generator",
+      n: 12
+    },
+    {
+      title: "Sənaye və dövriyyə nasoslarının sazlanması",
+      dir: "senaye-nasos-sazlama",
+      n: 7
     }
   ];
 
