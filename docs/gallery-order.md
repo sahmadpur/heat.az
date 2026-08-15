@@ -56,10 +56,6 @@ and the `ALBUMS` entries in `assets/js/main.js` get moved by hand.
 
 ## After applying — check these
 
-- **`brochure.html` references single gallery files** (`assets/img/gallery/yello-bank/03.webp`
-  and five others). Renumbering an album those point into silently swaps the
-  photos printed in the catalogue. Grep for `assets/img/gallery/` in
-  `brochure.html` and fix the paths.
 - The album cover is the first three photos (`initAlbums()` stacks at most
   three leaves), so the new `01`–`03` are what visitors see on the card.
 - `n` only changes when photos are added or removed, not when they are
@@ -67,6 +63,9 @@ and the `ALBUMS` entries in `assets/js/main.js` get moved by hand.
 
 ## Related
 
+- `assets/img/brochure/` holds its own copies of the six photos printed in
+  `brochure.html`, so renumbering an album never changes the catalogue. Never
+  point `brochure.html` at `assets/img/gallery/` — copy the file over instead.
 - `tools/build-gallery.py` — imports new folders of job photos as albums
   (WebP, 1600px + 640px thumbs). Always the way new photos enter the gallery.
 - The brochure PDF (`assets/docs/heattech-brochure.pdf`) is printed from

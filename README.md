@@ -72,8 +72,8 @@ FAQ, contact. Copy lives directly in `index.html` — there is no translation la
   photo order is the `01.webp…NN.webp` file names. The client reorders both in
   `order.html` (site root, `noindex`) and sends back the text plan it copies;
   `python3 tools/apply-order.py plan.txt` renames the files. See
-  [docs/gallery-order.md](docs/gallery-order.md) — it also lists what to
-  re-check in `brochure.html` afterwards.
+  [docs/gallery-order.md](docs/gallery-order.md). `brochure.html` uses its own
+  copies in `assets/img/brochure/`, so reordering never disturbs the catalogue.
 - **Sector photos.** The four cards in `#sahaler` are gradient panels with a
   line-art watermark because no photographs of those site types exist yet. To use
   a real photo, add `<img class="sector__img" src="…" alt="">` as the first child
