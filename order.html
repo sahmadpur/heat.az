@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Qalereya sırası — HeatTech (daxili alət)</title>
+  <style>
+    :root { color-scheme: light; --line: #d9dde1; --ink: #121517; --ink-2: #6b7378; --accent: #e2571f; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; background: #fff; color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p.hint { color: var(--ink-2); margin: 0 0 20px; max-width: 70ch; }
+    .cols { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px) { .cols { grid-template-columns: 1fr; } }
+    ol.albums { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 8px; }
+    ol.albums li { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--line); cursor: grab; }
+    ol.albums li:last-child { border-bottom: 0; }
+    ol.albums li.is-on { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    ol.albums li .t { flex: 1; font-size: 13px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    figure { margin: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; cursor: grab; background: #fff; }
+    figure.drag { opacity: .35; }
+    figure img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+    figcaption { display: flex; align-items: center; gap: 6px; padding: 6px 8px; font-size: 12px; color: var(--ink-2); }
+    figcaption b { margin-left: auto; color: var(--ink); font-weight: 600; }
+    button { font: inherit; line-height: 1; cursor: pointer; border: 1px solid var(--line); background: #f2f4f6; color: var(--ink); border-radius: 6px; padding: 0; width: 28px; height: 28px; }
+    button:hover { background: #e6e9ec; }
+    .bar { display: flex; gap: 10px; align-items: center; margin: 18px 0 8px; }
+    .bar button.primary { width: auto; height: auto; background: var(--accent); color: #fff; border-color: var(--accent); padding: 8px 16px; }
+    textarea { width: 100%; min-height: 140px; font: 13px/1.5 ui-monospace, monospace; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
+  </style>
+</head>
+
+<body>
+  <h1>Qalereya sırası</h1>
+  <p class="hint">
+    Soldakı siyahıda albomları, sağda isə seçilmiş albomun fotolarını sürüşdürərək (və ya ↑ ↓
+    düymələri ilə) istədiyiniz sıraya düzün. Sonda <b>Sıranı kopyala</b> düyməsini basın və
+    çıxan mətni bizə göndərin.
+  </p>
+
+  <div class="cols">
+    <ol class="albums" id="albums"></ol>
+    <div>
+      <h2 id="cur" style="font-size:16px;margin:0 0 10px"></h2>
+      <div class="grid" id="photos"></div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <button class="primary" id="copy" type="button">Sıranı kopyala</button>
+    <span id="msg" style="color:var(--ink-2)"></span>
+  </div>
+  <textarea id="out" readonly></textarea>
+
+  <script>
+    /* Reads the live ALBUMS list straight out of assets/js/main.js so this page
+       never holds a second copy of the album data. Output is a plain text plan
+       that tools/apply-order.py turns into file renames. */
+    var albumsEl = document.getElementById("albums");
+    var photosEl = document.getElementById("photos");
+    var curEl = document.getElementById("cur");
+    var outEl = document.getElementById("out");
+    var ALBUMS = [];
+    var order = {};      /* dir -> array of original photo numbers, in new order */
+    var albumOrder = []; /* dirs, in new order */
+    var current = null;
+
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function thumb(dir, n) { return "assets/img/gallery/" + dir + "/thumb/" + pad(n) + ".webp"; }
+
+    fetch("assets/js/main.js")
+      .then(function (r) { return r.text(); })
+      .then(function (src) {
+        var at = src.indexOf("var ALBUMS = ");
+        var lb = src.indexOf("[", at);
+        var rb = src.indexOf("\n  ];", at);
+        ALBUMS = new Function("return " + src.slice(lb, rb + 4))();
+        ALBUMS.forEach(function (a) {
+          albumOrder.push(a.dir);
+          order[a.dir] = Array.from({ length: a.n }, function (_, i) { return i + 1; });
+        });
+        drawAlbums();
+        select(ALBUMS[0]);
+      })
+      .catch(function () {
+        curEl.textContent = "main.js oxunmadı — bu səhifə sayt üzərindən (http) açılmalıdır.";
+      });
+
+    function album(dir) {
+      return ALBUMS.filter(function (a) { return a.dir === dir; })[0];
+    }
+
+    /* One drag implementation for both lists: the dragged node is remembered and
+       dropped in front of whatever it lands on. */
+    function dragify(node, list, dir, redraw) {
+      node.draggable = true;
+      node.addEventListener("dragstart", function (e) {
+        node.classList.add("drag");
+        e.dataTransfer.setData("text/plain", node.dataset.i);
+      });
+      node.addEventListener("dragend", function () { node.classList.remove("drag"); });
+      node.addEventListener("dragover", function (e) { e.preventDefault(); });
+      node.addEventListener("drop", function (e) {
+        e.preventDefault();
+        move(list, +e.dataTransfer.getData("text/plain"), +node.dataset.i);
+        redraw();
+      });
+    }
+
+    function move(list, from, to) {
+      if (from === to) return;
+      list.splice(to, 0, list.splice(from, 1)[0]);
+    }
+
+    function drawAlbums() {
+      albumsEl.textContent = "";
+      albumOrder.forEach(function (dir, i) {
+        var a = album(dir);
+        var li = document.createElement("li");
+        li.dataset.i = i;
+        if (current && current.dir === dir) li.className = "is-on";
+
+        var up = document.createElement("button");
+        up.textContent = "↑";
+        up.onclick = function (e) { e.stopPropagation(); move(albumOrder, i, Math.max(0, i - 1)); drawAlbums(); write(); };
+        var down = document.createElement("button");
+        down.textContent = "↓";
+        down.onclick = function (e) { e.stopPropagation(); move(albumOrder, i, Math.min(albumOrder.length - 1, i + 1)); drawAlbums(); write(); };
+
+        var t = document.createElement("span");
+        t.className = "t";
+        t.textContent = (i + 1) + ". " + a.title;
+
+        li.appendChild(up); li.appendChild(down); li.appendChild(t);
+        li.onclick = function () { select(a); };
+        dragify(li, albumOrder, null, function () { drawAlbums(); write(); });
+        albumsEl.appendChild(li);
+      });
+      write();
+    }
+
+    function select(a) {
+      current = a;
+      drawAlbums();
+      curEl.textContent = a.title;
+      drawPhotos();
+    }
+
+    function drawPhotos() {
+      var list = order[current.dir];
+      photosEl.textContent = "";
+      list.forEach(function (num, i) {
+        var fig = document.createElement("figure");
+        fig.dataset.i = i;
+
+        var img = new Image();
+        img.src = thumb(current.dir, num);
+        img.alt = "";
+        img.loading = "lazy";
+
+        var cap = document.createElement("figcaption");
+        var up = document.createElement("button");
+        up.textContent = "↑";
+        up.draggable = false;
+        up.onclick = function () { move(list, i, Math.max(0, i - 1)); drawPhotos(); };
+        var down = document.createElement("button");
+        down.textContent = "↓";
+        down.draggable = false;
+        down.onclick = function () { move(list, i, Math.min(list.length - 1, i + 1)); drawPhotos(); };
+        var lab = document.createElement("b");
+        lab.textContent = (i + 1) + " ← " + pad(num);
+
+        cap.appendChild(up); cap.appendChild(down); cap.appendChild(lab);
+        fig.appendChild(img); fig.appendChild(cap);
+        dragify(fig, list, current.dir, drawPhotos);
+        photosEl.appendChild(fig);
+      });
+      write();
+    }
+
+    function write() {
+      var lines = ["# HeatTech qalereya sırası"];
+      var base = ALBUMS.map(function (a) { return a.dir; }).join(",");
+      if (albumOrder.join(",") !== base) lines.push("ALBUMS: " + albumOrder.join(", "));
+      Object.keys(order).forEach(function (dir) {
+        var list = order[dir];
+        var same = list.every(function (n, i) { return n === i + 1; });
+        if (!same) lines.push(dir + ": " + list.join(","));
+      });
+      if (lines.length === 1) lines.push("# (dəyişiklik yoxdur)");
+      outEl.value = lines.join("\n");
+    }
+
+    document.getElementById("copy").onclick = function () {
+      outEl.select();
+      var ok = navigator.clipboard
+        ? navigator.clipboard.writeText(outEl.value)
+        : Promise.reject();
+      ok.then(function () { document.getElementById("msg").textContent = "Kopyalandı."; })
+        .catch(function () { document.getElementById("msg").textContent = "Mətni əl ilə seçib kopyalayın."; });
+    };
+  </script>
+</body>
+
+</html>
