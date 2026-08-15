@@ -12,12 +12,14 @@ index.html              single-page site, all ten sections
 assets/css/style.css    design tokens + every component
 assets/js/main.js       reveals, counters, marquee, tabs, lightbox, nav, form
 assets/js/i18n.js       Russian and English dictionaries + the language switch
+assets/js/brochure-i18n.js  the same, for the print catalogue only
 assets/img/             hero, brand and (optional) sector/certificate imagery
-assets/docs/            HeatTech service catalogue (PDF)
+assets/docs/            HeatTech service catalogue (PDF, one per language)
 docs/                   the design system and content specs this site implements
 tools/build-gallery.py  folders of job photos -> WebP albums for qalereya.html
 tools/apply-order.py    applies a gallery order plan copied out of order.html
 tools/watermark.py      burns the logo into the 1600px gallery photos
+tools/build-brochure.sh brochure.html -> the AZ/RU/EN catalogue PDFs
 order.html              client-facing drag-and-drop tool for the gallery order
 ```
 
@@ -81,7 +83,14 @@ choice in `localStorage` under `heat-lang`; the default is Azerbaijani.
 
 Translation is client side, so search engines index the Azerbaijani page only. Company,
 brand and product names are deliberately absent from the dictionaries and stay as they
-are in every language. `brochure.html` and `order.html` are Azerbaijani only.
+are in every language. `order.html` is Azerbaijani only.
+
+`brochure.html` speaks all three too, but from its own deck in
+`assets/js/brochure-i18n.js` — loaded before `i18n.js`, which merges it in, so the site
+pages never carry the catalogue strings. Being a print source it takes the language from
+the URL (`brochure.html?lang=ru`), and `tools/build-brochure.sh` prints one PDF per
+language. The download links on the site follow the switch: `heattech-brochure.pdf`,
+`-ru.pdf`, `-en.pdf`.
 
 ## Content notes
 

@@ -865,6 +865,17 @@
 
   var DICT = { ru: RU, en: EN };
 
+  /* brochure.html loads its own deck into window.heatExtraDict before this
+     file, so the catalogue strings never ship with the site pages */
+  (function (extra) {
+    if (!extra) return;
+    LANGS.forEach(function (lang) {
+      var add = extra[lang];
+      if (!add || !DICT[lang]) return;
+      for (var k in add) if (add.hasOwnProperty(k)) DICT[lang][k] = add[k];
+    });
+  })(w.heatExtraDict);
+
   /* ------------------------------------------------------------ engine -- */
 
   /* children that may sit inside a translatable phrase; anything else makes
@@ -947,12 +958,21 @@
       });
   }
 
+  /* the catalogue is printed once per language — hand out the right file */
+  function brochure(lang) {
+    d.querySelectorAll("a[href*='heattech-brochure']").forEach(function (a) {
+      a.href = "assets/docs/heattech-brochure" +
+        (lang === "az" ? "" : "-" + lang) + ".pdf";
+    });
+  }
+
   function apply(lang) {
     head.forEach(function (h) {
       var t = lang === "az" ? null : look(lang, norm(h.az));
       h.set(t === null ? h.az : t);
     });
     walk(d.body, lang);
+    brochure(lang);
     d.documentElement.lang = lang;
   }
 
@@ -983,9 +1003,13 @@
   var stored = null;
   try { stored = localStorage.getItem(STORE); } catch (e) { /* private mode */ }
 
+  /* ?lang=ru wins over the stored choice — headless printing of brochure.html
+     has no localStorage to read */
+  var q = /[?&]lang=(az|ru|en)/.exec(w.location.search);
+
   initHead();
   d.querySelectorAll("[data-lang]").forEach(function (b) {
     b.addEventListener("click", function () { set(b.getAttribute("data-lang")); });
   });
-  set(stored || "az");
+  set((q && q[1]) || stored || "az");
 })(window, document);
