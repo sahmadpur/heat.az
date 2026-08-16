@@ -42,7 +42,7 @@
     "Partnyorlar": "Партнёры",
     "Brendlər": "Бренды",
     "24/7 Fasiləsiz Sənaye, Aqro və Mülki Mühəndislik Servisi":
-      "Круглосуточный инженерный сервис для промышленности, агросектора и гражданских объектов",
+      "24/7 инженерный сервис для промышленности, агро и гражданских объектов",
     "Qazanxana, Odluq və Sənaye Avadanlıqlarının Peşəkar Təmiri, Avtomatlaşdırılması və Modifikasiyası":
       "<em>Профессиональный ремонт</em>, автоматизация и модификация котельных, горелок и промышленного оборудования",
     "Binalar, istehsalat müəssisələri, fabriklər, aqrokomplekslər və asfalt zavodları üçün istənilən gücdə və mürəkkəblikdə olan qazanxanaların, sənaye/qeyri-sənaye odluqlarının (burner), CO2 avtomatika sistemlərinin, dövriyyə və təzyiq nasoslarının, generatorların və vintli hava kompressorlarının profesional texniki servisi, təmiri və retrofit olunması xidmətlərini təqdim edirik. Məqsədimiz — avadanlıqlarınızın fasiləsiz işini, maksimal enerji səmərəliliyini və tam təhlükəsizliyini təmin etməkdir.":
